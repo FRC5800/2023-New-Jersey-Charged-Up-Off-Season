@@ -15,5 +15,21 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    
+    public static final int XboxController = 0;
+    
+  }
+
+  public static class DriveConstants {
+    public static final int kLeftMotorMasterPort = 1;
+    public static final int kLeftMotorSlavePort = 2;
+    public static final int kRightMotorMasterPort = 3;
+    public static final int kRightMotorSlavePort = 4;
+
+    public static final float DEAD_ZONE = 0.1f;
+
+    public static final int kEncoderTicksPerRevolution= 4096;
+    public static final double kWheelCircunference = 0.471238898;
+    
   }
 }
