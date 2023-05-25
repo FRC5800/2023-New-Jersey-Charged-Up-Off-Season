@@ -53,7 +53,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getVoltage() {
-    return ((leftGroup.get() + rightGroup.get()) / 2) * RobotController.getBatteryVoltage();
+    return ((leftGroup.get() + rightGroup.get()) / 2) * RobotController.getBatteryVoltage(); //por que essa parte de multiplicação por voltagem da bateria
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
