@@ -3,21 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class Drive extends CommandBase {
   /** Creates a new Drive. */
   private final DriveTrain driveTrain;
-  private XboxController controllers = new XboxController(Constants.OperatorConstants.XboxController);
+  private final XboxController driveController;
   //private boolean toggleSPD = false;
 
-  public Drive(DriveTrain driveTrain) {
+  public Drive(DriveTrain driveTrain, XboxController drivController) {
     this.driveTrain = driveTrain;
+    this.driveController = drivController;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
@@ -25,7 +27,6 @@ public class Drive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.resetPigeon();
     driveTrain.resetEncoders();
   }
 
@@ -39,10 +40,13 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("VoltageMotors", driveTrain.getVoltage());
-
-    double axisLeft = -controllers.getRawAxis(XboxController.Axis.kLeftY.value);
-    double axisRight = controllers.getRawAxis(XboxController.Axis.kRightX.value);
+    SmartDashboard.putNumber("speed", driveTrain.getSpeed());
+    SmartDashboard.putNumber("voltage", driveTrain.getVoltage());
+    SmartDashboard.putNumber("pitch", driveTrain.getPitch());
+    SmartDashboard.putNumber("encoder Average", driveTrain.getAverageEncoderMeters());
+    SmartDashboard.putNumber("battery Voltage", RobotController.getBatteryVoltage());
+    double axisLeft = -driveController.getRawAxis(XboxController.Axis.kLeftY.value);
+    double axisRight = driveController.getRawAxis(XboxController.Axis.kRightX.value);
     double leftSpeed = 0;
     double rightSpeed = 0;
 

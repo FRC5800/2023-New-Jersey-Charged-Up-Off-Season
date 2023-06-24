@@ -4,20 +4,26 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class BalanceCommand1 extends CommandBase {
   DriveTrain drivetrain = new DriveTrain();
   
   double initialPitch;
+  double initialEncoder;
+  double encoderDiff;
   double pitch;
-  boolean isBalancing = false;
-  boolean inEncoderMode = false;
+  double encoderGoal = Units.feetToMeters(AutoConstants.halfChargeStation + AutoConstants.halfRobotLength) +400;
+  boolean isBalancing = true;
+  boolean inGoal = false;
+  double voltage;
 
   public BalanceCommand1(DriveTrain driveTrain) {
     this.drivetrain = driveTrain;
-    
     addRequirements(drivetrain);
   }
 
@@ -28,31 +34,43 @@ public class BalanceCommand1 extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.resetEncoders();
-    initialPitch = drivetrain.ahrs.getPitch();
+    initialPitch = drivetrain.getPitch();
   }
 
   @Override
   public void execute() {
-    pitch = drivetrain.ahrs.getPitch();
-    if(isBalancing == false && pitch > initialPitch + 1) {
+    SmartDashboard.putNumber("VoltageMotors", drivetrain.getVoltage());
+    SmartDashboard.putNumber("encoder", drivetrain.getAverageEncoderMeters());
+    SmartDashboard.putNumber("Pigeon Pitch", drivetrain.getPitch());
+    pitch = drivetrain.getPitch();
+    encoderDiff = initialEncoder - drivetrain.getAverageEncoderMeters();
+
+    if(!isBalancing && pitch > initialPitch + 4) {
       isBalancing = true;
+      initialEncoder = drivetrain.getAverageEncoderMeters();
+    } else {
+      drivetrain.tankDrive(0.7, 0.7);
     }
 
-    if(!isBalancing) {
-      drivetrain.tankDrive(0.5, 0.5);
-      drivetrain.resetEncoders();
-    }
-    if(isBalancing){
-      if(drivetrain.getAverageEncoderMeters() < 1350) {
-        drivetrain.tankDrive(0.5, 0.5);
-      } else {
-        drivetrain.tankDrive(clamp(drivetrain.ahrs.getPitch()/8, -0.4, 0.4), clamp(drivetrain.ahrs.getPitch()/8, -0.4, 0.4));
+    if(isBalancing && !inGoal){
+      if(drivetrain.getAverageEncoderMeters() < -encoderGoal*1/3) {
+        drivetrain.setVoltage(9.6);
+      } else if((drivetrain.getAverageEncoderMeters() > encoderGoal*1/3) && (drivetrain.getAverageEncoderMeters() < encoderGoal)) {
+        drivetrain.setVoltage(4.0);
+      } else{
+        inGoal = true;
       }
+    }else if(pitch < initialPitch - 0.5) {
+      drivetrain.setVoltage(4.0);
+    } else if(pitch > initialPitch + 0.5) {
+      drivetrain.setVoltage(-4.0);
     }
-  }
+}
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.tankDrive(0, 0);
+  }
 
   @Override
   public boolean isFinished() {
