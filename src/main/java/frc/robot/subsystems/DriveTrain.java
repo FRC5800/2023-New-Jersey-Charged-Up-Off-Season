@@ -28,6 +28,7 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain() {
     rightMaster.setInverted(true);
+    rightSlave.setInverted(true);
     rightSlave.follow(rightMaster);
     leftSlave.follow(leftMaster);
 
@@ -57,8 +58,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
-    leftMaster.set(leftSpeed);
-    rightMaster.set(rightSpeed);
+    drive.tankDrive(leftSpeed, rightSpeed);
   }
 
   //Conversions encoders
@@ -104,7 +104,7 @@ public class DriveTrain extends SubsystemBase {
 	}
 
   public double getAverageEncoderMeters() {
-    double averageMeters = (2*getRightEncoderMeters() + getLeftEncoderMeters()) / 2.0; 
+    double averageMeters = (getRightEncoderMeters() + getLeftEncoderMeters()) / 2.0; 
 		SmartDashboard.putNumber("Average Encoder Meters", averageMeters);
     return averageMeters;
 	}
