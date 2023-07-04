@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.teleOpCommands;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,8 +42,7 @@ public class Drive extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("speed", driveTrain.getSpeed());
     SmartDashboard.putNumber("voltage", driveTrain.getVoltage());
-    SmartDashboard.putNumber("pitch", driveTrain.getPitch());
-    SmartDashboard.putNumber("encoder Average", driveTrain.getAverageEncoderMeters());
+    SmartDashboard.putNumber("encoder", driveTrain.getLeftEncoderTicks());
     SmartDashboard.putNumber("battery Voltage", RobotController.getBatteryVoltage());
     double axisLeft = -driveController.getRawAxis(XboxController.Axis.kLeftY.value);
     double axisRight = driveController.getRawAxis(XboxController.Axis.kRightX.value);

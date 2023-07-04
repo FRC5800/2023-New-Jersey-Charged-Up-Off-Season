@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.AutoRoutines;
-import frc.robot.commands.Drive;
-import frc.robot.commands.testeEncoderPhase;
-import frc.robot.commands.AutoRoutines.AutoMode;
+import frc.robot.commands.commandGroups.AutoRoutines;
+import frc.robot.commands.teleOpCommands.Drive;
+import frc.robot.commands.autoCommands.testeEncoderPhase;
+import frc.robot.commands.commandGroups.AutoRoutines.AutoMode;
 import frc.robot.subsystems.DriveTrain;
 
 public class RobotContainer {
@@ -20,7 +20,7 @@ public class RobotContainer {
 
   SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final Command autonomousMode = new AutoRoutines(AutoMode.ChargeStation, driveTrain);
+  private final Command autonomousMode = new AutoRoutines(AutoMode.TESTES_CHARGESTATION, driveTrain);
 
   public RobotContainer() {
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));

@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,15 +15,15 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveTrain extends SubsystemBase {
 
-  WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstants.kLeftMotorMasterPort);
-  WPI_TalonSRX leftSlave = new WPI_TalonSRX(DriveConstants.kLeftMotorSlavePort);
+  WPI_VictorSPX leftMaster = new WPI_VictorSPX(DriveConstants.kLeftMotorMasterPort);
+  WPI_VictorSPX leftSlave = new WPI_VictorSPX(DriveConstants.kLeftMotorSlavePort);
 
-  WPI_TalonSRX rightMaster = new WPI_TalonSRX(DriveConstants.kRightMotorMasterPort);
-  WPI_TalonSRX rightSlave = new WPI_TalonSRX(DriveConstants.kRightMotorSlavePort);
+  WPI_VictorSPX rightMaster = new WPI_VictorSPX(DriveConstants.kRightMotorMasterPort);
+  WPI_VictorSPX rightSlave = new WPI_VictorSPX(DriveConstants.kRightMotorSlavePort);
 
   DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
-  
-  private PigeonIMU pigeon = new PigeonIMU(8);
+
+  public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
   public DriveTrain() {
     rightMaster.setInverted(true);
@@ -37,11 +36,6 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setNeutralMode(NeutralMode.Brake);
     rightSlave.setNeutralMode(NeutralMode.Brake);
 
-    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 ,20);
-    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 20);
-    
-    leftMaster.setSelectedSensorPosition(0);
-    rightMaster.setSelectedSensorPosition(0);
   }
 
   public void setVoltage(double voltage) {
@@ -70,14 +64,23 @@ public class DriveTrain extends SubsystemBase {
 		return (encoderMeters * DriveConstants.kEncoderTicksPerRevolution) / DriveConstants.kWheelCircunference;
 	}
 
-  //Reset encoders
+  //Resets
   public void resetEncoders(){
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
 
   }
 
+  public void resetGyro(){
+    gyro.reset();
+
+  }
+
   //Get functions
+  public double getAngle() {
+    return gyro.getAngle();
+  }
+
   public double getLeftEncoderTicks() {
 		double position;
 			position = -leftMaster.getSelectedSensorPosition(0);
@@ -92,7 +95,7 @@ public class DriveTrain extends SubsystemBase {
 	}
 
   public double getLeftEncoderMeters() {
-		double meters = encoderTicksToMeters(getLeftEncoderTicks());
+		double meters = 0;
 		SmartDashboard.putNumber("Left Encoder Position", meters);
 		return meters;
 	}
@@ -104,15 +107,10 @@ public class DriveTrain extends SubsystemBase {
 	}
 
   public double getAverageEncoderMeters() {
-    double averageMeters = (getRightEncoderMeters() + getLeftEncoderMeters()) / 2.0; 
+    double averageMeters = 0;
 		SmartDashboard.putNumber("Average Encoder Meters", averageMeters);
     return averageMeters;
 	}
-
-  public double getPitch(){
-    SmartDashboard.putNumber("Pigeon Pitch", pigeon.getPitch());
-    return -pigeon.getPitch();
- }
 
   @Override
   public void periodic() {
