@@ -11,12 +11,13 @@ import frc.robot.commands.autoCommands.*;
 public class AutoRoutines extends SequentialCommandGroup {
   
   public enum AutoMode{
+    PID_MOBILITY, // 3 points
+    PID_MID_MOB_PICK, // 7 points
+    PID_MID_MOB_PICK_MID, // 11 points
+    PID_MID_CHARGE, // 16 points
+    PID_MID_MOB_PICK_CHARGE, // 19 points
+    PID_MID_MOB_PICK_MID_CHARGE, // 23 points
     TESTES_CHARGESTATION,
-    PID_MID_MOB_CHARGE,
-    PID_MID_CHARGE,
-    PID_MID_PICK_MID,
-    PID_MID_PICK,
-    PID_MOBILITY,
 }
 
   public AutoRoutines(AutoMode selectedRoutine, DriveTrain driveTrain) {
@@ -24,6 +25,49 @@ public class AutoRoutines extends SequentialCommandGroup {
     if(selectedRoutine == AutoMode.TESTES_CHARGESTATION){
       addCommands(
         new BalanceCommand1(driveTrain)
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MOBILITY){
+      addCommands(
+        new DriveAuto(driveTrain, 4)
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK){
+      addCommands(
+        // Comando de jogar GP
+        new DriveAuto(driveTrain, 5)
+        // Comando de pegar GP
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_MID){
+      addCommands(
+        // Comando de jogar GP
+        new DriveAuto(driveTrain, 5)
+        // Comando de pegar GP
+        // Comando de jogar GP
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MID_CHARGE){
+      addCommands(
+        // Comando de jogar GP
+        new BalanceCommand1(driveTrain)
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_CHARGE){
+      addCommands(
+        // Comando de jogar GP
+        new DriveAuto(driveTrain, 5),
+        // Comando de pegar GP
+        new BalanceCommand1(driveTrain)
+      );
+    } 
+    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_MID_CHARGE){
+      addCommands(
+        // Comando de jogar GP
+        new DriveAuto(driveTrain, 5),
+        // Comando de pegar GP
+        new BalanceCommand1(driveTrain)
+        // Comando de jogar GP
       );
     }
   }

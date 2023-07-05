@@ -26,10 +26,6 @@ public class BalanceCommand1 extends CommandBase {
     this.drivetrain = driveTrain;
     addRequirements(drivetrain);
   }
-
-  public double clamp(double value, double min, double max) {
-    return Math.max(min, Math.min(max, value));
-  }
   
   @Override
   public void initialize() {
@@ -60,9 +56,9 @@ public class BalanceCommand1 extends CommandBase {
       } else{
         inGoal = true;
       }
-    }else if(pitch < initialPitch - 0.5) {
+    }else if(pitch < initialPitch - 1) {
       drivetrain.setVoltage(4.0);
-    } else if(pitch > initialPitch + 0.5) {
+    } else if(pitch > initialPitch + 1) {
       drivetrain.setVoltage(-4.0);
     }
 }
