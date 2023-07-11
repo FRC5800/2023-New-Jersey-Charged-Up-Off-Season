@@ -5,43 +5,90 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Take extends SubsystemBase {
   /** Creates a new Take. */
 
-  WPI_TalonSRX topMotor = new WPI_TalonSRX(DriveConstants.KTopShooterMotor);
-  WPI_TalonSRX bottomMotor = new WPI_TalonSRX(DriveConstants.KBottomShooterMotor);
+  WPI_TalonSRX intakeUpper = new WPI_TalonSRX(ShooterConstants.KIntakeUpperID);
+  WPI_TalonSRX intakeLower = new WPI_TalonSRX(ShooterConstants.KIntakeLowerID);
 
   public Take() {
-    topMotor.setInverted(true);
+    intakeUpper.configFactoryDefault();
+    intakeLower.configFactoryDefault();
 
-    topMotor.setNeutralMode(NeutralMode.Brake);
-    bottomMotor.setNeutralMode(NeutralMode.Brake);
+    intakeUpper.setNeutralMode(NeutralMode.Brake);
+    intakeLower.setNeutralMode(NeutralMode.Brake);
 
-    topMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 ,20);
-    bottomMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 20);
+    intakeUpper.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, 20);
+    intakeLower.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, 0, 20);
+
+    intakeLower.setSensorPhase(true);
+
+    intakeUpper.setInverted(false);
+    intakeLower.setInverted(false);
+
+    intakeLower.configNominalOutputForward(0, 20);
+    intakeLower.configNominalOutputReverse(0, 20);
+    intakeLower.configPeakOutputForward(1, 20);
+    intakeLower.configPeakOutputReverse(-1, 20);
+
+    intakeUpper.configNominalOutputForward(0, 20);
+    intakeUpper.configNominalOutputReverse(0, 20);
+    intakeUpper.configPeakOutputForward(1, 20);
+    intakeUpper.configPeakOutputReverse(-1, 20);
+
+    intakeLower.config_kF(0, 5, 20);
+    intakeLower.config_kP(0, 0.0151, 20);
+    intakeLower.config_kI(0, 0, 20);
+    intakeLower.config_kD(0, 9, 20);
+
+    intakeUpper.config_kF(0, 0, 20);
+    intakeUpper.config_kP(0, 0, 20);
+    intakeUpper.config_kI(0, 0, 20);
+    intakeUpper.config_kD(0, 0, 20);
+  
   }
 
-  public void setShooterSpeed(double vel){
-    topMotor.set(ControlMode.PercentOutput, vel);
-    bottomMotor.set(ControlMode.PercentOutput, vel);
-}
-
-  public double getTopEncoderVelocity(){
-    return topMotor.getSelectedSensorVelocity();
+  public void setUpperShooterPercentage(double vel){
+    intakeUpper.set(ControlMode.PercentOutput, vel);
+  }
+  public void setLowerShooterPercentage(double vel){
+    intakeLower.set(ControlMode.PercentOutput, vel); 
   }
 
-  public double getBottomEncoderVelocity(){
-    return bottomMotor.getSelectedSensorVelocity();
+  public void setUpperShooterVelocity(double vel){
+    intakeUpper.set(ControlMode.Velocity, vel);
+  }
+  public void setLowerShooterVelocity(double vel){
+    intakeLower.set(ControlMode.Velocity, vel);
   }
 
-  public double getAverageEncoderVelocity(){
-    return (topMotor.getSelectedSensorVelocity() + bottomMotor.getSelectedSensorVelocity()) / 2;
+  public double getLowerEncoderRPM(){
+    return (intakeUpper.getSelectedSensorVelocity()/4096)*60;
+  }
+
+  public double getUpperEncoderRPM(){
+    return (intakeLower.getSelectedSensorVelocity()/4096)*60;
+  }
+
+  public double getLowerEncoderLinearVelocity(){
+    return intakeLower.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 5.08;
+  }
+  public double getUpperEncoderLinearVelocity(){
+    return intakeUpper.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 2.54;
+  }
+
+  public double getAverageEncoderRPM(){
+    return (getLowerEncoderRPM() + getUpperEncoderRPM()) / 2;
+  }
+
+  public double getAverageEncoderLinearVelocity(){
+    return (getLowerEncoderLinearVelocity() + getUpperEncoderLinearVelocity()) / 2 ;
   }
 }

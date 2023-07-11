@@ -5,17 +5,19 @@
 package frc.robot.commands.teleOpCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Take;
 
 public class Intake extends CommandBase {
   /** Creates a new InOutTake. */
   Take take = new Take();
-  XboxController subsystemsController;
+  XboxController xboxController;
   double speed;
 
-  public Intake(Take take, XboxController subsystemsController) {
+  public Intake(Take take, XboxController xboxController) {
     this.take = take;
+    this.xboxController = xboxController;
     addRequirements(take);
   }
 
@@ -24,8 +26,29 @@ public class Intake extends CommandBase {
 
   @Override
   public void execute() {
-    speed = subsystemsController.getRightTriggerAxis() * 0.7;
-    take.setShooterSpeed(speed);
+    double low = xboxController.getAButton() ? 1.0 : 0.0;
+    double mid = xboxController.getBButton() ? 1.0 : 0.0;
+    double high = xboxController.getYButton() ? 1.0 : 0.0;
+
+    if (low == 1){
+      take.setUpperShooterVelocity(100);                                                                 
+      take.setLowerShooterVelocity(80);
+  
+    }else if(mid == 1){
+      take.setUpperShooterVelocity(100);                                                                 
+      take.setLowerShooterVelocity(90);
+
+    }else if(high == 1){
+      take.setUpperShooterVelocity(100);                                                                 
+      take.setLowerShooterVelocity(100);
+    }else{
+      take.setUpperShooterPercentage(0);                                                                 
+      take.setLowerShooterPercentage(0);
+    }
+
+    SmartDashboard.putNumber("Velocity Upper", take.getUpperEncoderRPM());
+    SmartDashboard.putNumber("Velocity Lower", take.getLowerEncoderRPM());
+    SmartDashboard.putNumber("high", high);  
   }
 
   @Override

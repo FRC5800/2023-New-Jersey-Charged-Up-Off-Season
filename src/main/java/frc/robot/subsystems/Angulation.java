@@ -15,25 +15,25 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.AngulationConstants;
 
 public class Angulation extends SubsystemBase {
   /** Creates a new Angulation. */
 
-  CANSparkMax leftMaster = new CANSparkMax(DriveConstants.KLeftMotorMasterAngle, MotorType.kBrushed);
-  CANSparkMax leftSlave = new CANSparkMax(DriveConstants.KLeftMotorSlaveAngle, MotorType.kBrushed);
+  CANSparkMax rightMaster = new CANSparkMax(AngulationConstants.kAngleMasterID, MotorType.kBrushed);
+  WPI_VictorSPX rightSlave = new WPI_VictorSPX(AngulationConstants.kAngleSlave0ID);
+  MotorControllerGroup rightGroup = new MotorControllerGroup(rightMaster, rightSlave);
+
+  CANSparkMax leftMaster = new CANSparkMax(AngulationConstants.kAngleSlave1ID, MotorType.kBrushed);
+  CANSparkMax leftSlave = new CANSparkMax(AngulationConstants.kAngleSlave2ID, MotorType.kBrushed); 
   MotorControllerGroup leftGroup = new MotorControllerGroup(leftMaster, leftSlave);
 
-  CANSparkMax rightMaster = new CANSparkMax(DriveConstants.KRightMotorMasterAngle, MotorType.kBrushed);
-  WPI_VictorSPX rightSlave = new WPI_VictorSPX(DriveConstants.KRightMotorSlaveAngle);
-  MotorControllerGroup rightgroup = new MotorControllerGroup(rightMaster, rightSlave);
-
-  DifferentialDrive drive = new DifferentialDrive(leftGroup, rightMaster);
+  DifferentialDrive drive = new DifferentialDrive(leftGroup, rightGroup);
 
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
 
   public Angulation() {
-    rightgroup.setInverted(true);
+    rightGroup.setInverted(true);
 
     leftMaster.setIdleMode(IdleMode.kBrake);
     leftSlave.setIdleMode(IdleMode.kBrake);

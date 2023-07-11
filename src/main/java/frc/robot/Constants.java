@@ -16,32 +16,24 @@ public final class Constants {
     public static final int kLeftMotorSlavePort = 4;
     public static final int kRightMotorMasterPort = 23;
     public static final int kRightMotorSlavePort = 2;
+    public static final float DEAD_ZONE = 0.1f;
 
-    //a definir
-    public static final int KLeftMotorSlaveAngle = 1;
-    public static final int KLeftMotorMasterAngle = 54;
-    public static final int KRightMotorSlaveAngle = 55;
-    public static final int KRightMotorMasterAngle = 13;
-    public static final int KTopShooterMotor = 67;
-    public static final int KBottomShooterMotor = 87;
-    //a definir
-
+    public static final int kEncoderTicksPerRevolution= 4096;
+    public static final double kWheelCircunference = 0.471238898;
+  }
+  public static class ShooterConstants{
+    public static final int KIntakeUpperID = 11;
+    public static final int KIntakeLowerID = 10;
+  }
+  public static class AngulationConstants {
+    public static final int kAngleMasterID = 21;
+    public static final int kAngleSlave0ID = 20;
+    public static final int kAngleSlave1ID = 22;
+    public static final int kAngleSlave2ID = 23;
+  
     public static final double KMaxAngle = 0;
     public static final double KMinAngle = 0;
     public static final double KAngleMultiplier = 0.7;
-
-    public static final float DEAD_ZONE = 0.1f;
-
-    public static final int kEncoderTicksPerRevolution= 2048;
-    public static final double kWheelCircunference = 0.471238898;
-
-    //Calculando quantos metros para se equilibrar na charge(obs: tudo em feet)
-    public static final double halfChargeStation = (6 + (0.5 / 12)) / 2;
-    public static final double halfRobotLength = (29.5275591 / 2) / 12;
-    
-  }
-
-  public static class AngulationConstants {
 
   }
 

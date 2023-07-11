@@ -6,7 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +24,7 @@ public class DriveTrain extends SubsystemBase {
 
   DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
 
-  public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  public WPI_Pigeon2 pigeon = new WPI_Pigeon2(8);
 
   public DriveTrain() {
     rightMaster.setInverted(true);
@@ -72,13 +73,18 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void resetGyro(){
-    gyro.reset();
-
+    pigeon.reset();
   }
 
   //Get functions
   public double getAngle() {
-    return gyro.getAngle();
+    return pigeon.getAngle();
+  }
+  public double getHeading(){
+    return pigeon.getYaw();
+  }
+  public double getInclination(){
+    return pigeon.getPitch();
   }
 
   public double getLeftEncoderTicks() {
@@ -95,7 +101,7 @@ public class DriveTrain extends SubsystemBase {
 	}
 
   public double getLeftEncoderMeters() {
-		double meters = 0;
+		double meters = encoderMeterToTicks(getLeftEncoderTicks());
 		SmartDashboard.putNumber("Left Encoder Position", meters);
 		return meters;
 	}
@@ -107,10 +113,11 @@ public class DriveTrain extends SubsystemBase {
 	}
 
   public double getAverageEncoderMeters() {
-    double averageMeters = 0;
+    double averageMeters = (getRightEncoderMeters() + getLeftEncoderMeters()) / 2;
 		SmartDashboard.putNumber("Average Encoder Meters", averageMeters);
     return averageMeters;
 	}
+
 
   @Override
   public void periodic() {
