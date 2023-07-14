@@ -43,15 +43,15 @@ public class Take extends SubsystemBase {
     intakeUpper.configPeakOutputForward(1, 20);
     intakeUpper.configPeakOutputReverse(-1, 20);
 
-    intakeLower.config_kF(0, 5, 20);
-    intakeLower.config_kP(0, 0.0151, 20);
+    intakeLower.config_kF(0, 3.8, 20);
+    intakeLower.config_kP(0, 0.000351, 20);
     intakeLower.config_kI(0, 0, 20);
-    intakeLower.config_kD(0, 9, 20);
+    intakeLower.config_kD(0, 3, 20);
 
-    intakeUpper.config_kF(0, 0, 20);
-    intakeUpper.config_kP(0, 0, 20);
+    intakeUpper.config_kF(0, 7.1, 20);
+    intakeUpper.config_kP(0, 0.003, 20);
     intakeUpper.config_kI(0, 0, 20);
-    intakeUpper.config_kD(0, 0, 20);
+    intakeUpper.config_kD(0, 3, 20);
   
   }
 

@@ -22,7 +22,7 @@ public class DriveTrain extends SubsystemBase {
   WPI_VictorSPX rightMaster = new WPI_VictorSPX(DriveConstants.kRightMotorMasterPort);
   WPI_VictorSPX rightSlave = new WPI_VictorSPX(DriveConstants.kRightMotorSlavePort);
 
-  DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
+  private DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
 
   public WPI_Pigeon2 pigeon = new WPI_Pigeon2(8);
 

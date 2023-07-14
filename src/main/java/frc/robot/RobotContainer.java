@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.commandGroups.AutoRoutines;
+import frc.robot.commands.commandGroups.AutoRoutinesPID;
 import frc.robot.commands.teleOpCommands.Angle;
 import frc.robot.commands.teleOpCommands.Drive;
 import frc.robot.commands.teleOpCommands.Intake;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.autoCommands.testeEncoderPhase;
-import frc.robot.commands.commandGroups.AutoRoutines.AutoMode;
+
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
@@ -29,14 +29,14 @@ public class RobotContainer {
 
   SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final Command autonomousMode = new AutoRoutines(AutoMode.TESTES_CHARGESTATION, driveTrain);
+  //private final Command autonomousMode = new AutoRoutinesPID(AutoMode.TESTES_CHARGESTATION, driveTrain);
 
   public RobotContainer() {
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
     angulation.setDefaultCommand(new Angle(angulation, subsystemsController));
     take.setDefaultCommand(new Intake(take, subsystemsController));
 
-    chooser.setDefaultOption("Autonomous Mode", autonomousMode);
+    //chooser.setDefaultOption("Autonomous Mode", autonomousMode);
     SmartDashboard.putData("Auto mode", chooser);
     
     configureBindings();

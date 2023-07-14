@@ -14,7 +14,7 @@ public class Intake extends CommandBase {
   Take take = new Take();
   XboxController xboxController;
   double speed;
-
+  int in;
   public Intake(Take take, XboxController xboxController) {
     this.take = take;
     this.xboxController = xboxController;
@@ -22,25 +22,29 @@ public class Intake extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.in = 1;
+  }
 
   @Override
   public void execute() {
     double low = xboxController.getAButton() ? 1.0 : 0.0;
     double mid = xboxController.getBButton() ? 1.0 : 0.0;
     double high = xboxController.getYButton() ? 1.0 : 0.0;
-
+    if (xboxController.getXButtonPressed()){
+      in = -in;
+    }
     if (low == 1){
-      take.setUpperShooterVelocity(100);                                                                 
-      take.setLowerShooterVelocity(80);
+      take.setUpperShooterVelocity(70*in);
+      take.setLowerShooterVelocity(70*in);
   
     }else if(mid == 1){
-      take.setUpperShooterVelocity(100);                                                                 
-      take.setLowerShooterVelocity(90);
+      take.setUpperShooterVelocity(90*in);                                                                 
+      take.setLowerShooterVelocity(120*in);
 
     }else if(high == 1){
-      take.setUpperShooterVelocity(100);                                                                 
-      take.setLowerShooterVelocity(100);
+      take.setUpperShooterPercentage(in);                                                                 
+      take.setLowerShooterPercentage(in);
     }else{
       take.setUpperShooterPercentage(0);                                                                 
       take.setLowerShooterPercentage(0);

@@ -12,14 +12,20 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    public static final int kLeftMotorMasterPort = 3;
-    public static final int kLeftMotorSlavePort = 4;
-    public static final int kRightMotorMasterPort = 23;
-    public static final int kRightMotorSlavePort = 2;
+    public static final int kLeftMotorMasterPort = 1;
+    public static final int kLeftMotorSlavePort = 2;
+    public static final int kRightMotorMasterPort = 3;
+    public static final int kRightMotorSlavePort = 4;
     public static final float DEAD_ZONE = 0.1f;
 
     public static final int kEncoderTicksPerRevolution= 4096;
     public static final double kWheelCircunference = 0.471238898;
+
+    public static final double KPTurnAuto = 3; //a definir
+    public static final double KITurnAuto = 3; //a definir
+    public static final double KDTurnAuto = 3; //a definir
+    public static final double IrangeTurnAuto = 0.5; //a definir
+    public static final double ContinuousInputTurnAuto = 180; //a definir
   }
   public static class ShooterConstants{
     public static final int KIntakeUpperID = 11;

@@ -7,21 +7,14 @@ package frc.robot.commands.commandGroups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.commands.autoCommands.*;
+import frc.robot.commands.commandGroups.Autos.AutoMode;
 
-public class AutoRoutines extends SequentialCommandGroup {
+public class AutoRoutinesPID extends SequentialCommandGroup {
   
-  public enum AutoMode{
-    PID_MOBILITY, // 3 points
-    PID_MID_MOB_PICK, // 7 points
-    PID_MID_MOB_PICK_MID, // 11 points
-    PID_MID_CHARGE, // 16 points
-    PID_MID_MOB_PICK_CHARGE, // 19 points
-    PID_MID_MOB_PICK_MID_CHARGE, // 23 points
-    TESTES_CHARGESTATION,
-}
+  
 
-  public AutoRoutines(AutoMode selectedRoutine, DriveTrain driveTrain) {
-  
+  public AutoRoutinesPID(AutoMode selectedRoutine, DriveTrain driveTrain) {
+    /* 
     if(selectedRoutine == AutoMode.TESTES_CHARGESTATION){
       addCommands(
         new BalanceCommand1(driveTrain)
@@ -70,5 +63,6 @@ public class AutoRoutines extends SequentialCommandGroup {
         // Comando de jogar GP
       );
     }
+    */
   }
 }
