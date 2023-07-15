@@ -4,12 +4,17 @@
 
 package frc.robot.commands.commandGroups;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.AngulationTimedAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTimedAuto;
+import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTurnAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
 import frc.robot.commands.commandGroups.Autos.AutoMode;
 import frc.robot.commands.teleOpCommands.Drive;
+import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
 
@@ -19,7 +24,7 @@ import frc.robot.subsystems.Take;
 public class AutoRoutinesTimed extends SequentialCommandGroup {
 
   /** Creates a new AutoRoutines. */
-  public AutoRoutinesTimed(AutoMode selectedRoutine, DriveTrain driveTrain, Take intake) {
+  public AutoRoutinesTimed(AutoMode selectedRoutine, DriveTrain driveTrain, Take intake, Angulation angulation) {
     switch (selectedRoutine) {
       case MID:
         addCommands(ShooterTimedAuto.MID(intake));
@@ -60,6 +65,7 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
       case MID_MOB_CHARGE:
         addCommands(
           ShooterTimedAuto.MID(intake),
+          DriveTimedAuto.MOB(driveTrain),
           DriveTimedAuto.MOB_CHARGE(driveTrain)
         );
         break;
@@ -67,6 +73,7 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
       case LOW_MOB_CHARGE:
         addCommands(
           ShooterTimedAuto.LOW(intake),
+          DriveTimedAuto.MOB(driveTrain),
           DriveTimedAuto.MOB_CHARGE(driveTrain)
         );
         break;
@@ -74,53 +81,64 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
       case MID_MOB_PIECE:
         addCommands(
           ShooterTimedAuto.MID(intake),
-          DriveTimedAuto.MOB(driveTrain)
-          //ANGUlAÇÃO A FAZER
+          DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 180),
+          AngulationTimedAuto.DOWN(angulation),
+          ShooterTimedAuto.IN(intake),
+          new WaitCommand(1),
+          AngulationTimedAuto.UP(angulation)
         );
         break;
 
       case LOW_MOB_PIECE:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain)
-          //ANGULACAO A FAZER
-        );
+      addCommands(
+        ShooterTimedAuto.LOW(intake),
+        DriveTimedAuto.MOB(driveTrain), 
+        new DriveTurnAuto(driveTrain, 180),
+        AngulationTimedAuto.DOWN(angulation),
+        ShooterTimedAuto.IN(intake),
+        new WaitCommand(1),
+        AngulationTimedAuto.UP(angulation)
+      );
         break;
 
       case MID_MOD_PIECE_CHARGE:
         addCommands(
           ShooterTimedAuto.MID(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          //angulação a fazer
-          DriveTimedAuto.CHARGE(driveTrain)
+          DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 180),
+          AngulationTimedAuto.DOWN(angulation),
+          ShooterTimedAuto.IN(intake),
+          new WaitCommand(1),
+          AngulationTimedAuto.UP(angulation),
+          DriveTimedAuto.MOB_CHARGE(driveTrain)
         );
         break;
 
       case LOW_MOD_PIECE_CHARGE:
         addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          //angulação a fazer
-          DriveTimedAuto.CHARGE(driveTrain)
-        );
-        break;
-
-      case MID_MOB_PIECE_MID:
-        addCommands(
           ShooterTimedAuto.MID(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          //Angulação a fazer
-          DriveTimedAuto.GRID(driveTrain),
-          ShooterTimedAuto.MID(intake)
+          DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 180),
+          AngulationTimedAuto.DOWN(angulation),
+          ShooterTimedAuto.IN(intake),
+          new WaitCommand(1),
+          AngulationTimedAuto.UP(angulation),
+          DriveTimedAuto.CHARGE(driveTrain)
         );
         break;
 
       case MID_MOB_PIECE_LOW:
         addCommands(
           ShooterTimedAuto.MID(intake),
+          DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 180),
+          AngulationTimedAuto.DOWN(angulation),
+          ShooterTimedAuto.IN(intake),
+          new WaitCommand(1),
+          AngulationTimedAuto.UP(angulation),
           DriveTimedAuto.MOB(driveTrain),
-          //Angulação a fazer
-          DriveTimedAuto.GRID(driveTrain),
+          new DriveTurnAuto(driveTrain, 180),
           ShooterTimedAuto.LOW(intake)
         );
         break;
@@ -128,23 +146,17 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
       case LOW_MOB_PIECE_MID:
         addCommands(
           ShooterTimedAuto.LOW(intake),
+          DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 180),
+          AngulationTimedAuto.DOWN(angulation),
+          ShooterTimedAuto.IN(intake),
+          new WaitCommand(1),
+          AngulationTimedAuto.UP(angulation),
           DriveTimedAuto.MOB(driveTrain),
-          //Angulação a fazer
-          DriveTimedAuto.GRID(driveTrain),
+          new DriveTurnAuto(driveTrain, 180),
           ShooterTimedAuto.MID(intake)
         );
         break;
-
-      case LOW_MOB_PIECE_LOW:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          //Angulação a fazer
-          DriveTimedAuto.GRID(driveTrain),
-          ShooterTimedAuto.LOW(intake)
-        );
-        break;
-
       
     }
    

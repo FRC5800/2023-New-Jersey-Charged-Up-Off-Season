@@ -40,12 +40,12 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("speed", driveTrain.getSpeed());
-    SmartDashboard.putNumber("voltage", driveTrain.getVoltage());
+    //SmartDashboard.putNumber("speed", driveTrain.getSpeed());
+    //SmartDashboard.putNumber("voltage", driveTrain.getVoltage());
     SmartDashboard.putNumber("encoder", driveTrain.getLeftEncoderTicks());
     SmartDashboard.putNumber("battery Voltage", RobotController.getBatteryVoltage());
     double axisLeft = -driveController.getRawAxis(XboxController.Axis.kLeftY.value);
-    double axisRight = driveController.getRawAxis(XboxController.Axis.kRightX.value);
+    double axisRight = -driveController.getRawAxis(XboxController.Axis.kRightX.value);
     double leftSpeed = 0;
     double rightSpeed = 0;
 

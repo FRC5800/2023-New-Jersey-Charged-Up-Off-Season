@@ -33,8 +33,9 @@ public class Angulation extends SubsystemBase {
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
 
   public Angulation() {
-    rightGroup.setInverted(true);
-
+    rightMaster.setInverted(true);
+    rightSlave.setInverted(true);
+    
     leftMaster.setIdleMode(IdleMode.kBrake);
     leftSlave.setIdleMode(IdleMode.kBrake);
     rightMaster.setIdleMode(IdleMode.kBrake);

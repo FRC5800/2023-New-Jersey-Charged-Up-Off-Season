@@ -36,14 +36,14 @@ public class testeEncoderPhase extends CommandBase {
 
   @Override
   public void execute() {
-    SmartDashboard.putNumber("VoltageMotors", drivetrain.getVoltage());
+    //SmartDashboard.putNumber("VoltageMotors", drivetrain.getVoltage());
     SmartDashboard.putNumber("metersCharge", encoderGoal);
     SmartDashboard.putNumber("encoder", drivetrain.getAverageEncoderMeters());
     if(isBalancing && !inGoal){
       if(drivetrain.getAverageEncoderMeters() < encoderGoal*1/3) {
-        drivetrain.setVoltage(9.6);
+        //drivetrain.setVoltage(9.6);
       } else if((drivetrain.getAverageEncoderMeters() > encoderGoal*1/3) && (drivetrain.getAverageEncoderMeters() < encoderGoal)) {
-        drivetrain.setVoltage(4.0);
+        //drivetrain.setVoltage(4.0);
       } else{
         inGoal = true;
       }

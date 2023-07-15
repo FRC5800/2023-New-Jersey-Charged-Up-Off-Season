@@ -19,11 +19,11 @@ public class DriveTimedAuto extends CommandBase {
   private Timer timer = new Timer();
 
   public final static DriveTimedAuto MOB(DriveTrain driveTrain) {
-    return new DriveTimedAuto(driveTrain, 5, -0.9, -0.9);
+    return new DriveTimedAuto(driveTrain, 3, -0.75, -0.75);
   }
 
   public final static DriveTimedAuto CHARGE(DriveTrain driveTrain) {
-    return new DriveTimedAuto(driveTrain, 6, -0.6, -0.6);
+    return new DriveTimedAuto(driveTrain, 2.25, -0.75, -0.75);
   }
   
   public final static DriveTimedAuto MOB_CHARGE(DriveTrain driveTrain) {
@@ -31,7 +31,7 @@ public class DriveTimedAuto extends CommandBase {
   }
 
   public final static DriveTimedAuto GRID(DriveTrain driveTrain) {
-    return new DriveTimedAuto(driveTrain, 4, 0.8, 0.8);
+    return new DriveTimedAuto(driveTrain, 4, 0.7, 0.7);
   }
 
   public DriveTimedAuto(DriveTrain driveTrain, double time, double leftMotorPercentage, double rightMotorPercentage) {

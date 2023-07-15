@@ -6,38 +6,32 @@ package frc.robot.commands.commandGroups.AutoCommands.TimedCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.Take;
 
-public class ShooterTimedAuto extends CommandBase {
+public class AngulationTimedAuto extends CommandBase {
   /** Creates a new AutoShooter. */
-  private final Take intake;
-  private double lowerSpd;
-  private double upperSpd;
+  private final Angulation angulation;
+  private final double speed = 1;
   private double time;
   private Timer timer = new Timer();
-  private boolean in;
+  private boolean down;
 
-  public final static ShooterTimedAuto MID(Take intake) {
-    return new ShooterTimedAuto(intake, 1, 1, 1 , false);
+  public final static AngulationTimedAuto DOWN(Angulation angulation) {
+    return new AngulationTimedAuto(angulation, 3 , true);
   }
 
-  public final static ShooterTimedAuto LOW(Take intake) {
-    return new ShooterTimedAuto(intake, 0.65, 0.65, 1 , false);
-  }
-
-  public final static ShooterTimedAuto IN(Take intake) {
-    return new ShooterTimedAuto(intake, 0.65, 0.65, 3 , true);
+  public final static AngulationTimedAuto UP(Angulation angulation) {
+    return new AngulationTimedAuto(angulation, 3 , false);
   }
   
-  public ShooterTimedAuto(Take intake, double lowerSpd, double upperSpd, double time, boolean in) {
+  public AngulationTimedAuto(Angulation angulation, double time, boolean down) {
 
-    this.in = in;
-    this.intake = intake;
-    this.lowerSpd = lowerSpd;
-    this.upperSpd = upperSpd;
+    this.down = down;
+    this.angulation = angulation;
     this.time = time;
 
-    addRequirements(intake);
+    addRequirements(angulation);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -51,20 +45,20 @@ public class ShooterTimedAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    setPercentage(upperSpd, lowerSpd);
+    if(down){
+      angulation.setElevatorAngleSpeed(speed);
+    }else{
+    angulation.setElevatorAngleSpeed(-speed);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    setPercentage(0.0, 0.0);
+    angulation.setElevatorAngleSpeed(0);
   }
 
-  public void setPercentage(double upper, double lower) {
-    var dir = in ? 1 : -1;
-    intake.setLowerShooterPercentage(lower*dir);
-    intake.setUpperShooterPercentage(upper*dir);
-  }
+
 
   // Returns true when the command should end.
   @Override
