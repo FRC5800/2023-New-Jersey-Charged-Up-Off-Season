@@ -5,6 +5,7 @@
 package frc.robot.commands.teleOpCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AngulationConstants;
 import frc.robot.subsystems.Angulation;
@@ -27,7 +28,8 @@ public class Angle extends CommandBase {
 
   @Override
   public void execute() {
-    angle = angulation.getEncoderAngle();
+    SmartDashboard.putNumber("Angulation rotation", angulation.getEncoderRotations());
+    angle = angulation.getEncoderRotations();
     speed = subsystemsController.getRawAxis(XboxController.Axis.kRightY.value);
     //speed = speed * (((AngulationConstants.KMaxAngle - angle) * AngulationConstants.KAngleMultiplier / AngulationConstants.KMaxAngle - AngulationConstants.KMinAngle)+0.1); // quando sem imput indo pra tras
     angulation.setElevatorAngleSpeed(speed);

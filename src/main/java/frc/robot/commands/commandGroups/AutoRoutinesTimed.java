@@ -81,11 +81,11 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
       case MID_MOB_PIECE:
         addCommands(
           ShooterTimedAuto.MID(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
+          //DriveTimedAuto.MOB(driveTrain), 
+          new DriveTurnAuto(driveTrain, 140),
           AngulationTimedAuto.DOWN(angulation),
           ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
+          //new WaitCommand(1),
           AngulationTimedAuto.UP(angulation)
         );
         break;

@@ -5,16 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.commandGroups.AutoRoutinesPID;
 import frc.robot.commands.commandGroups.AutoRoutinesTimed;
 import frc.robot.commands.commandGroups.Autos.AutoMode;
 import frc.robot.commands.teleOpCommands.Angle;
+import frc.robot.commands.teleOpCommands.AngulationEncoder;
 import frc.robot.commands.teleOpCommands.Drive;
 import frc.robot.commands.teleOpCommands.GetCube;
-import frc.robot.commands.teleOpCommands.Intake;
+import frc.robot.commands.teleOpCommands.ShooterMid;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.autoCommands.testeEncoderPhase;
 
@@ -38,6 +41,7 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
     angulation.setDefaultCommand(new Angle(angulation, subsystemsController));
     take.setDefaultCommand(new GetCube(take, subsystemsController));
+    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ShooterMid(take));
 
     //chooser.setDefaultOption("Autonomous Mode", autonomousMode);
     SmartDashboard.putData("Auto mode", chooser);
@@ -50,6 +54,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AutoRoutinesTimed(AutoMode.MID_MOB_PIECE, driveTrain, take, angulation);
+    return new AngulationEncoder(angulation);
   }
 }

@@ -26,7 +26,7 @@ public class ShooterTimedAuto extends CommandBase {
   }
 
   public final static ShooterTimedAuto IN(Take intake) {
-    return new ShooterTimedAuto(intake, 0.65, 0.65, 3 , true);
+    return new ShooterTimedAuto(intake, 0.65, 0.65, 1 , true);
   }
   
   public ShooterTimedAuto(Take intake, double lowerSpd, double upperSpd, double time, boolean in) {

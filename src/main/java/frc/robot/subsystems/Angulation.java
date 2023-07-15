@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -31,6 +32,8 @@ public class Angulation extends SubsystemBase {
   DifferentialDrive drive = new DifferentialDrive(leftGroup, rightGroup);
 
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+  public static final double DOWN_POSITION = 1;
+  public static final double UP_POSITION = 0.68505859375;
 
   public Angulation() {
     rightMaster.setInverted(true);
@@ -40,14 +43,16 @@ public class Angulation extends SubsystemBase {
     leftSlave.setIdleMode(IdleMode.kBrake);
     rightMaster.setIdleMode(IdleMode.kBrake);
     rightSlave.setNeutralMode(NeutralMode.Brake);
-
   }
 
-  public void setElevatorAngleSpeed(double vel){
+  
+
+  public void setElevatorAngleSpeed(double vel) {
     rightMaster.set(vel);
     leftMaster.set(vel);
 }
-public double getEncoderAngle(){
-  return (rightEncoder.getPosition())*360;
+public double getEncoderRotations() {
+  var position = rightEncoder.getPosition();
+  return 550 - (position < 400 ? position+550 : position);
 }
 }

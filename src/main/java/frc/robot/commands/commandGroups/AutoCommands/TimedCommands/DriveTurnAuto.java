@@ -33,8 +33,7 @@ public class DriveTurnAuto extends CommandBase {
     if (angle == 0) return;
 
     var speed = 0.8;
-    var dist = (angle-Math.abs(initialAngle - driveTrain.getAngle()))/angle;
-    driveTrain.tankDrive(Math.min(0.35, speed*dist), -Math.min(0.35, speed*dist));
+    driveTrain.tankDrive(speed, -speed);
   }
 
   // Called once the command ends or is interrupted.

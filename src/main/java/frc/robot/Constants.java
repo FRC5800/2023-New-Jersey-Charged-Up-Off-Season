@@ -45,7 +45,7 @@ public final class Constants {
     public static final int kAngleSlave1ID = 22;
     public static final int kAngleSlave2ID = 23;
   
-    public static final double KMaxAngle = 0;
+    public static final double KMaxAngle = 300;
     public static final double KMinAngle = 0;
     public static final double KAngleMultiplier = 0.7;
 
