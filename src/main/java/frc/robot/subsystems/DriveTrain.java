@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +27,8 @@ public class DriveTrain extends SubsystemBase {
   private VictorSPX rightSlave = new VictorSPX(DrivetrainConstants.kRightSlaveID);
 
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
+
+  Pigeon2 pigeon = new Pigeon2(0);
 
   WPI_PigeonIMU gyro = new WPI_PigeonIMU(8);
 
@@ -57,6 +60,11 @@ public class DriveTrain extends SubsystemBase {
 
   public void tankDrive(double left, double right) {
     diffDrive.tankDrive(left, right);
+  }
+
+  public void setVoltage(double voltage) {
+    leftMaster.setVoltage(voltage);
+    rightMaster.setVoltage(voltage);
   }
 
   public void resetOdometry(Pose2d pose){
@@ -136,7 +144,7 @@ public class DriveTrain extends SubsystemBase {
 
 
   public double getPitch(){
-    return gyro.getPitch();
+    return pigeon.getPitch();
   }
 
   public Rotation2d getRotation2D(){

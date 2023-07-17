@@ -7,62 +7,107 @@ package frc.robot.commands.commandGroups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.commands.autoCommands.*;
-import frc.robot.commands.commandGroups.Autos.AutoMode;
+import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
+import frc.robot.commands.commandGroups.Autos.AutoModePID;
+import frc.robot.commands.teleOpCommands.ShooterMid;
+import frc.robot.subsystems.Angulation;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Take;
 
 public class AutoRoutinesPID extends SequentialCommandGroup {
   
-  
+  public AutoRoutinesPID(AutoModePID selectedRoutine, DriveTrain driveTrain, Angulation angulation, Take intake) {
 
-  public AutoRoutinesPID(AutoMode selectedRoutine, DriveTrain driveTrain) {
-    /* 
-    if(selectedRoutine == AutoMode.TESTES_CHARGESTATION){
+    switch (selectedRoutine) {
+      case MID:
+        new ShooterMid(intake);
+        break;
+
+      case LOW:
+        addCommands(ShooterTimedAuto.LOW(intake));
+        break;
+
+      case MID_MOB:
+        addCommands(
+          new ShooterMid(intake)
+          // Drive command
+        );
+        break;
+
+      case LOW_MOB:
+        addCommands(
+          ShooterTimedAuto.LOW(intake)
+          // Drive command
+        );
+        break;
+
+      case MID_CHARGE:
+        addCommands(
+          new ShooterMid(intake)
+          // Drive command
+        );
+        break;
+
+      case LOW_CHARGE:
+        addCommands(
+          ShooterTimedAuto.LOW(intake)
+          // Balance command
+        );
+        break;
+
+      case MID_MOB_CHARGE:
+        addCommands(
+          new ShooterMid(intake)
+          // Drive command
+          // Balance command
+        );
+        break;
+
+      case LOW_MOB_CHARGE:
+        addCommands(
+          ShooterTimedAuto.LOW(intake)
+          // Drive command
+          // Balance command
+        );
+        break;
+
+      case MID_MOB_PIECE:
+        addCommands(
+          
+        );
+        break;
+
+      case LOW_MOB_PIECE:
       addCommands(
-        new BalanceCommand1(driveTrain)
+        
       );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MOBILITY){
-      addCommands(
-        new DriveAuto(driveTrain, 4)
-      );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK){
-      addCommands(
-        // Comando de jogar GP
-        new DriveAuto(driveTrain, 5)
-        // Comando de pegar GP
-      );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_MID){
-      addCommands(
-        // Comando de jogar GP
-        new DriveAuto(driveTrain, 5)
-        // Comando de pegar GP
-        // Comando de jogar GP
-      );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MID_CHARGE){
-      addCommands(
-        // Comando de jogar GP
-        new BalanceCommand1(driveTrain)
-      );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_CHARGE){
-      addCommands(
-        // Comando de jogar GP
-        new DriveAuto(driveTrain, 5),
-        // Comando de pegar GP
-        new BalanceCommand1(driveTrain)
-      );
-    } 
-    else if(selectedRoutine == AutoMode.PID_MID_MOB_PICK_MID_CHARGE){
-      addCommands(
-        // Comando de jogar GP
-        new DriveAuto(driveTrain, 5),
-        // Comando de pegar GP
-        new BalanceCommand1(driveTrain)
-        // Comando de jogar GP
-      );
+        break;
+
+      case MID_MOD_PIECE_CHARGE:
+        addCommands(
+          
+        );
+        break;
+
+      case LOW_MOD_PIECE_CHARGE:
+        addCommands(
+          
+        );
+        break;
+
+      case MID_MOB_PIECE_LOW:
+        addCommands(
+          
+        );
+        break;
+
+      case LOW_MOB_PIECE_MID:
+        addCommands(
+          
+        );
+        break;
+      
     }
-    */
+
   }
 }

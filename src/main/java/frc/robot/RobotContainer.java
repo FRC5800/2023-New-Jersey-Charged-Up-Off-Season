@@ -12,14 +12,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.commandGroups.AutoRoutinesPID;
 import frc.robot.commands.commandGroups.AutoRoutinesTimed;
-import frc.robot.commands.commandGroups.Autos.AutoMode;
+import frc.robot.commands.commandGroups.Autos.AutoModeTimed;
+import frc.robot.commands.commandGroups.Autos.AutoModePID;
 import frc.robot.commands.teleOpCommands.Angle;
 import frc.robot.commands.teleOpCommands.AngulationEncoder;
 import frc.robot.commands.teleOpCommands.Drive;
 import frc.robot.commands.teleOpCommands.GetCube;
 import frc.robot.commands.teleOpCommands.ShooterMid;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.autoCommands.testeEncoderPhase;
 
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
@@ -50,7 +50,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-
+    
   }
 
   public Command getAutonomousCommand() {

@@ -14,8 +14,8 @@ public class ShooterMid extends SequentialCommandGroup{
 
   public ShooterMid(Take take) {
     addCommands(
-      new ShooterTimedAuto(take, 0, 0.65, 0.5 , true),
-      new ShooterTimedAuto(take, 1, 0, 5 , false),
+      new ShooterTimedAuto(take, 0, 0.65, 0.5, true),
+      new ShooterTimedAuto(take, 1, 0, 5, false),
       new ShooterTimedAuto(take, 1, 1, 1, false)
     );
   }

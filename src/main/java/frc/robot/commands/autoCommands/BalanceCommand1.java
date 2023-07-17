@@ -30,15 +30,14 @@ public class BalanceCommand1 extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.resetEncoders();
-    //initialPitch = drivetrain.getPitch();
+    initialPitch = drivetrain.getPitch();
   }
 
   @Override
   public void execute() {
-    //SmartDashboard.putNumber("VoltageMotors", drivetrain.getVoltage());
     SmartDashboard.putNumber("encoder", drivetrain.getAverageEncoderMeters());
-    //SmartDashboard.putNumber("Pigeon Pitch", drivetrain.getPitch());
-    //pitch = drivetrain.getPitch();
+    SmartDashboard.putNumber("Pigeon Pitch", drivetrain.getPitch());
+    pitch = drivetrain.getPitch();
     encoderDiff = initialEncoder - drivetrain.getAverageEncoderMeters();
 
     if(!isBalancing && pitch > initialPitch + 4) {
@@ -50,16 +49,16 @@ public class BalanceCommand1 extends CommandBase {
 
     if(isBalancing && !inGoal){
       if(drivetrain.getAverageEncoderMeters() < encoderGoal*1/3) {
-        //drivetrain.setVoltage(9.6);
+        drivetrain.setVoltage(9.6);
       } else if((drivetrain.getAverageEncoderMeters() > encoderGoal*1/3) && (drivetrain.getAverageEncoderMeters() < encoderGoal)) {
-        //drivetrain.setVoltage(4.0);
+        drivetrain.setVoltage(4.0);
       } else{
         inGoal = true;
       }
     }else if(pitch < initialPitch - 1) {
-      //drivetrain.setVoltage(4.0);
+      drivetrain.setVoltage(4.0);
     } else if(pitch > initialPitch + 1) {
-      //drivetrain.setVoltage(-4.0);
+      drivetrain.setVoltage(-4.0);
     }
 }
 
