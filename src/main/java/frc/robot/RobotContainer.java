@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.commandGroups.AutoRoutinesPID;
 import frc.robot.commands.commandGroups.AutoRoutinesTimed;
+import frc.robot.commands.commandGroups.AutoCommands.PIDCommands.DrivePIDAuto;
 import frc.robot.commands.commandGroups.Autos.AutoMode;
 import frc.robot.commands.teleOpCommands.Angle;
 import frc.robot.commands.teleOpCommands.AngulationEncoder;
@@ -42,7 +44,9 @@ public class RobotContainer {
     angulation.setDefaultCommand(new Angle(angulation, subsystemsController));
     take.setDefaultCommand(new GetCube(take, subsystemsController));
     new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ShooterMid(take));
+    
 
+    subsystemsController.getXButton();
     //chooser.setDefaultOption("Autonomous Mode", autonomousMode);
     SmartDashboard.putData("Auto mode", chooser);
     
@@ -50,10 +54,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    OperatorConstants.buttonX.toggleOnTrue(new AngulationEncoder(angulation));
 
   }
 
   public Command getAutonomousCommand() {
-    return new AngulationEncoder(angulation);
+    return new DrivePIDAuto(driveTrain, 2);
   }
 }

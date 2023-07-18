@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AngulationConstants;
 
@@ -52,6 +53,7 @@ public class Angulation extends SubsystemBase {
     leftMaster.set(vel);
 }
 public double getEncoderRotations() {
+  SmartDashboard.putNumber("Raw encoder", rightEncoder.getPosition());
   var position = rightEncoder.getPosition();
   return 550 - (position < 400 ? position+550 : position);
 }

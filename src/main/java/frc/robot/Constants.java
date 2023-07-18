@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 public final class Constants {
   public static class DrivetrainConstants {
     public static final int kLeftMasterID = 1;
@@ -16,6 +19,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kSubsystemsControllerPort = 1;
+
+    public static JoystickButton buttonX = new JoystickButton(RobotContainer.subsystemsController, XboxController.Button.kX.value);
     
   }
 
@@ -63,7 +68,8 @@ public final class Constants {
     public static final double INTEGRAL_RANGE_TURNAUTO = 0.5;
     public static final double CONTINIUS_INPUT_TURNAUTO = 180;
 
-    public static final double KP_DRIVEAUTO = 0;
-    public static final double KI_DRIVEAUTO = 0;
+    public static final double KP_DRIVEAUTO = 0.7;
+    public static final double KI_DRIVEAUTO = 0.01;
+    public static final double KD_DRIVEAUTO = 0.009;
   }
 }

@@ -27,11 +27,10 @@ public class AngulationEncoder extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    executando = false;
     initialRotation = angulation.getEncoderRotations();
     SmartDashboard.putNumber("initialRotation", initialRotation);
     down = true;
-    if (initialRotation >= 150) down = false;
+    if (initialRotation >= (Angulation.UP_POSITION+Angulation.DOWN_POSITION)/2) down = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,14 +56,10 @@ public class AngulationEncoder extends CommandBase {
   public boolean isFinished() {
 
     if (down){
-      executando = true;
-      SmartDashboard.putBoolean("Ta indo", executando);
-      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION;
+      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.1;
       
     }else{
-      executando = false;
-      SmartDashboard.putBoolean("Ta indo", executando);
-      return angulation.getEncoderRotations() <= Angulation.UP_POSITION;
+      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.1;
     }
   }
 }

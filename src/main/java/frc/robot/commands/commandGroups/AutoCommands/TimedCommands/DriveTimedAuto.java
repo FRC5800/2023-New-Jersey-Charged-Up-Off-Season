@@ -37,7 +37,7 @@ public class DriveTimedAuto extends CommandBase {
   public DriveTimedAuto(DriveTrain driveTrain, double time, double leftMotorPercentage, double rightMotorPercentage) {
     this.driveTrain = driveTrain;
     this.leftMotorPercentage = leftMotorPercentage;
-    this.rightMotorPercentage = leftMotorPercentage;
+    this.rightMotorPercentage = rightMotorPercentage;
     this.time = time;
 
     addRequirements(driveTrain);

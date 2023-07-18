@@ -29,8 +29,8 @@ public class GetCube extends CommandBase {
   @Override
   public void execute() {
     if(xboxController.getAButton()){
-      take.setUpperShooterPercentage(1);                                                                 
-      take.setLowerShooterPercentage(1);
+      take.setUpperShooterPercentage(0.8);                                                                 
+      take.setLowerShooterPercentage(0.8);
     } else {
       take.setUpperShooterPercentage(0);                                                                 
       take.setLowerShooterPercentage(0);
