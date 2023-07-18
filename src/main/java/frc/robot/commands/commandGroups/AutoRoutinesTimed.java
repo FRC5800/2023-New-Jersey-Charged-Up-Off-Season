@@ -12,7 +12,7 @@ import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.AngulationTim
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTimedAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTurnAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
-import frc.robot.commands.commandGroups.Autos.AutoMode;
+import frc.robot.commands.commandGroups.Autos.AutoModeTimed;
 import frc.robot.commands.teleOpCommands.Drive;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
@@ -24,7 +24,7 @@ import frc.robot.subsystems.Take;
 public class AutoRoutinesTimed extends SequentialCommandGroup {
 
   /** Creates a new AutoRoutines. */
-  public AutoRoutinesTimed(AutoMode selectedRoutine, DriveTrain driveTrain, Take intake, Angulation angulation) {
+  public AutoRoutinesTimed(AutoModeTimed selectedRoutine, DriveTrain driveTrain, Take intake, Angulation angulation) {
     switch (selectedRoutine) {
       case MID:
         addCommands(ShooterTimedAuto.MID(intake));

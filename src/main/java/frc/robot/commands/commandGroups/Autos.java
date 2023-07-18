@@ -6,7 +6,26 @@ package frc.robot.commands.commandGroups;
 
 /** Add your docs here. */
 public final class Autos {
-  public static enum AutoMode {
+  public static enum AutoModeTimed {
+    MID,
+    LOW,
+    MID_MOB,
+    LOW_MOB,
+    MID_CHARGE,
+    LOW_CHARGE,
+    MID_MOB_CHARGE,
+    LOW_MOB_CHARGE,
+    MID_MOB_PIECE,
+    LOW_MOB_PIECE,
+    MID_MOD_PIECE_CHARGE,
+    LOW_MOD_PIECE_CHARGE,
+    MID_MOB_PIECE_MID,
+    MID_MOB_PIECE_LOW,
+    LOW_MOB_PIECE_MID,
+    LOW_MOB_PIECE_LOW
+  }
+
+  public static enum AutoModePID {
     MID,
     LOW,
     MID_MOB,
