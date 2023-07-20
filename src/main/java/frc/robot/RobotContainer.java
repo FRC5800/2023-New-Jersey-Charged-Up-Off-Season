@@ -80,7 +80,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AutoRoutinesPID(AutoMode.HIGH_CHARGE, driveTrain, angulation, take);
+    //return new AutoRoutinesPID(AutoMode.MID_MOB, driveTrain, angulation, take);
     //return new ChargeRoutine(driveTrain);
+    return DrivePIDAuto.MOB(driveTrain);
+
   }
 }

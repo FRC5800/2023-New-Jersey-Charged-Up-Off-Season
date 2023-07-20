@@ -22,7 +22,7 @@ public class DrivePIDAuto extends CommandBase {
   private PIDController pid = new PIDController(Constants.AutoConstants.KP_DRIVEAUTO, Constants.AutoConstants.KI_DRIVEAUTO, Constants.AutoConstants.KD_DRIVEAUTO);
 
   public final static DrivePIDAuto MOB(DriveTrain driveTrain) {
-    return new DrivePIDAuto(driveTrain, -4);
+    return new DrivePIDAuto(driveTrain, -4.5);
   }
   public final static DrivePIDAuto MOB_C(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -5);
@@ -51,8 +51,7 @@ public class DrivePIDAuto extends CommandBase {
   @Override
   public void initialize() {
     pid.setTolerance(0.035, 1.9181);
-    pid.setIntegratorRange(0.1, 1.5);
-    driveTrain.resetEncoders();
+    pid.setIntegratorRange(0.1, 1.45);
     pid.reset();
     initialEncoderLeft = driveTrain.getLeftEncoderMeters();
     initialEncoderRight = driveTrain.getRightEncoderMeters();
@@ -68,8 +67,8 @@ public class DrivePIDAuto extends CommandBase {
 
     SmartDashboard.putNumber("Erro setpoint", pid.getPositionError());
     SmartDashboard.putNumber("setpoint", pid.getPositionError());
-    SmartDashboard.putNumber("left encoder", driveTrain.getLeftEncoderMeters());
-    SmartDashboard.putNumber("right encoder", driveTrain.getRightEncoderMeters());
+    SmartDashboard.putNumber("left encoder", encoderLeft);
+    SmartDashboard.putNumber("right encoder", encoderRight);
     driveTrain.tankDrive(pid.calculate(encoderLeft, distance), pid.calculate(encoderRight, distance));
 
   }

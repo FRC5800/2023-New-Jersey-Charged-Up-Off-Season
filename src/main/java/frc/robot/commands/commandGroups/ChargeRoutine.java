@@ -22,7 +22,7 @@ public class ChargeRoutine extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ChargePigeon(driveTrain, 15, -0.83, 1.7),
-      new ChargePigeon(driveTrain, 3, -0.579, 3),
+      new ChargePigeon(driveTrain, 3, -0.6, 3),
       new KeepCharge2(driveTrain)
     );
   }
