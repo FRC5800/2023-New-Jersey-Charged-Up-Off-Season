@@ -7,6 +7,7 @@ package frc.robot.commands.commandGroups;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.commands.autoCommands.*;
 import frc.robot.commands.commandGroups.AutoCommands.PIDCommands.DrivePIDAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
@@ -14,6 +15,7 @@ import frc.robot.commands.commandGroups.Autos.AutoMode;
 import frc.robot.commands.teleOpCommands.ShooterHigh;
 import frc.robot.commands.teleOpCommands.ShooterLow;
 import frc.robot.commands.teleOpCommands.ShooterMid;
+import frc.robot.commands.trajectory.FollowPath;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
@@ -23,6 +25,13 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
   public AutoRoutinesPID(AutoMode selectedRoutine, DriveTrain driveTrain, Angulation angulation, Take intake) {
 
     switch (selectedRoutine) {
+
+      case PATH:
+        addCommands(
+          new FollowPath(driveTrain)
+        );
+        break;
+
       case HIGH:
         addCommands(
           new ShooterHigh(intake)
