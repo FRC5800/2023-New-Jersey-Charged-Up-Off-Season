@@ -9,12 +9,14 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -28,9 +30,9 @@ public class DriveTrain extends SubsystemBase {
 
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
 
-  Pigeon2 pigeon = new Pigeon2(0);
-
-  WPI_PigeonIMU gyro = new WPI_PigeonIMU(8);
+  private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(8);
+  private double initialPigeon;
+  
 
   public DriveTrain() {
     rightMaster.configFactoryDefault();
@@ -49,6 +51,8 @@ public class DriveTrain extends SubsystemBase {
 
     rightMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
     leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
+  
+    initialPigeon = pigeon.getRoll();
   }
 
   public void drive(XboxController xboxController){
@@ -80,11 +84,11 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void resetGyro(){
-    gyro.reset();
+    pigeon.reset();
   }
 
   public void calibrateGyro(){
-    gyro.calibrate();
+    pigeon.calibrate();
   }
 
   public double getLeftEncoderTicks() {
@@ -119,6 +123,18 @@ public class DriveTrain extends SubsystemBase {
     return (getRightEncoderMeters() + getLeftEncoderMeters()) / 2.0;
   }
 
+  public double getAverageEncoderSpeed() {
+    return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2.0;
+  }
+
+  public double getLeftEncoderSpeed() {
+    return leftMaster.getSelectedSensorVelocity();
+  }
+
+  public double getRightEncoderSpeed() {
+    return rightMaster.getSelectedSensorVelocity();
+  }
+
   //SET MASTER PERCENT OUTPUT
   public void setLeftMasterPercent(double percent){
     leftMaster.set(ControlMode.PercentOutput, percent);
@@ -138,17 +154,25 @@ public class DriveTrain extends SubsystemBase {
   }
 
 
-  public double getHeading(){
-    return gyro.getAngle();
+  public double getAngle(){
+    return pigeon.getAngle();
   }
 
 
   public double getPitch(){
-    return pigeon.getPitch();
+    return pigeon.getPitch();//-initialPigeon;
+  }
+
+  public double getYaw(){
+    return pigeon.getYaw();//-initialPigeon;
+  }
+
+  public double getRoll(){
+    return pigeon.getRoll()-initialPigeon;//-initialPigeon;
   }
 
   public Rotation2d getRotation2D(){
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(getAngle());
   }
 
   @Override
@@ -158,8 +182,4 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
   }
-
-public double getAngle() {
-    return this.getHeading();
 }
-  }

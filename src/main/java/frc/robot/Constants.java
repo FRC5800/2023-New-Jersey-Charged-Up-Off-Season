@@ -68,8 +68,8 @@ public final class Constants {
     public static final double INTEGRAL_RANGE_TURNAUTO = 0.5;
     public static final double CONTINIUS_INPUT_TURNAUTO = 180;
 
-    public static final double KP_DRIVEAUTO = 0.7;
-    public static final double KI_DRIVEAUTO = 0.01;
-    public static final double KD_DRIVEAUTO = 0.009;
+    public static final double KP_DRIVEAUTO = 1.1;
+    public static final double KI_DRIVEAUTO = 0.1; //0.01
+    public static final double KD_DRIVEAUTO = 0.08; //0.009
   }
 }

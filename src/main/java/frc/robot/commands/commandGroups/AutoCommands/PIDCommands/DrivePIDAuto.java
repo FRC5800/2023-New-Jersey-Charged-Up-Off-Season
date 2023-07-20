@@ -17,11 +17,15 @@ public class DrivePIDAuto extends CommandBase {
   private final DriveTrain driveTrain;
   private double motorSpeed;
   private double distance;
-  private double initialEncoder;
+  private double initialEncoderLeft;
+  private double initialEncoderRight;
   private PIDController pid = new PIDController(Constants.AutoConstants.KP_DRIVEAUTO, Constants.AutoConstants.KI_DRIVEAUTO, Constants.AutoConstants.KD_DRIVEAUTO);
 
   public final static DrivePIDAuto MOB(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -4);
+  }
+  public final static DrivePIDAuto MOB_C(DriveTrain driveTrain) {
+    return new DrivePIDAuto(driveTrain, -5);
   }
 
   public final static DrivePIDAuto CHARGE(DriveTrain driveTrain) {
@@ -46,20 +50,28 @@ public class DrivePIDAuto extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid.setTolerance(0.05, 1.9181);
-    pid.setIntegratorRange(0.08, 0.5);
+    pid.setTolerance(0.035, 1.9181);
+    pid.setIntegratorRange(0.1, 1.5);
     driveTrain.resetEncoders();
     pid.reset();
+    initialEncoderLeft = driveTrain.getLeftEncoderMeters();
+    initialEncoderRight = driveTrain.getRightEncoderMeters();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double encoderLeft = driveTrain.getLeftEncoderMeters() - initialEncoderLeft;
+    double encoderRight = driveTrain.getRightEncoderMeters() - initialEncoderRight;
+
+
     SmartDashboard.putNumber("Erro setpoint", pid.getPositionError());
     SmartDashboard.putNumber("setpoint", pid.getPositionError());
-    //SmartDashboard.putNumber("left encoder", driveTrain.getLeftEncoderMeters());
-    //SmartDashboard.putNumber("right encoder", driveTrain.getRightEncoderMeters());
-    driveTrain.tankDrive(pid.calculate(driveTrain.getLeftEncoderMeters(), distance), pid.calculate(driveTrain.getRightEncoderMeters(), distance));
+    SmartDashboard.putNumber("left encoder", driveTrain.getLeftEncoderMeters());
+    SmartDashboard.putNumber("right encoder", driveTrain.getRightEncoderMeters());
+    driveTrain.tankDrive(pid.calculate(encoderLeft, distance), pid.calculate(encoderRight, distance));
+
   }
 
   // Called once the command ends or is interrupted.
@@ -71,6 +83,9 @@ public class DrivePIDAuto extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
+    SmartDashboard.putBoolean("At setpoint", pid.atSetpoint());
     return pid.atSetpoint();
+
   }
 }

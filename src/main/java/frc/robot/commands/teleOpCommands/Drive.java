@@ -45,6 +45,11 @@ public class Drive extends CommandBase {
     SmartDashboard.putNumber("encoderleft teleop", driveTrain.getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", driveTrain.getRightEncoderMeters());
     SmartDashboard.putNumber("battery Voltage", RobotController.getBatteryVoltage());
+    SmartDashboard.putNumber("pitch", driveTrain.getPitch());
+    SmartDashboard.putNumber("Yaw", driveTrain.getYaw());
+    SmartDashboard.putNumber("Roll", driveTrain.getRoll());
+    SmartDashboard.putNumber("speed", driveTrain.getAverageEncoderSpeed());
+
     double axisLeft = -driveController.getRawAxis(XboxController.Axis.kLeftY.value);
     double axisRight = -driveController.getRawAxis(XboxController.Axis.kRightX.value);
     double leftSpeed = 0;

@@ -22,7 +22,7 @@ public class ShooterTimedAuto extends CommandBase {
   }
 
   public final static ShooterTimedAuto LOW(Take intake) {
-    return new ShooterTimedAuto(intake, 0.65, 0.65, 1 , false);
+    return new ShooterTimedAuto(intake, 0.3, 0.3, 1 , false);
   }
 
   public final static ShooterTimedAuto IN(Take intake) {

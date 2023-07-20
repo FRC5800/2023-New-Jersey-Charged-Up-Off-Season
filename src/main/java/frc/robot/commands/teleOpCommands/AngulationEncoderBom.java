@@ -10,16 +10,14 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 
-public class AngulationEncoder extends CommandBase {
+public class AngulationEncoderBom extends CommandBase {
   /** Creates a new DriveTime. */
   private final Angulation angulation;
   private double initialRotation;
   private boolean down;
   private boolean executando;
-  private double kp1 = 8;
-  private double kp2 = 0.5;
 
-  public AngulationEncoder(Angulation angulation) {
+  public AngulationEncoderBom(Angulation angulation) {
     this.angulation = angulation;
 
     addRequirements(angulation);
@@ -44,20 +42,10 @@ public class AngulationEncoder extends CommandBase {
     double rotation = angulation.getEncoderRotations();
 
     if(down){
-      angulation.setElevatorAngleSpeed(0.6);
+      angulation.setElevatorAngleSpeed(0.65);
       
-      if(rotation < 0.87){
-        diff = 0.85 - rotation;
-        vel = diff*kp1;
-        angulation.setElevatorAngleSpeed(vel);
-      
-      }else if(rotation > 0.87){
-        diff = 1 - rotation;
-        vel = diff*kp2;
-        angulation.setElevatorAngleSpeed(vel);
-      }
       }else{
-       angulation.setElevatorAngleSpeed(-0.6);
+       angulation.setElevatorAngleSpeed(-0.65);
 
     }
   }
@@ -73,10 +61,10 @@ public class AngulationEncoder extends CommandBase {
   public boolean isFinished() {
 
     if (down){
-      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.1;
+      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.11;
       
     }else{
-      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.1;
+      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.11;
     }
   }
 }

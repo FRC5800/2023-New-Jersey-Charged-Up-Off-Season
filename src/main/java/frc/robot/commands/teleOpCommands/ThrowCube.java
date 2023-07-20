@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Take;
 
-public class GetCube extends CommandBase {
+public class ThrowCube extends CommandBase {
   /** Creates a new InOutTake. */
   Take take;
   XboxController xboxController;
   double speed;
-  int in;
-  public GetCube(Take take, XboxController xboxController) {
+  public ThrowCube(Take take, XboxController xboxController) {
     this.take = take;
     this.xboxController = xboxController;
     addRequirements(take);
@@ -23,21 +22,21 @@ public class GetCube extends CommandBase {
 
   @Override
   public void initialize() {
-    speed = -0.8;
+    speed = 0.8;
   }
-
   @Override
   public void execute() {
     /*if(xboxController.getAButton()){
-      take.setUpperShooterPercentage(0.8);                                                                 
-      take.setLowerShooterPercentage(0.8);
+      take.setUpperShooterPercentage(speed);                                                                 
+      take.setLowerShooterPercentage(speed);
     } else {
       take.setUpperShooterPercentage(0);                                                                 
       take.setLowerShooterPercentage(0);
     }*/
-
+    
     take.setUpperShooterPercentage(speed);                                                                 
     take.setLowerShooterPercentage(speed);
+
   }
 
 

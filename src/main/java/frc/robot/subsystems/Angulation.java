@@ -30,27 +30,27 @@ public class Angulation extends SubsystemBase {
   CANSparkMax leftSlave = new CANSparkMax(AngulationConstants.kAngleSlave2ID, MotorType.kBrushed); 
   MotorControllerGroup leftGroup = new MotorControllerGroup(leftMaster, leftSlave);
 
-  DifferentialDrive drive = new DifferentialDrive(leftGroup, rightGroup);
-
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
   public static final double DOWN_POSITION = 1;
   public static final double UP_POSITION = 0.68505859375;
 
   public Angulation() {
-    rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
-    
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
+
+    leftSlave.follow(leftMaster);
+
     leftMaster.setIdleMode(IdleMode.kBrake);
     leftSlave.setIdleMode(IdleMode.kBrake);
     rightMaster.setIdleMode(IdleMode.kBrake);
     rightSlave.setNeutralMode(NeutralMode.Brake);
   }
 
-  
-
   public void setElevatorAngleSpeed(double vel) {
-    rightMaster.set(vel);
-    leftMaster.set(vel);
+    double speed = vel;
+    SmartDashboard.putNumber("vel", speed);
+    rightGroup.set(vel);
+    leftGroup.set(vel);
 }
 public double getEncoderRotations() {
   SmartDashboard.putNumber("Raw encoder", rightEncoder.getPosition());
