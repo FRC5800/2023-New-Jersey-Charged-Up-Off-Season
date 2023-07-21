@@ -15,14 +15,17 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 
 public class DriveTrain extends SubsystemBase {
@@ -37,12 +40,16 @@ public class DriveTrain extends SubsystemBase {
 
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
   private final DifferentialDriveOdometry odometry;
+  public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TrajectoryConstants.kTrackwidthMeters);
 
   private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(8);
   private double initialPigeon;
+
+  private Field2d field = new Field2d();
   
 
   public DriveTrain() {
+    SmartDashboard.putData(field);
     rightMaster.configFactoryDefault();
     rightSlave.configFactoryDefault();
     leftMaster.configFactoryDefault();
@@ -61,7 +68,6 @@ public class DriveTrain extends SubsystemBase {
     leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
   
     initialPigeon = pigeon.getRoll();
-    resetEncoders();
     odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters() /*,new Pose2d(5.0, 13.5, new Rotation2d()) */);
   }
 
@@ -102,8 +108,8 @@ public class DriveTrain extends SubsystemBase {
     return position;
   }
   public double encoderTicksToMeters(double encoderticks) {
-		return -(encoderticks / 4096) * 0.471238898;
-	}
+		return -(encoderticks / 4096) * Constants.DriveConstants.kWheelCircunference;
+  }
 
   public double getLeftEncoderMeters() {
     double meters = encoderTicksToMeters(getLeftEncoderTicks());
@@ -130,6 +136,14 @@ public class DriveTrain extends SubsystemBase {
     return rightMaster.getSelectedSensorVelocity();
   }
 
+  public double getRightEncoderSpeedMeters() {
+    return encoderTicksToMeters(rightMaster.getSelectedSensorVelocity() * 10) ;
+  }
+  public double getLeftEncoderSpeedMeters() {
+    return encoderTicksToMeters(leftMaster.getSelectedSensorVelocity() * 10) ;
+  }
+
+
   //SET MASTER PERCENT OUTPUT
   public void setLeftMasterPercent(double percent){
     leftMaster.set(ControlMode.PercentOutput, percent);
@@ -150,6 +164,9 @@ public class DriveTrain extends SubsystemBase {
   public double getAngle(){
     return pigeon.getAngle();
   }
+  public double getHeading(){
+    return pigeon.getRotation2d().getDegrees();
+  }
   public double getPitch(){
     return pigeon.getPitch();//-initialPigeon;
   }
@@ -165,7 +182,7 @@ public class DriveTrain extends SubsystemBase {
     return odometry.getPoseMeters();
   }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftEncoderSpeed(), getRightEncoderSpeed());
+    return new DifferentialDriveWheelSpeeds(getLeftEncoderSpeedMeters(), getRightEncoderSpeedMeters());
   }  
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
@@ -178,8 +195,8 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setVoltage(rightVolts);
     diffDrive.feed();
   }
-  public double getHeading() {
-    return pigeon.getRotation2d().getDegrees(); //return de -180 até 180
+  public Rotation2d getRotation2d() {
+    return pigeon.getRotation2d(); //return de -180 até 180
   }
   public double getTurnRate() {
     return pigeon.getRate();
@@ -188,6 +205,12 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters());
+    
+    SmartDashboard.putNumber(("speedMeters"), getLeftEncoderSpeedMeters());
+    SmartDashboard.putNumber("encoderleft teleop", getLeftEncoderMeters());
+    SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
+
+    field.setRobotPose(getPose());
   }
 
   @Override

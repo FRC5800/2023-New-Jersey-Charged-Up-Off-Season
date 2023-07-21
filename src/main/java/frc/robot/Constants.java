@@ -75,4 +75,19 @@ public final class Constants {
     public static final double KI_DRIVEAUTO = 0.1; //0.01
     public static final double KD_DRIVEAUTO = 0.08; //0.009
   }
+
+  public static class TrajectoryConstants {
+    public static final double ksVolts = 0.72947;
+    public static final double kvVoltSecondsPerMeter = 3.1603;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.82106;
+    public static final double kPDriveVel = 4.7751;
+
+    public static final double kTrackwidthMeters = 0.62;
+
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 8;
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+  }
 }

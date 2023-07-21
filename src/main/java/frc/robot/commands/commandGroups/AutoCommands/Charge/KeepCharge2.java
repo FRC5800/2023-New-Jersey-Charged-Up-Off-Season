@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DriveTrain;
-
+//ajustar cálculo de speed para lados individualmente
 public class KeepCharge2 extends CommandBase {
   private final DriveTrain driveTrain;
   private double initialSpeed = 0.4;

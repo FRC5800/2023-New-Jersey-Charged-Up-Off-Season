@@ -24,6 +24,6 @@ public final class Autos {
     MID_MOB_PIECE_MID,
     MID_MOB_PIECE_LOW,
     LOW_MOB_PIECE_MID,
-    LOW_MOB_PIECE_LOW
+    LOW_MOB_PIECE_LOW, PATH
   }
 }
