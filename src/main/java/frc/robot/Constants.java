@@ -39,6 +39,9 @@ public final class Constants {
     public static final double KDTurnAuto = 3; //a definir
     public static final double IrangeTurnAuto = 0.5; //a definir
     public static final double ContinuousInputTurnAuto = 180; //a definir
+
+    public static final double robotMeasure = 0.94; //metros
+
   }
   public static class ShooterConstants{
     public static final int KIntakeUpperID = 11;

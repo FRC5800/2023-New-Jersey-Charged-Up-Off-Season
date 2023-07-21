@@ -32,9 +32,9 @@ public class Angle extends CommandBase {
     speed = subsystemsController.getRawAxis(XboxController.Axis.kRightY.value);
     //speed = speed * (((AngulationConstants.KMaxAngle - angle) * AngulationConstants.KAngleMultiplier / AngulationConstants.KMaxAngle - AngulationConstants.KMinAngle)+0.1); // quando sem imput indo pra tras
     if (speed > 0) {
-      angulation.setElevatorAngleSpeed(speed*0.56);
+      angulation.setElevatorAngleSpeed(speed*0.58);
     } else {
-      angulation.setElevatorAngleSpeed(speed*0.62);
+      angulation.setElevatorAngleSpeed(speed*0.66);
     }
   }
 
