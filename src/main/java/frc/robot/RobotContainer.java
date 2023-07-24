@@ -4,43 +4,22 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.commandGroups.AutoRoutinesPID;
-import frc.robot.commands.commandGroups.AutoRoutinesTimed;
-import frc.robot.commands.commandGroups.ChargeRoutine;
-import frc.robot.commands.commandGroups.AutoCommands.PIDCommands.DrivePIDAuto;
-import frc.robot.commands.commandGroups.Autos.AutoMode;
-import frc.robot.commands.teleOpCommands.Angle;
-import frc.robot.commands.teleOpCommands.AngulationEncoder;
-import frc.robot.commands.teleOpCommands.AngulationEncoderBom;
-import frc.robot.commands.teleOpCommands.Drive;
-import frc.robot.commands.teleOpCommands.GetCube;
-import frc.robot.commands.teleOpCommands.ShooterHigh;
-import frc.robot.commands.teleOpCommands.ShooterLow;
-import frc.robot.commands.teleOpCommands.ShooterMid;
-import frc.robot.commands.teleOpCommands.ThrowCube;
+import frc.robot.commands.commandGroups.AutoCommands.Routines.AutoRoutinesPID;
+import frc.robot.commands.commandGroups.AutoCommands.Routines.Autos.AutoMode;
+import frc.robot.commands.teleOpCommands.Angulation.AngulationEncoder;
+import frc.robot.commands.teleOpCommands.Angulation.ManualAngle;
+import frc.robot.commands.teleOpCommands.Drivetrain.Drive;
+import frc.robot.commands.teleOpCommands.Take.GetCube;
+import frc.robot.commands.teleOpCommands.Take.ShooterHigh;
+import frc.robot.commands.teleOpCommands.Take.ShooterLow;
+import frc.robot.commands.teleOpCommands.Take.ShooterMid;
+import frc.robot.commands.teleOpCommands.Take.ThrowCube;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.autoCommands.testeEncoderPhase;
-
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
@@ -65,35 +44,27 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
-    angulation.setDefaultCommand(new Angle(angulation, subsystemsController));
+    angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
     //take.setDefaultCommand(new GetCube(take, subsystemsController));
-    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ShooterMid(take));
-    
-
-    subsystemsController.getXButton();
     //chooser.setDefaultOption("Autonomous Mode", autonomousMode);
-    SmartDashboard.putData("Auto mode", chooser);
-    SmartDashboard.putNumber("pitch", driveTrain.getPitch());
-    SmartDashboard.putNumber("angulation position", angulation.getEncoderRotations());
-
     
     configureBindings();
   }
 
   private void configureBindings() {
-    //OperatorConstants.buttonX.toggleOnTrue(new AngulationEncoderBom(angulation));
+    
     new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
     new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
     new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoderBom(angulation));
-
+    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder(angulation));
     new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
-    new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));  //onTrue(new ThrowCube(take, subsystemsController));
+    new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));
     
   }
 
   public Command getAutonomousCommand() {
-    return new AutoRoutinesPID(AutoMode.PATH, driveTrain, angulation, take);
+    return new AutoRoutinesPID(AutoMode.LOW_MOB_PIECE, driveTrain, angulation, take);
+    //return new FollowPathMeters(driveTrain);
     //return new ChargeRoutine(driveTrain);
 
     /*  var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(

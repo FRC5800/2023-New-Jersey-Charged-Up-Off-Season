@@ -6,7 +6,6 @@ package frc.robot.commands.commandGroups.AutoCommands.PIDCommands;
 
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -15,7 +14,6 @@ import frc.robot.subsystems.DriveTrain;
 public class DrivePIDAuto extends CommandBase {
   /** Creates a new DriveTime. */
   private final DriveTrain driveTrain;
-  private double motorSpeed;
   private double distance;
   private double initialEncoderLeft;
   private double initialEncoderRight;

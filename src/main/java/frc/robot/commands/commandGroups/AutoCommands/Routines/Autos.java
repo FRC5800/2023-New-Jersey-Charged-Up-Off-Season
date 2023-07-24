@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.commandGroups;
+package frc.robot.commands.commandGroups.AutoCommands.Routines;
 
 /** Add your docs here. */
 public final class Autos {
@@ -19,11 +19,11 @@ public final class Autos {
     LOW_MOB_CHARGE,
     MID_MOB_PIECE,
     LOW_MOB_PIECE,
-    MID_MOD_PIECE_CHARGE,
-    LOW_MOD_PIECE_CHARGE,
-    MID_MOB_PIECE_MID,
+    HIGH_MOB_PIECE,
+    MID_MOB_PIECE_CHARGE,
+    LOW_MOB_PIECE_CHARGE,
     MID_MOB_PIECE_LOW,
     LOW_MOB_PIECE_MID,
-    LOW_MOB_PIECE_LOW, PATH
+    PATH
   }
 }

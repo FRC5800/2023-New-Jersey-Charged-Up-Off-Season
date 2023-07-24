@@ -8,20 +8,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.Pigeon2;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -209,7 +204,9 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber(("speedMeters"), getLeftEncoderSpeedMeters());
     SmartDashboard.putNumber("encoderleft teleop", getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
-
+    SmartDashboard.putNumber("pose X", odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("pose Y", odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("rotation", pigeon.getRotation2d().getDegrees());
     field.setRobotPose(getPose());
   }
 

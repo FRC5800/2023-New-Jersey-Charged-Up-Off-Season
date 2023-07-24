@@ -6,12 +6,10 @@ package frc.robot.commands.commandGroups.AutoCommands.Charge;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class ChargePigeon extends CommandBase {
   private final DriveTrain driveTrain;
-  private double initialAngle;
   private double target;
   private double speed;
   private double tolerance;
@@ -28,7 +26,6 @@ public class ChargePigeon extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialAngle = driveTrain.getRoll();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

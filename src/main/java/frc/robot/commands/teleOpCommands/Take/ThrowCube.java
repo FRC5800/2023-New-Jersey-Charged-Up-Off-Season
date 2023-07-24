@@ -5,7 +5,6 @@
 package frc.robot.commands.teleOpCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Take;
 
@@ -26,20 +25,11 @@ public class ThrowCube extends CommandBase {
   }
   @Override
   public void execute() {
-    /*if(xboxController.getAButton()){
-      take.setUpperShooterPercentage(speed);                                                                 
-      take.setLowerShooterPercentage(speed);
-    } else {
-      take.setUpperShooterPercentage(0);                                                                 
-      take.setLowerShooterPercentage(0);
-    }*/
     
     take.setUpperShooterPercentage(speed);                                                                 
     take.setLowerShooterPercentage(speed);
 
   }
-
-
 
   @Override
   public void end(boolean interrupted) {

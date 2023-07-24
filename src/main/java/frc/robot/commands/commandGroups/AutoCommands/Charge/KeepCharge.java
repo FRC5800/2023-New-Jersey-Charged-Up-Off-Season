@@ -7,11 +7,11 @@ package frc.robot.commands.commandGroups.AutoCommands.Charge;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-
+//ajustar cálculo de speed para lados individualmente
 public class KeepCharge extends CommandBase {
   private final DriveTrain driveTrain;
-  private double initialAngle;
-  private double speed;
+  private double initialSpeed = 0.4;
+  private double speed = 0.4;
   /** Creates a new KeepCharge. */
   public KeepCharge(DriveTrain driveTrain) {
     this.driveTrain = driveTrain; 
@@ -35,17 +35,33 @@ public class KeepCharge extends CommandBase {
       driveTrain.tankDrive(0.5, 0.5);
     }*/
 
-    if (driveTrain.getRoll() > 5) {
-      driveTrain.setVoltage(-2.7);
+    if (driveTrain.getRoll() > 4.7) {
+      driveTrain.tankDrive(-speed, -speed);
       //driveTrain.tankDrive(-0.454, -0.454);
     } 
-    else if (driveTrain.getRoll() < -5) {
-      driveTrain.setVoltage(2.7);
+    else if (driveTrain.getRoll() < -4.7) {
+      driveTrain.tankDrive(speed, speed);
       //driveTrain.tankDrive(0.454, 0.454);
     }
     else {
       driveTrain.tankDrive(0, 0);
+      speed = initialSpeed;
     }
+
+    if (driveTrain.getRoll() > 5) {
+      if (driveTrain.getAverageEncoderSpeed() < 25) {
+        speed += 0.002;
+      }
+    } else if (driveTrain.getRoll() < -5) {
+      if (driveTrain.getAverageEncoderSpeed() > -25) {
+        speed += 0.002;
+      }
+    }
+
+    
+    SmartDashboard.putNumber("Yaw", driveTrain.getYaw());
+    SmartDashboard.putNumber("Roll", driveTrain.getRoll());
+    SmartDashboard.putNumber("speed", driveTrain.getAverageEncoderSpeed());
 
     SmartDashboard.putNumber("keepCharge", driveTrain.getRoll() );
 

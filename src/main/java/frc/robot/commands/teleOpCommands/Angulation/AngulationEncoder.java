@@ -4,45 +4,36 @@
 
 package frc.robot.commands.teleOpCommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Angulation;
-import frc.robot.subsystems.DriveTrain;
 
-public class AngulationEncoderBom extends CommandBase {
-  /** Creates a new DriveTime. */
+public class AngulationEncoder extends CommandBase {
+ 
   private final Angulation angulation;
   private double initialRotation;
   private boolean down;
-  private boolean executando;
 
-  public AngulationEncoderBom(Angulation angulation) {
+  public AngulationEncoder(Angulation angulation) {
     this.angulation = angulation;
 
     addRequirements(angulation);
     
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     initialRotation = angulation.getEncoderRotations();
-    SmartDashboard.putNumber("initialRotation", initialRotation);
     down = true;
     if (initialRotation >= (Angulation.UP_POSITION+Angulation.DOWN_POSITION)/2) down = false;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double diff = 0;
-    double vel = 0;
     double rotation = angulation.getEncoderRotations();
+    double vel = 0.35*((Angulation.DOWN_POSITION) - rotation)/(Angulation.DOWN_POSITION-Angulation.UP_POSITION) + 0.3;
 
     if(down){
-      angulation.setElevatorAngleSpeed(0.65);
+      angulation.setElevatorAngleSpeed(vel);
       
       }else{
        angulation.setElevatorAngleSpeed(-0.65);
@@ -61,10 +52,10 @@ public class AngulationEncoderBom extends CommandBase {
   public boolean isFinished() {
 
     if (down){
-      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.11;
+      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.16;
       
     }else{
-      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.11;
+      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.12;
     }
   }
 }

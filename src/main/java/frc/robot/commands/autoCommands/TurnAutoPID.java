@@ -15,8 +15,8 @@ import frc.robot.Constants.AutoConstants;
 public class TurnAutoPID extends CommandBase {
   private final DriveTrain driveTrain;
   private double ang;
-  double sensorAngle;
-  double outputSpeed;
+  private double sensorAngle;
+  private double outputSpeed;
   private PIDController pidController = 
   new PIDController(Constants.AutoConstants.KP_TURNAUTO, Constants.AutoConstants.KI_TURNAUTO, Constants.AutoConstants.KD_TURNAUTO);
 

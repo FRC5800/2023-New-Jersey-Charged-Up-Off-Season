@@ -8,9 +8,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DrivetrainConstants;
@@ -21,15 +19,10 @@ public class DriveTrainPID extends PIDSubsystem {
   private WPI_TalonSRX rightMaster = new WPI_TalonSRX(DrivetrainConstants.kRightMasterID);
   private VictorSPX rightSlave = new VictorSPX(DrivetrainConstants.kRightSlaveID);
 
-  private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
-
   WPI_PigeonIMU gyro = new WPI_PigeonIMU(8);
   
-  /** Creates a new DriveTrainPID. */
   public DriveTrainPID() {
     super(new PIDController(0.4, 0, 0));
-
-    
 
     rightMaster.configFactoryDefault();
     rightSlave.configFactoryDefault();

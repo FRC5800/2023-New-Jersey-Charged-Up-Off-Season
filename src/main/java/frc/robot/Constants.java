@@ -66,7 +66,7 @@ public final class Constants {
 
   public static class AutoConstants {
     public static final double KP_TURNAUTO = 0.03;
-    public static final double KI_TURNAUTO = 0.2;
+    public static final double KI_TURNAUTO = 0.3;
     public static final double KD_TURNAUTO = 0.005;
     public static final double INTEGRAL_RANGE_TURNAUTO = 0.5;
     public static final double CONTINIUS_INPUT_TURNAUTO = 180;

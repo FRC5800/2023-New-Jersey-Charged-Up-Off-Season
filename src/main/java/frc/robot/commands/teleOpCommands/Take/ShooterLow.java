@@ -4,15 +4,13 @@
 
 package frc.robot.commands.teleOpCommands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
 import frc.robot.subsystems.Take;
 
-public class ShooterMid extends SequentialCommandGroup{
+public class ShooterLow extends SequentialCommandGroup{
 
-  public ShooterMid(Take take) {
+  public ShooterLow(Take take) {
     addCommands(
       new ShooterTimedAuto(take, 0, 0.65, 0.5 , true),
       new ShooterTimedAuto(take, 0.4, 0, 1 , false),
