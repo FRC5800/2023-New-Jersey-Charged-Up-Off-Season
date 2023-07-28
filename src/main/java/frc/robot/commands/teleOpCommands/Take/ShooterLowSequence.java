@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
 import frc.robot.subsystems.Take;
 
-public class ShooterHigh extends SequentialCommandGroup{
+public class ShooterLowSequence extends SequentialCommandGroup{
 
-  public ShooterHigh(Take take) {
+  public ShooterLowSequence(Take take) {
     addCommands(
-      new ShooterTimedAuto(take, 0, 0.48, 0.3 , true),
-      new ShooterTimedAuto(take, 0.9, 0, 0.5, false),
-      new ShooterTimedAuto(take, 0.7, 1, 0.6, false)
+      new ShooterTimedAuto(take, 0, 0.65, 0.5 , true),
+      new ShooterTimedAuto(take, 0.4, 0, 1 , false),
+      new ShooterTimedAuto(take, 0.4, 1, 0.6, false)
     );
   }
 

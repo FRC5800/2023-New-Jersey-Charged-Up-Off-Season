@@ -5,6 +5,7 @@
 package frc.robot.commands.commandGroups.AutoCommands.PIDCommands;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -17,15 +18,18 @@ public class DrivePIDAuto extends CommandBase {
   private double distance;
   private double initialEncoderLeft;
   private double initialEncoderRight;
+  private double leftSpeed;
+  private double rightSpeed;
+  
   private PIDController pid = new PIDController(Constants.AutoConstants.KP_DRIVEAUTO, Constants.AutoConstants.KI_DRIVEAUTO, Constants.AutoConstants.KD_DRIVEAUTO);
 
   public final static DrivePIDAuto MOB(DriveTrain driveTrain) {
-    return new DrivePIDAuto(driveTrain, -4.5);
+    return new DrivePIDAuto(driveTrain, -4.4);
   }
   public final static DrivePIDAuto MOB_C(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -5);
   }
-
+  
   public final static DrivePIDAuto CHARGE(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -1.);
   }
@@ -67,8 +71,9 @@ public class DrivePIDAuto extends CommandBase {
     SmartDashboard.putNumber("setpoint", pid.getPositionError());
     SmartDashboard.putNumber("left encoder", encoderLeft);
     SmartDashboard.putNumber("right encoder", encoderRight);
-    driveTrain.tankDrive(pid.calculate(encoderLeft, distance), pid.calculate(encoderRight, distance));
 
+    driveTrain.tankDrive(pid.calculate(encoderLeft, distance), pid.calculate(encoderRight, distance) );
+    //driveTrain.tankDrive(MathUtil.clamp(pid.calculate(encoderLeft, distance), -0.88, 0.88), MathUtil.clamp(pid.calculate(encoderRight, distance), -0.88, 0.88));
   }
 
   // Called once the command ends or is interrupted.

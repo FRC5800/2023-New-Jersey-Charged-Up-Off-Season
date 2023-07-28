@@ -4,180 +4,73 @@
 
 package frc.robot.commands.commandGroups.AutoCommands.Routines;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.commandGroups.AutoCommands.Routines.Autos.AutoMode;
+import frc.robot.commands.commandGroups.AutoCommands.Routines.Autos.ShooterHeight;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.AngulationTimedAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTimedAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.DriveTurnAuto;
 import frc.robot.commands.commandGroups.AutoCommands.TimedCommands.ShooterTimedAuto;
-import frc.robot.commands.teleOpCommands.ShooterHigh;
-import frc.robot.commands.teleOpCommands.ShooterMid;
+import frc.robot.commands.teleOpCommands.Take.ShooterHigh;
+import frc.robot.commands.teleOpCommands.Take.ShooterLow;
+import frc.robot.commands.teleOpCommands.Take.ShooterMid;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
 
 public class AutoRoutinesTimed extends SequentialCommandGroup {
 
-  public AutoRoutinesTimed(AutoMode selectedRoutine, DriveTrain driveTrain, Take intake, Angulation angulation) {
-    switch (selectedRoutine) {
-      case MID:
-        addCommands(new ShooterMid(intake));
-        break;
-
+  public AutoRoutinesTimed(ShooterHeight shooterHeight, AutoMode autoMode, DriveTrain driveTrain, Angulation angulation, Take intake) {
+    Command shooterCommand = new ShooterHigh(intake);
+    switch (shooterHeight) {
       case LOW:
-        addCommands(ShooterTimedAuto.LOW(intake));
+        shooterCommand = new ShooterLow(intake);
         break;
-
+      case MID:
+        shooterCommand = new ShooterMid(intake);
+        break;
       case HIGH:
-        addCommands(new ShooterHigh(intake));
-        break;
-
-      case MID_MOB:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.MOB(driveTrain)
-        );
-        break;
-
-      case LOW_MOB:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain)
-        );
-        break;
-
-      case MID_CHARGE:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.CHARGE(driveTrain)
-        );
-        break;
-
-      case LOW_CHARGE:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.CHARGE(driveTrain)
-        );
-        break;
-
-      case HIGH_CHARGE:
-        addCommands(
-          new ShooterHigh(intake),
-          DriveTimedAuto.CHARGE(driveTrain)
-        );
-        break;
-
-      case MID_MOB_CHARGE:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          DriveTimedAuto.MOB_CHARGE(driveTrain)
-        );
-        break;
-
-      case LOW_MOB_CHARGE:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain),
-          DriveTimedAuto.MOB_CHARGE(driveTrain)
-        );
-        break;
-
-      case MID_MOB_PIECE:
-        addCommands(
-          new ShooterMid(intake),
-          //DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 140),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          //new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation)
-        );
-        break;
-
-      case LOW_MOB_PIECE:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation)
-        );
-          break;
-        
-      case HIGH_MOB_PIECE:
-        addCommands(
-          new ShooterHigh(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation)
-        );
-            break;
-
-      case MID_MOB_PIECE_CHARGE:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation),
-          DriveTimedAuto.MOB_CHARGE(driveTrain)
-        );
-        break;
-
-      case LOW_MOB_PIECE_CHARGE:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation),
-          DriveTimedAuto.CHARGE(driveTrain)
-        );
-        break;
-
-      case MID_MOB_PIECE_LOW:
-        addCommands(
-          new ShooterMid(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation),
-          DriveTimedAuto.MOB(driveTrain),
-          new DriveTurnAuto(driveTrain, 180),
-          ShooterTimedAuto.LOW(intake)
-        );
-        break;
-
-      case LOW_MOB_PIECE_MID:
-        addCommands(
-          ShooterTimedAuto.LOW(intake),
-          DriveTimedAuto.MOB(driveTrain), 
-          new DriveTurnAuto(driveTrain, 180),
-          AngulationTimedAuto.DOWN(angulation),
-          ShooterTimedAuto.IN(intake),
-          new WaitCommand(1),
-          AngulationTimedAuto.UP(angulation),
-          DriveTimedAuto.MOB(driveTrain),
-          new DriveTurnAuto(driveTrain, 180),
-          new ShooterMid(intake)
-        );
-        break;
-        
-      default:
+        shooterCommand = new ShooterLow(intake);
         break;
     }
+
+    SequentialCommandGroup commands = new SequentialCommandGroup(ChargeRoutine.BACKWARDS(driveTrain));
+    switch (autoMode) {
+      case MOB:
+        commands = new SequentialCommandGroup(
+          DriveTimedAuto.MOB(driveTrain)
+        );
+        break;
+
+      case CHARGE:
+        commands = new SequentialCommandGroup(
+          ChargeRoutine.BACKWARDS(driveTrain)
+        );
+        break;
+
+      case MOB_CHARGE:
+        commands = new SequentialCommandGroup(
+          DriveTimedAuto.MOB(driveTrain),
+          ChargeRoutine.FORWARD(driveTrain)
+        );
+        break;
+
+      case MOB_PIECE:
+        commands = new SequentialCommandGroup(
+          DriveTimedAuto.MOB(driveTrain),
+          new ParallelCommandGroup(
+            new DriveTurnAuto(driveTrain, 180),
+            AngulationTimedAuto.DOWN(angulation)
+          ),
+          new ShooterTimedAuto(intake, 0.5, 0.5, 1.5, true),
+          AngulationTimedAuto.UP(angulation)
+        );
+        break;
+    }
+
+    addCommands(shooterCommand, commands);
   }
+
 }

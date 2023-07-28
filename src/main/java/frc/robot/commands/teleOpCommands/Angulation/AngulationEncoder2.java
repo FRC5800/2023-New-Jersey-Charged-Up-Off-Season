@@ -7,13 +7,15 @@ package frc.robot.commands.teleOpCommands.Angulation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Angulation;
 
-public class AngulationEncoder extends CommandBase {
+public class AngulationEncoder2 extends CommandBase {
  
   private final Angulation angulation;
   private double initialRotation;
   private boolean down;
+  private double diff;
+  private double speed;
 
-  public AngulationEncoder(Angulation angulation) {
+  public AngulationEncoder2(Angulation angulation) {
     this.angulation = angulation;
 
     addRequirements(angulation);
@@ -30,13 +32,15 @@ public class AngulationEncoder extends CommandBase {
   @Override
   public void execute() {
     double rotation = angulation.getEncoderRotations();
-    double vel = 0.35*((Angulation.DOWN_POSITION) - rotation)/(Angulation.DOWN_POSITION-Angulation.UP_POSITION) + 0.3;
+    diff = (Angulation.DOWN_POSITION - rotation) * (Angulation.DOWN_POSITION - rotation) *10;
 
+    speed = diff * 1.2;
+    if(speed>0.75) {speed=0.75;}
     if(down){
-      angulation.setElevatorAngleSpeed(vel);
+      angulation.setElevatorAngleSpeed(speed);
       
       }else{
-       angulation.setElevatorAngleSpeed(-0.65);
+       angulation.setElevatorAngleSpeed(-0.50);
 
     }
   }
@@ -52,10 +56,10 @@ public class AngulationEncoder extends CommandBase {
   public boolean isFinished() {
 
     if (down){
-      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.16;
+      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.098;
       
     }else{
-      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.12;
+      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.07;
     }
   }
 }

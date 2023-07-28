@@ -29,8 +29,8 @@ public class Angulation extends SubsystemBase {
   MotorControllerGroup leftGroup = new MotorControllerGroup(leftMaster, leftSlave);
 
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
-  public static final double DOWN_POSITION = 1;
-  public static final double UP_POSITION = 0.68505859375;
+  public static final double DOWN_POSITION = 0.965;
+  public static final double UP_POSITION = 0.696;  //0.68505859375;
 
   public Angulation() {
     rightMaster.setInverted(false);
@@ -42,6 +42,7 @@ public class Angulation extends SubsystemBase {
     leftSlave.setIdleMode(IdleMode.kBrake);
     rightMaster.setIdleMode(IdleMode.kBrake);
     rightSlave.setNeutralMode(NeutralMode.Brake);
+
   }
 
   public void setElevatorAngleSpeed(double vel) {
@@ -53,6 +54,11 @@ public class Angulation extends SubsystemBase {
 public double getEncoderRotations() {
   SmartDashboard.putNumber("Raw encoder", rightEncoder.getPosition());
   var position = rightEncoder.getPosition();
-  return 550 - (position < 400 ? position+550 : position);
+  //  return 550 - (position < 400 ? position+550 : position);
+  if (position < 400){
+    return position;
+  }else{
+    return 550-position;
+  }
 }
 }

@@ -46,29 +46,10 @@ public class Drive extends CommandBase {
     SmartDashboard.putNumber("pitch", driveTrain.getPitch());
     SmartDashboard.putNumber("Yaw", driveTrain.getYaw());
     SmartDashboard.putNumber("Roll", driveTrain.getRoll());
+
     SmartDashboard.putNumber("speed", driveTrain.getAverageEncoderSpeed());
 
-    double axisLeft = -driveController.getRawAxis(XboxController.Axis.kLeftY.value);
-    double axisRight = -driveController.getRawAxis(XboxController.Axis.kRightX.value);
-    double leftSpeed = 0;
-    double rightSpeed = 0;
-
-
-    //if ((axisLeft > DriveConstants.DEAD_ZONE || axisLeft < -DriveConstants.DEAD_ZONE)){
-    if ((between(axisLeft, -DriveConstants.DEAD_ZONE,DriveConstants.DEAD_ZONE))){
-      leftSpeed += -axisLeft * 0.95 * Math.cos(axisRight);
-      rightSpeed += -axisLeft * 0.95 * Math.cos(axisRight);
-    }     
-  
-  
-    //if(axisRight > DriveConstants.DEAD_ZONE || axisRight < -DriveConstants.DEAD_ZONE){
-    if(between(axisRight, -DriveConstants.DEAD_ZONE,DriveConstants.DEAD_ZONE)){
-      leftSpeed += 0.95 * Math.sin(axisRight);
-      rightSpeed += -0.95 * Math.sin(axisRight);
-    }
-    
-    driveTrain.tankDrive((-Math.min(leftSpeed, 0.95)),(-Math.min(rightSpeed, 0.95)));
-
+    driveTrain.drive(driveController);
       
   }
 

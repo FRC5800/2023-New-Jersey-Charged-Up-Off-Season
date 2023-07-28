@@ -67,8 +67,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void drive(XboxController xboxController){
-    double y = -xboxController.getLeftY() * 0.8;
-    double x = -xboxController.getRightX() * 0.8;
+    double y = -xboxController.getLeftY();
+    double x = -xboxController.getRightX();
 
     diffDrive.arcadeDrive(y, x);
   }

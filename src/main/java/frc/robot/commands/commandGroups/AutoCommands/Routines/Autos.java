@@ -6,24 +6,16 @@ package frc.robot.commands.commandGroups.AutoCommands.Routines;
 
 /** Add your docs here. */
 public final class Autos {
-  public static enum AutoMode {
-    MID,
+  public static enum ShooterHeight {
     LOW,
-    HIGH,
-    MID_MOB,
-    LOW_MOB,
-    MID_CHARGE,
-    LOW_CHARGE,
-    HIGH_CHARGE,
-    MID_MOB_CHARGE,
-    LOW_MOB_CHARGE,
-    MID_MOB_PIECE,
-    LOW_MOB_PIECE,
-    HIGH_MOB_PIECE,
-    MID_MOB_PIECE_CHARGE,
-    LOW_MOB_PIECE_CHARGE,
-    MID_MOB_PIECE_LOW,
-    LOW_MOB_PIECE_MID,
-    PATH
+    MID,
+    HIGH
+  }
+
+  public static enum AutoMode {
+    MOB,
+    CHARGE,
+    MOB_PIECE,
+    MOB_CHARGE,
   }
 }
