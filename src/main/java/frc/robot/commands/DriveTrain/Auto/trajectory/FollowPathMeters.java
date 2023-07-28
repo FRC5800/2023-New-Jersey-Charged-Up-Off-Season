@@ -21,7 +21,7 @@ public class FollowPathMeters extends CommandBase {
   private DifferentialDriveVoltageConstraint autoVoltageConstraint;
   private DriveTrain driveTrain; 
   private TrajectoryConfig config;
-  private Trajectory exampleTrajectory;
+  //private Trajectory exampleTrajectory;
   private RamseteCommand ramseteCommand;
 
   private Trajectory trajectoryWeaver;

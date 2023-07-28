@@ -6,9 +6,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
+//import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+//import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -18,10 +18,10 @@ import frc.robot.subsystems.DriveTrain;
 
 public class FollowPath extends CommandBase {
   
-  private DifferentialDriveVoltageConstraint autoVoltageConstraint;
+  //private DifferentialDriveVoltageConstraint autoVoltageConstraint;
   private DriveTrain driveTrain; 
-  private TrajectoryConfig config;
-  private Trajectory exampleTrajectory;
+  //private TrajectoryConfig config;
+  //private Trajectory exampleTrajectory;
   private RamseteCommand ramseteCommand;
   private String trajectoryJSON = "paths/game.wpilib.json";
 
@@ -37,14 +37,15 @@ public class FollowPath extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    /* 
     autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
         Constants.TrajectoryConstants.ksVolts, Constants.TrajectoryConstants.kvVoltSecondsPerMeter, Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter),
         DriveTrain.driveKinematics,  12);
-
-    config = new TrajectoryConfig(
-      Constants.TrajectoryConstants.kMaxSpeedMetersPerSecond, Constants.TrajectoryConstants.kMaxAccelerationMetersPerSecondSquared)
-      .setKinematics(DriveTrain.driveKinematics).addConstraint(autoVoltageConstraint);
+    */
+    //config = new TrajectoryConfig(
+    //  Constants.TrajectoryConstants.kMaxSpeedMetersPerSecond, Constants.TrajectoryConstants.kMaxAccelerationMetersPerSecondSquared)
+    //  .setKinematics(DriveTrain.driveKinematics).addConstraint(autoVoltageConstraint);
 
     /*exampleTrajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d(0)), 
