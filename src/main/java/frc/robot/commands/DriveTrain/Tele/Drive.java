@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class Drive extends CommandBase {
@@ -29,14 +28,7 @@ public class Drive extends CommandBase {
   public void initialize() {
     driveTrain.resetEncoders();
   }
-
-  private boolean between(double v, double n1, double n2){
-    if (n1 < v && v < n2){
-      return false;
-    }
-    return true;
-  }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

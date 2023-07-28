@@ -18,7 +18,6 @@ import frc.robot.commands.Take.Tele.ShooterMid;
 import frc.robot.commands.Take.Tele.ThrowCube;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.AutoRoutinesPID;
-import frc.robot.Routines.ChargeRoutine;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.subsystems.Angulation;

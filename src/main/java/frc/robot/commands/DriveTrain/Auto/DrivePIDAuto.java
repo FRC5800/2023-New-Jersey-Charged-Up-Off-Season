@@ -5,7 +5,6 @@
 package frc.robot.commands.DriveTrain.Auto;
 
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -18,8 +17,6 @@ public class DrivePIDAuto extends CommandBase {
   private double distance;
   private double initialEncoderLeft;
   private double initialEncoderRight;
-  private double leftSpeed;
-  private double rightSpeed;
   
   private PIDController pid = new PIDController(Constants.AutoConstants.KP_DRIVEAUTO, Constants.AutoConstants.KI_DRIVEAUTO, Constants.AutoConstants.KD_DRIVEAUTO);
 
