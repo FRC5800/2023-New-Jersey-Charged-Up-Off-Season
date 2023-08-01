@@ -30,6 +30,7 @@ public class ManualAngle extends CommandBase {
   public void execute() {
     angle = angulation.getEncoderRotations();
     speed = subsystemsController.getRawAxis(XboxController.Axis.kRightY.value);
+    
     if (speed > 0) {
       angulation.setElevatorAngleSpeed(speed*0.58);
     } else {

@@ -44,7 +44,7 @@ public class TurnAutoPID extends CommandBase {
     
     outputSpeed = MathUtil.clamp(pidController.calculate(sensorAngle, ang), -0.9, 0.9);
     driveTrain.tankDrive(outputSpeed, -outputSpeed);
-
+    System.out.println("funcinando turn");
   }
   
   @Override

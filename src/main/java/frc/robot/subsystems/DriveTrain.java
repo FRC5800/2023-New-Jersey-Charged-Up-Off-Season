@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -41,7 +42,11 @@ public class DriveTrain extends SubsystemBase {
   private double initialPigeon;
 
   private Field2d field = new Field2d();
-  
+
+  private double kSpeed = Constants.DrivetrainConstants.kSPeedFast;
+  private boolean kSpeedIsFast = true;
+  private double kSpeedFast = Constants.DrivetrainConstants.kSPeedFast;
+  private double kSpeedSlow = Constants.DrivetrainConstants.kSPeedSlow;
 
   public DriveTrain() {
     SmartDashboard.putData(field);
@@ -63,13 +68,15 @@ public class DriveTrain extends SubsystemBase {
     leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
   
     initialPigeon = pigeon.getRoll();
-    odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters() /*,new Pose2d(5.0, 13.5, new Rotation2d()) */);
+    odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), new Pose2d(0, 0, new Rotation2d(0)) /*,new Pose2d(5.0, 13.5, new Rotation2d()) */);
   }
 
   public void drive(XboxController xboxController){
     double y = -xboxController.getLeftY();
     double x = -xboxController.getRightX();
 
+    y = y*kSpeed;
+    x = x*kSpeed;
     diffDrive.arcadeDrive(y, x);
   }
 
@@ -80,6 +87,11 @@ public class DriveTrain extends SubsystemBase {
   public void setVoltage(double voltage) {
     leftMaster.setVoltage(voltage);
     rightMaster.setVoltage(voltage);
+  }
+
+  public void kSpeedAlter() {
+    kSpeedIsFast = !kSpeedIsFast;
+    kSpeed = kSpeedIsFast ? kSpeedFast : kSpeedSlow;
   }
 
   //RESETTING SENSORS
@@ -108,12 +120,12 @@ public class DriveTrain extends SubsystemBase {
 
   public double getLeftEncoderMeters() {
     double meters = encoderTicksToMeters(getLeftEncoderTicks());
-    SmartDashboard.putNumber("Left Encoder Position", meters);
+    //SmartDashboard.putNumber("Left Encoder Position", meters);
     return meters;
   }
   public double getRightEncoderMeters() {
     double meters = encoderTicksToMeters(getRightEncoderTicks());
-    SmartDashboard.putNumber("Right Encoder Position", meters);
+    //SmartDashboard.putNumber("Right Encoder Position", meters);
     return meters;
   }
 
@@ -202,7 +214,7 @@ public class DriveTrain extends SubsystemBase {
     odometry.update(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters());
     
     SmartDashboard.putNumber(("speedMeters"), getLeftEncoderSpeedMeters());
-    SmartDashboard.putNumber("encoderleft teleop", getLeftEncoderMeters());
+    SmartDashboard.putNumber("leftEncoder teleop", getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
     SmartDashboard.putNumber("pose X", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("pose Y", odometry.getPoseMeters().getY());

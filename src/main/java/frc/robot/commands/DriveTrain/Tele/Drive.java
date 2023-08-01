@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.DriveTrain.Tele;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,7 @@ public class Drive extends CommandBase {
   private final DriveTrain driveTrain;
   private final XboxController driveController;
   //private boolean toggleSPD = false;
+
 
   public Drive(DriveTrain driveTrain, XboxController drivController) {
     this.driveTrain = driveTrain;
@@ -43,6 +45,10 @@ public class Drive extends CommandBase {
 
     driveTrain.drive(driveController);
       
+    if (driveController.getYButtonPressed()){
+      driveTrain.kSpeedAlter();
+    }
+
   }
 
   // Called once the command ends or is interrupted.

@@ -11,9 +11,12 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder;
+import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.DriveTrain.Auto.DrivePIDAuto;
 import frc.robot.commands.DriveTrain.Auto.DriveTimedAuto;
 import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPath;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPathMeters;
 import frc.robot.commands.Take.Auto.ShooterTimedAuto;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
@@ -33,7 +36,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
         shooterCommand = new ShooterMid(intake);
         break;
       case HIGH:
-        shooterCommand = new ShooterLow(intake);
+        shooterCommand = new ShooterHigh(intake);
         break;
     }
 
@@ -41,7 +44,9 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
     switch (autoMode) {
       case MOB:
         commands = new SequentialCommandGroup(
-          DrivePIDAuto.MOB(driveTrain)
+          //DrivePIDAuto.MOB(driveTrain),
+          new TurnAutoPID(driveTrain, 180),
+          new FollowPath(driveTrain)
         );
         break;
 
@@ -60,13 +65,18 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
 
       case MOB_PIECE:
         commands = new SequentialCommandGroup(
-          DrivePIDAuto.MOB(driveTrain),
-          new ParallelCommandGroup(
-            new TurnAutoPID(driveTrain, 180),
-            new AngulationEncoder(angulation)
-          ),
-          new ShooterTimedAuto(intake, 0.5, 0.5, 1.5, true),
-          new AngulationEncoder(angulation)
+          //DrivePIDAuto.MOB(driveTrain),
+          new TurnAutoPID(driveTrain, 175),
+          new FollowPath(driveTrain),
+          //new ParallelCommandGroup(
+            //new TurnAutoPID(driveTrain, 175),
+            new AngulationEncoder2(angulation),
+          //),
+          new ShooterTimedAuto(intake, 0.5, 0.5, 1, true),
+          new AngulationEncoder2(angulation),
+          new TurnAutoPID(driveTrain, 178),
+          new FollowPath(driveTrain),
+          new ShooterMid(intake)
         );
         break;
     }

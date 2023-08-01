@@ -5,6 +5,7 @@
 package frc.robot.commands.Take.Tele;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Take;
 
@@ -17,12 +18,13 @@ public class GetCube extends CommandBase {
   public GetCube(Take take, XboxController xboxController) {
     this.take = take;
     this.xboxController = xboxController;
+
     addRequirements(take);
   }
 
   @Override
   public void initialize() {
-    speed = -0.8;
+    speed = 0;
   }
 
   @Override
@@ -34,9 +36,31 @@ public class GetCube extends CommandBase {
       take.setUpperShooterPercentage(0);                                                                 
       take.setLowerShooterPercentage(0);
     }*/
+    SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
+    
+    
 
-    take.setUpperShooterPercentage(speed);                                                                 
-    take.setLowerShooterPercentage(speed);
+    if (xboxController.getRightBumper()) {
+      speed = -1;
+    } else {
+      if (xboxController.getLeftTriggerAxis() > 0.15) {
+        speed = 0.4 * xboxController.getLeftTriggerAxis();
+      }else{
+        speed = 0;
+      }
+    }
+
+    SmartDashboard.putNumber("POV", xboxController.getPOV());
+
+    if (xboxController.getPOV() == 0){
+      take.setUpperShooterPercentage(0.65);                                                                 
+    }else if(xboxController.getPOV() == 180){
+      take.setLowerShooterPercentage(-0.65);
+    }else{
+      take.setUpperShooterPercentage(speed);                                                                 
+      take.setLowerShooterPercentage(speed);
+    }
+
   }
 
 

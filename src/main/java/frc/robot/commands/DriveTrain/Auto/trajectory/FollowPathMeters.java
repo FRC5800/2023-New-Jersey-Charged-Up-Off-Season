@@ -24,7 +24,7 @@ public class FollowPathMeters extends CommandBase {
   //private Trajectory exampleTrajectory;
   private RamseteCommand ramseteCommand;
 
-  private Trajectory trajectoryWeaver;
+  private Trajectory trajectory;
     /** Creates a new FollowPath. */
   public FollowPathMeters(DriveTrain driveTrain) {
     this.driveTrain = driveTrain;
@@ -46,21 +46,21 @@ public class FollowPathMeters extends CommandBase {
       .setKinematics(DriveTrain.driveKinematics).addConstraint(autoVoltageConstraint);
     config.setReversed(true);
 
-    trajectoryWeaver = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(4.4,0.1, new Rotation2d(0)), 
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0, new Rotation2d(0)), 
       List.of(), 
-      new Pose2d(0, 0, new Rotation2d(0)), 
+      new Pose2d(2, 0, new Rotation2d(0)), 
       config);
      
-    driveTrain.resetOdometry(trajectoryWeaver.getInitialPose());
+    driveTrain.resetOdometry(trajectory.getInitialPose());
 
      ramseteCommand = new RamseteCommand(
-      trajectoryWeaver, driveTrain::getPose, new RamseteController(Constants.TrajectoryConstants.kRamseteB, Constants.TrajectoryConstants.kRamseteZeta),
+      trajectory, driveTrain::getPose, new RamseteController(Constants.TrajectoryConstants.kRamseteB, Constants.TrajectoryConstants.kRamseteZeta),
        new SimpleMotorFeedforward(Constants.TrajectoryConstants.ksVolts, Constants.TrajectoryConstants.kvVoltSecondsPerMeter, Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter), 
        DriveTrain.driveKinematics, driveTrain::getWheelSpeeds, new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), 
        new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), driveTrain::tankDriveVolts, driveTrain);
     
-    driveTrain.resetOdometry(trajectoryWeaver.getInitialPose());
+    driveTrain.resetOdometry(trajectory.getInitialPose());
     ramseteCommand.initialize();
  
   }

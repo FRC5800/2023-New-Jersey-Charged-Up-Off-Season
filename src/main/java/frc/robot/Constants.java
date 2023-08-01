@@ -14,6 +14,9 @@ public final class Constants {
     public static final int kRightMasterID = 3;
     public static final int kRightSlaveID = 4;
     public static final int kTimeOutEncoder = 20;
+    public static final double kSPeedFast = 1 ;
+    //public static final double kSPeedSlow = 0.6 ;
+    public static final double kSPeedSlow = 0.65 ;
 
   }
   public static class OperatorConstants {
@@ -77,10 +80,10 @@ public final class Constants {
   }
 
   public static class TrajectoryConstants {
-    public static final double ksVolts = 0.72947;
-    public static final double kvVoltSecondsPerMeter = 3.1603;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.82106;
-    public static final double kPDriveVel = 4.7751;
+    public static final double ksVolts = 0.71998;
+    public static final double kvVoltSecondsPerMeter = 3.1991;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.81292;
+    public static final double kPDriveVel = 4.817;
 
     public static final double kTrackwidthMeters = 0.62;
 

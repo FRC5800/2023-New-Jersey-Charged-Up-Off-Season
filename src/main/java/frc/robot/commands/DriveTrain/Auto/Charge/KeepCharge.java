@@ -35,11 +35,11 @@ public class KeepCharge extends CommandBase {
       driveTrain.tankDrive(0.5, 0.5);
     }*/
 
-    if (driveTrain.getRoll() > 4.7) {
+    if (driveTrain.getRoll() > 4.4) {
       driveTrain.tankDrive(-speed, -speed);
       //driveTrain.tankDrive(-0.454, -0.454);
     } 
-    else if (driveTrain.getRoll() < -4.7) {
+    else if (driveTrain.getRoll() < -4.4) {
       driveTrain.tankDrive(speed, speed);
       //driveTrain.tankDrive(0.454, 0.454);
     }
@@ -48,13 +48,13 @@ public class KeepCharge extends CommandBase {
       speed = initialSpeed;
     }
 
-    if (driveTrain.getRoll() > 5) {
+    if (driveTrain.getRoll() > 4) {
       if (driveTrain.getAverageEncoderSpeed() < 25) {
-        speed += 0.002;
+        speed += 0.001;
       }
-    } else if (driveTrain.getRoll() < -5) {
-      if (driveTrain.getAverageEncoderSpeed() > -25) {
-        speed += 0.002;
+    } else if (driveTrain.getRoll() < -4) {
+      if (driveTrain.getAverageEncoderSpeed() > -22) {
+        speed += 0.001;
       }
     }
 

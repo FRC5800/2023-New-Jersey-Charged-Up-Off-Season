@@ -23,6 +23,9 @@ public class DrivePIDAuto extends CommandBase {
   public final static DrivePIDAuto MOB(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -4.4);
   }
+  public final static DrivePIDAuto MOB_F(DriveTrain driveTrain) {
+    return new DrivePIDAuto(driveTrain, 4.4);
+  }
   public final static DrivePIDAuto MOB_C(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, -5);
   }
@@ -49,7 +52,7 @@ public class DrivePIDAuto extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid.setTolerance(0.035, 1.9181);
+    pid.setTolerance(0.1, 1.9181);
     pid.setIntegratorRange(0.1, 1.45);
     pid.reset();
     initialEncoderLeft = driveTrain.getLeftEncoderMeters();

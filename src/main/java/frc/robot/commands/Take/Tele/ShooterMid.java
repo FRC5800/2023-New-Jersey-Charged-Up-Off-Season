@@ -12,9 +12,9 @@ public class ShooterMid extends SequentialCommandGroup{
 
   public ShooterMid(Take take) {
     addCommands(
-      new ShooterTimedAuto(take, 0, 0.48, 0.3 , true),
-      new ShooterTimedAuto(take, 0.4, 0, 1 , false),
-      new ShooterTimedAuto(take, 0.4, 1, 0.4, false)
+      new ShooterTimedAuto(take, 0, 0.6, 0.4 , true),
+      new ShooterTimedAuto(take, 0.4, -0.35, 0.7 , false),
+      new ShooterTimedAuto(take, 0.5, 1, 0.4, false) //antes tensão tava 0.4
     );
   }
 

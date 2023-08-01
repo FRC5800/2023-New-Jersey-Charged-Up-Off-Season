@@ -29,8 +29,8 @@ public class Angulation extends SubsystemBase {
   MotorControllerGroup leftGroup = new MotorControllerGroup(leftMaster, leftSlave);
 
   RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
-  public static final double DOWN_POSITION = 0.965;
-  public static final double UP_POSITION = 0.696;  //0.68505859375;
+  public static final double DOWN_POSITION = 0.6894;
+  public static final double UP_POSITION = 0.2924;  //0.68505859375;
 
   public Angulation() {
     rightMaster.setInverted(false);

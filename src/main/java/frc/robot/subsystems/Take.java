@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -17,6 +19,8 @@ public class Take extends SubsystemBase {
 
   WPI_TalonSRX intakeUpper = new WPI_TalonSRX(ShooterConstants.KIntakeUpperID);
   WPI_TalonSRX intakeLower = new WPI_TalonSRX(ShooterConstants.KIntakeLowerID);
+
+  private DigitalInput bufferSwitch = new DigitalInput(0);
 
   public Take() {
     intakeUpper.configFactoryDefault();
@@ -55,6 +59,11 @@ public class Take extends SubsystemBase {
   
   }
 
+  @Override
+  public void periodic() {
+    SmartDashboard.putBoolean("FimDeCurso", this.getEndOfRoad());
+  }
+
   public void setUpperShooterPercentage(double vel){
     intakeUpper.set(ControlMode.PercentOutput, vel);
   }
@@ -90,5 +99,9 @@ public class Take extends SubsystemBase {
 
   public double getAverageEncoderLinearVelocity(){
     return (getLowerEncoderLinearVelocity() + getUpperEncoderLinearVelocity()) / 2 ;
+  }
+
+  public boolean getEndOfRoad() {
+    return this.bufferSwitch.get();
   }
 }

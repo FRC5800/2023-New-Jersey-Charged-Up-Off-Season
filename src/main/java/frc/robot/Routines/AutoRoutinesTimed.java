@@ -32,7 +32,7 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
         shooterCommand = new ShooterMid(intake);
         break;
       case HIGH:
-        shooterCommand = new ShooterLow(intake);
+        shooterCommand = new ShooterHigh(intake);
         break;
     }
 

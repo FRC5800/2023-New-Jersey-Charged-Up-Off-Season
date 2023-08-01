@@ -26,8 +26,8 @@ public class ChargeRoutine extends SequentialCommandGroup {
     var dir = forward ? 1 : -1;
 
     addCommands(
-      new ChargePigeon(driveTrain, 15*-dir, 0.8*dir, 1.7),
-      new ChargePigeon(driveTrain, -6*-dir, 0.65*dir, 3),
+      new ChargePigeon(driveTrain, 17*-dir, 0.8*dir, 1.7),
+      new ChargePigeon(driveTrain, 6*-dir, 0.6*dir, 3),
       new KeepCharge(driveTrain)
     );
   }
