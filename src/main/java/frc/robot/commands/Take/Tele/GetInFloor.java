@@ -5,27 +5,35 @@
 package frc.robot.commands.Take.Tele;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.Take;
 
-public class GetWithLimit extends CommandBase {
+public class GetInFloor extends CommandBase {
   
   private Take take;
+  private Angulation angulation;
   private final double SPEED = 0.3;
 
-  public GetWithLimit(Take take) {
+  public GetInFloor(Take take, Angulation angulation) {
     this.take = take;
-    addRequirements(take);
+    this.angulation = angulation;
+    addRequirements(take, angulation);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.take.setUpperShooterPercentage(SPEED);
-    this.take.setLowerShooterPercentage(SPEED);
+    if(!this.take.getEndOfRoad()) {
+      this.take.setUpperShooterPercentage(SPEED);
+      this.take.setLowerShooterPercentage(SPEED);
+    } else {
+      angulation.setElevatorAngleSpeed(-0.74);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +46,6 @@ public class GetWithLimit extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return this.take.getEndOfRoad();
+    return this.take.getEndOfRoad() && angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.04;
   }
 }

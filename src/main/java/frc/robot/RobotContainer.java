@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Angulation.Tele.AngulationEncoder;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
+import frc.robot.commands.Take.Tele.GetInFloor;
 import frc.robot.commands.Take.Tele.GetWithLimit;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
@@ -55,6 +55,7 @@ public class RobotContainer {
     //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
     new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));
     new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).toggleOnTrue(new GetWithLimit(take));
+    new JoystickButton(subsystemsController, XboxController.Axis.kRightTrigger.value).toggleOnTrue(new GetInFloor(take, angulation));
   }
 
   public Command getAutonomousCommand() {
