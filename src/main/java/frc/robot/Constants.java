@@ -92,5 +92,11 @@ public final class Constants {
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
+
+    public static final double xMobSmall = 3.10;
+    public static final double yMobSmall = 0;
+    public static final double xMobBig = 4.30;
+    public static final double yMobBig = 0;
+
   }
 }

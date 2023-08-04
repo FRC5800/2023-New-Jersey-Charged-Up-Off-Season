@@ -47,12 +47,11 @@ public class Angulation extends SubsystemBase {
 
   public void setElevatorAngleSpeed(double vel) {
     double speed = vel;
-    SmartDashboard.putNumber("vel", speed);
     rightGroup.set(vel);
     leftGroup.set(vel);
 }
 public double getEncoderRotations() {
-  SmartDashboard.putNumber("Raw encoder", rightEncoder.getPosition());
+  SmartDashboard.putNumber("Encoder Angulação", rightEncoder.getPosition());
   var position = rightEncoder.getPosition();
   //  return 550 - (position < 400 ? position+550 : position);
   if (position < 400){

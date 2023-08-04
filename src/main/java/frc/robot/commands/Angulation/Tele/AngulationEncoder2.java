@@ -15,6 +15,7 @@ public class AngulationEncoder2 extends CommandBase {
   private double diff;
   private double speed;
   private double k;
+  private double diffDown;
 
   public AngulationEncoder2(Angulation angulation) {
     this.angulation = angulation;
@@ -29,16 +30,20 @@ public class AngulationEncoder2 extends CommandBase {
     down = true;
     if (initialRotation >= (Angulation.UP_POSITION+Angulation.DOWN_POSITION)/2) down = false;
     
+    diffDown = Angulation.DOWN_POSITION + 0.05;
   }
 
   @Override
   public void execute() {
     double rotation = angulation.getEncoderRotations();
+
+  
+
     diff = (Angulation.DOWN_POSITION - rotation) * (Angulation.DOWN_POSITION - rotation) *10;
 
     k = 1.5;
     speed = diff * k;
-    if(speed>0.65) {speed=0.65;}
+    if(speed>0.7) {speed=0.7;}
 
     /*if (rotation > 0.78 && rotation < 0.86) {
       k
@@ -64,7 +69,7 @@ public class AngulationEncoder2 extends CommandBase {
   public boolean isFinished() {
 
     if (down){
-      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.08;
+      return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-0.055;
       
     }else{
       return angulation.getEncoderRotations() <= Angulation.UP_POSITION+0.04;

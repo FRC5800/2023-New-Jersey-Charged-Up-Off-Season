@@ -1,7 +1,5 @@
 package frc.robot.commands.DriveTrain.Auto.trajectory;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -9,16 +7,10 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-//import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-//import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
@@ -31,11 +23,16 @@ public class FollowPath extends CommandBase {
   private TrajectoryConfig config;
   private Trajectory exampleTrajectory;
   private RamseteCommand ramseteCommand;
+  private double xDistance = 0;
+  private double yDistance = 0;
   //private String trajectoryJSON = "paths/game.wpilib.json";
 
     /** Creates a new FollowPath. */
-  public FollowPath(DriveTrain driveTrain) {
+  public FollowPath(DriveTrain driveTrain, double xDistance, double yDistance) {
     this.driveTrain = driveTrain;
+    this.xDistance = xDistance;
+    this.yDistance = yDistance;
+
 
        // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
@@ -57,7 +54,7 @@ public class FollowPath extends CommandBase {
     exampleTrajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d()), 
       List.of(), 
-      new Pose2d(3, 0, new Rotation2d(0)), 
+      new Pose2d(xDistance, yDistance, new Rotation2d(0)), 
       config); 
 
       /*try {

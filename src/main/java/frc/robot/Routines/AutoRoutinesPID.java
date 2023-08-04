@@ -4,19 +4,20 @@
 
 package frc.robot.Routines;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.Constants;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
-import frc.robot.commands.Angulation.Tele.AngulationEncoder;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
-import frc.robot.commands.DriveTrain.Auto.DrivePIDAuto;
 import frc.robot.commands.DriveTrain.Auto.DriveTimedAuto;
 import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
 import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPath;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPathMeters;
 import frc.robot.commands.Take.Auto.ShooterTimedAuto;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
@@ -25,9 +26,25 @@ import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.Take;
 
 public class AutoRoutinesPID extends SequentialCommandGroup {
+
+  public AutoRoutinesPID(Supplier<ShooterHeight> shooterHeight, Supplier<AutoMode> autoMode, DriveTrain driveTrain, Angulation angulation, Take intake) {
+    switch (shooterHeight.get()) {
+      case HIGH:
+        addCommands(
+          new ShooterHigh(intake)
+        );
+        break;
+      default:
+        addCommands(
+          new ShooterLow(intake)
+        );
+        break;
+    }
+    //this(shooterHeight.get(), autoMode.get(), driveTrain, angulation, intake);
+  }
   
   public AutoRoutinesPID(ShooterHeight shooterHeight, AutoMode autoMode, DriveTrain driveTrain, Angulation angulation, Take intake) {
-    Command shooterCommand = new ShooterHigh(intake);
+    Command shooterCommand = new WaitCommand(0);
     switch (shooterHeight) {
       case LOW:
         shooterCommand = new ShooterLow(intake);
@@ -40,13 +57,13 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
         break;
     }
 
-    SequentialCommandGroup commands = new SequentialCommandGroup(ChargeRoutine.BACKWARDS(driveTrain));
+    SequentialCommandGroup commands = new SequentialCommandGroup();
     switch (autoMode) {
       case MOB:
         commands = new SequentialCommandGroup(
           //DrivePIDAuto.MOB(driveTrain),
           new TurnAutoPID(driveTrain, 180),
-          new FollowPath(driveTrain)
+          new FollowPath(driveTrain, Constants.TrajectoryConstants.xMobBig, Constants.TrajectoryConstants.yMobSmall)
         );
         break;
 
@@ -67,7 +84,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
         commands = new SequentialCommandGroup(
           //DrivePIDAuto.MOB(driveTrain),
           new TurnAutoPID(driveTrain, 175),
-          new FollowPath(driveTrain),
+          new FollowPath(driveTrain, Constants.TrajectoryConstants.xMobSmall, Constants.TrajectoryConstants.yMobSmall),
           //new ParallelCommandGroup(
             //new TurnAutoPID(driveTrain, 175),
             new AngulationEncoder2(angulation),
@@ -75,7 +92,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
           new ShooterTimedAuto(intake, 0.5, 0.5, 1, true),
           new AngulationEncoder2(angulation),
           new TurnAutoPID(driveTrain, 178),
-          new FollowPath(driveTrain),
+          new FollowPath(driveTrain, Constants.TrajectoryConstants.xMobSmall, Constants.TrajectoryConstants.yMobSmall),
           new ShooterMid(intake)
         );
         break;

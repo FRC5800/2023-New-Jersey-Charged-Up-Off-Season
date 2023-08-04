@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
@@ -36,11 +37,30 @@ public class RobotContainer {
   public static XboxController driveController = new XboxController(OperatorConstants.kDriverControllerPort);
   public static XboxController subsystemsController = new XboxController(OperatorConstants.kSubsystemsControllerPort);
 
-  SendableChooser<Command> chooser = new SendableChooser<>();
+  SendableChooser<ShooterHeight> ShooterChooser = new SendableChooser<>();
+  SendableChooser<AutoMode> AutoChooser = new SendableChooser<>();
+
+
+  
+  
 
   public RobotContainer() {
+    ShooterChooser.setDefaultOption("HIGH", ShooterHeight.HIGH);
+    ShooterChooser.addOption("MID", ShooterHeight.MID);
+    ShooterChooser.addOption("LOW", ShooterHeight.LOW);
+    ShooterChooser.addOption("NONE", null);
+
+    AutoChooser.setDefaultOption("CHARGE", AutoMode.CHARGE);
+    AutoChooser.addOption("MOB", AutoMode.MOB);
+    AutoChooser.addOption("MOB_PIECE", AutoMode.MOB_PIECE);
+    AutoChooser.addOption("MOB_CHARGE", AutoMode.MOB_CHARGE);
+    AutoChooser.addOption("NONE", null);
+
+    SmartDashboard.putData(AutoChooser);
+    SmartDashboard.putData(ShooterChooser);
+
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
-    angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
+    //angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
     take.setDefaultCommand(new GetCube(take, subsystemsController));
     
     configureBindings();
@@ -51,16 +71,19 @@ public class RobotContainer {
     new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
     new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
     new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
+    //new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
     new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));
     new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).toggleOnTrue(new GetWithLimit(take));
-    new JoystickButton(subsystemsController, XboxController.Axis.kRightTrigger.value).toggleOnTrue(new GetInFloor(take, angulation));
+    //new JoystickButton(subsystemsController, XboxController.Axis.kRightTrigger.value).toggleOnTrue(new GetInFloor(take, angulation));
   }
 
   public Command getAutonomousCommand() {
-    //FAZER CHOOSER
-    driveTrain.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    return new AutoRoutinesPID(ShooterHeight.HIGH, AutoMode.MOB_CHARGE, driveTrain, angulation, take);
+    //return new AutoRoutinesPID(ShooterChooser.getSelected(), AutoChooser.getSelected(), driveTrain, angulation, take);
+//
+    //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
+    return new AutoRoutinesPID(ShooterHeight.MID, AutoMode.CHARGE, driveTrain, angulation, take);
+
   }
+
 }
