@@ -21,6 +21,8 @@ import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
 import frc.robot.commands.Take.Tele.ShooterMid;
 import frc.robot.commands.Take.Tele.ThrowCube;
+import frc.robot.commands.Take.Tele.ThrowMid;
+import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.AutoRoutinesPID;
 import frc.robot.Routines.Autos.AutoMode;
@@ -48,19 +50,19 @@ public class RobotContainer {
     ShooterChooser.setDefaultOption("HIGH", ShooterHeight.HIGH);
     ShooterChooser.addOption("MID", ShooterHeight.MID);
     ShooterChooser.addOption("LOW", ShooterHeight.LOW);
-    ShooterChooser.addOption("NONE", null);
+    ShooterChooser.addOption("NONE", ShooterHeight.NONE);
 
     AutoChooser.setDefaultOption("CHARGE", AutoMode.CHARGE);
     AutoChooser.addOption("MOB", AutoMode.MOB);
     AutoChooser.addOption("MOB_PIECE", AutoMode.MOB_PIECE);
     AutoChooser.addOption("MOB_CHARGE", AutoMode.MOB_CHARGE);
-    AutoChooser.addOption("NONE", null);
+    AutoChooser.addOption("NONE", AutoMode.NONE);
 
     SmartDashboard.putData(AutoChooser);
     SmartDashboard.putData(ShooterChooser);
 
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
-    //angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
+    angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
     take.setDefaultCommand(new GetCube(take, subsystemsController));
     
     configureBindings();
@@ -69,12 +71,16 @@ public class RobotContainer {
   private void configureBindings() {
 
     new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterMid(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterLow(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ThrowMax(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).onTrue(new ThrowMid(take));
+ 
+
     //new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
-    new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));
-    new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).toggleOnTrue(new GetWithLimit(take));
+    //new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).whileTrue(new ThrowCube(take, subsystemsController));
+    //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).toggleOnTrue(new GetWithLimit(take));
     //new JoystickButton(subsystemsController, XboxController.Axis.kRightTrigger.value).toggleOnTrue(new GetInFloor(take, angulation));
   }
 
@@ -82,7 +88,7 @@ public class RobotContainer {
     //return new AutoRoutinesPID(ShooterChooser.getSelected(), AutoChooser.getSelected(), driveTrain, angulation, take);
 //
     //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
-    return new AutoRoutinesPID(ShooterHeight.MID, AutoMode.CHARGE, driveTrain, angulation, take);
+    return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
 
   }
 
