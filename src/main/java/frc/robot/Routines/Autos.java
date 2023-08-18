@@ -9,7 +9,8 @@ public final class Autos {
   public static enum ShooterHeight {
     LOW,
     MID,
-    HIGH
+    HIGH,
+    NONE
   }
 
   public static enum AutoMode {
@@ -17,5 +18,6 @@ public final class Autos {
     CHARGE,
     MOB_PIECE,
     MOB_CHARGE,
+    NONE
   }
 }
