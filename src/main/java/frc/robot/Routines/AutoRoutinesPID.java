@@ -55,6 +55,8 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
       case HIGH:
         shooterCommand = new ShooterHigh(intake);
         break;
+      case NONE:
+        break;
     }
 
     SequentialCommandGroup commands = new SequentialCommandGroup();
@@ -87,7 +89,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
           new FollowPath(driveTrain, Constants.TrajectoryConstants.xMobSmall, Constants.TrajectoryConstants.yMobSmall),
           //new ParallelCommandGroup(
             //new TurnAutoPID(driveTrain, 175),
-            new AngulationEncoder2(angulation),
+          new AngulationEncoder2(angulation),
           //),
           new ShooterTimedAuto(intake, 0.5, 0.5, 1, true),
           new AngulationEncoder2(angulation),
@@ -95,6 +97,8 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
           new FollowPath(driveTrain, Constants.TrajectoryConstants.xMobSmall, Constants.TrajectoryConstants.yMobSmall),
           new ShooterMid(intake)
         );
+        break;
+      case NONE:
         break;
     }
 
