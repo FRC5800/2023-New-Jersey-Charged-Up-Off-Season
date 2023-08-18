@@ -47,6 +47,9 @@ public class DriveTrain extends SubsystemBase {
   private double kSpeedFast = Constants.DrivetrainConstants.kSPeedFast;
   private double kSpeedSlow = Constants.DrivetrainConstants.kSPeedSlow;
 
+  private double averageSpeedRight = 0;
+  private double averageSpeedLeft = 0; 
+
   public DriveTrain() {
     SmartDashboard.putData(field);
     rightMaster.configFactoryDefault();
@@ -62,6 +65,7 @@ public class DriveTrain extends SubsystemBase {
 
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
+    
 
     rightMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
     leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
@@ -77,6 +81,7 @@ public class DriveTrain extends SubsystemBase {
     y = y*kSpeed;
     x = x*kSpeed;
     diffDrive.arcadeDrive(y, x);
+    rightMaster.set(rightMaster.get()*0.96825);
   }
 
   public void tankDrive(double left, double right) {
@@ -211,10 +216,13 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters());
+
     
     SmartDashboard.putNumber(("speedMeters"), getLeftEncoderSpeedMeters());
     SmartDashboard.putNumber("leftEncoder teleop", getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
+    SmartDashboard.putNumber("rightEncoder speed", getRightEncoderSpeed());
+    SmartDashboard.putNumber("leftEncoder speed", getLeftEncoderSpeed());
     SmartDashboard.putNumber("pose X", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("pose Y", odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("rotation", pigeon.getRotation2d().getDegrees());

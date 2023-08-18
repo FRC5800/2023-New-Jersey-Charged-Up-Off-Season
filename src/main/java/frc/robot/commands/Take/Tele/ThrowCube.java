@@ -21,7 +21,7 @@ public class ThrowCube extends CommandBase {
 
   @Override
   public void initialize() {
-    speed = 0.8;
+    speed = 0.5;
   }
   @Override
   public void execute() {
