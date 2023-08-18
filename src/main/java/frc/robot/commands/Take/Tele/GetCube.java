@@ -15,10 +15,11 @@ public class GetCube extends CommandBase {
   XboxController xboxController;
   double speed;
   int in;
+  private boolean pov;
   public GetCube(Take take, XboxController xboxController) {
     this.take = take;
     this.xboxController = xboxController;
-
+    pov = false;
     addRequirements(take);
   }
 
@@ -38,10 +39,26 @@ public class GetCube extends CommandBase {
     }*/
     SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
     
-    
+    if (xboxController.getPOV() == 0){
+      take.setUpperShooterPercentage(0.65);   
+      pov = true;                                                              
+    }else if(xboxController.getPOV() == 180){
+      take.setLowerShooterPercentage(-0.65);
+      pov = true;
+    }else{
+      take.setUpperShooterPercentage(speed);                                                                 
+      take.setLowerShooterPercentage(speed);
+      pov = false;
+    }
+
+    if (take.getEndOfRoad() && !pov) {
+      take.setUpperShooterPercentage(0);                                                                 
+      take.setLowerShooterPercentage(0);
+      return;
+    }
 
     if (xboxController.getRightBumper()) {
-      speed = -1;
+      speed = 0.35;
     } else {
       if (xboxController.getLeftTriggerAxis() > 0.15) {
         speed = 0.4 * xboxController.getLeftTriggerAxis();
@@ -60,6 +77,8 @@ public class GetCube extends CommandBase {
       take.setUpperShooterPercentage(speed);                                                                 
       take.setLowerShooterPercentage(speed);
     }
+
+    
 
   }
 
