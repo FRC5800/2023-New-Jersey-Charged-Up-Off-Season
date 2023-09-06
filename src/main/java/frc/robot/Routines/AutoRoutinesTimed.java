@@ -7,6 +7,8 @@ package frc.robot.Routines;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.commands.Angulation.Auto.AngulationTimedAuto;
@@ -33,6 +35,9 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
         break;
       case HIGH:
         shooterCommand = new ShooterHigh(intake);
+        break;
+      case NONE:
+        shooterCommand = new WaitCommand(0);
         break;
     }
 
@@ -67,6 +72,9 @@ public class AutoRoutinesTimed extends SequentialCommandGroup {
           new ShooterTimedAuto(intake, 0.5, 0.5, 1.5, true),
           AngulationTimedAuto.UP(angulation)
         );
+        break;
+      case NONE:
+        shooterCommand = new WaitCommand(0);
         break;
     }
 

@@ -6,12 +6,10 @@ package frc.robot.Routines;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.Constants;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;

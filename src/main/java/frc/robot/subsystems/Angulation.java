@@ -46,7 +46,6 @@ public class Angulation extends SubsystemBase {
   }
 
   public void setElevatorAngleSpeed(double vel) {
-    double speed = vel;
     rightGroup.set(vel);
     leftGroup.set(-vel);
 }

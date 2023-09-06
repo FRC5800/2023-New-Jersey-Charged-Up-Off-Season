@@ -4,35 +4,24 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
-import frc.robot.commands.DriveTrain.Auto.trajectory.EventFollowPathPlanner;
 import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FlatEventFollowPathPlanner;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPath;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPathPlanner;
 import frc.robot.commands.DriveTrain.Auto.trajectory.GoToBottomMiddle;
 import frc.robot.commands.DriveTrain.Auto.trajectory.MakeCurve;
 import frc.robot.commands.DriveTrain.Auto.trajectory.RelativeToCurve;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
-import frc.robot.commands.Take.Tele.GetInFloor;
-import frc.robot.commands.Take.Tele.GetWithLimit;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
 import frc.robot.commands.Take.Tele.ShooterMid;
-import frc.robot.commands.Take.Tele.ThrowCube;
 import frc.robot.commands.Take.Tele.ThrowMid;
 import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Routines.AutoRoutinesPID;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.subsystems.Angulation;
