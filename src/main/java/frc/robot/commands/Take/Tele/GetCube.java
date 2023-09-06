@@ -23,7 +23,10 @@ public class GetCube extends CommandBase {
     addRequirements(take);
   }
 
-  @Override
+  public GetCube(Take take2, int i) {
+}
+
+@Override
   public void initialize() {
     speed = 0;
   }
