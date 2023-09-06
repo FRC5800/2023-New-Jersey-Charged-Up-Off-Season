@@ -9,7 +9,13 @@ import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -19,6 +25,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -35,20 +44,19 @@ public class DriveTrain extends SubsystemBase {
 
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
   private final DifferentialDriveOdometry odometry;
-  public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TrajectoryConstants.kTrackwidthMeters);
+  public final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TrajectoryConstants.kTrackwidthMeters);
 
   private WPI_PigeonIMU pigeon = new WPI_PigeonIMU(8);
   private double initialPigeon;
 
-  private Field2d field = new Field2d();
+  public Field2d field = new Field2d();
 
   private double kSpeed = Constants.DrivetrainConstants.kSPeedFast;
   private boolean kSpeedIsFast = true;
   private double kSpeedFast = Constants.DrivetrainConstants.kSPeedFast;
   private double kSpeedSlow = Constants.DrivetrainConstants.kSPeedSlow;
 
-  private double averageSpeedRight = 0;
-  private double averageSpeedLeft = 0; 
+  public final PIDConstants pidConstants = new PIDConstants(Constants.TrajectoryConstants.kPDriveVel, 0, 0);
 
   public DriveTrain() {
     SmartDashboard.putData(field);
@@ -189,6 +197,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   //trajectory
+
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
@@ -196,7 +205,6 @@ public class DriveTrain extends SubsystemBase {
     return new DifferentialDriveWheelSpeeds(getLeftEncoderSpeedMeters(), getRightEncoderSpeedMeters());
   }  
   public void resetOdometry(Pose2d pose) {
-    resetEncoders();
     //pose = new Pose2d(3, 6, new Rotation2d(3)); /*rotation pode ser definido como (radiano), (cos,sen)*/
     odometry.resetPosition(
       pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
@@ -212,6 +220,33 @@ public class DriveTrain extends SubsystemBase {
   public double getTurnRate() {
     return pigeon.getRate();
   }
+
+  // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+  return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        // Reset odometry for the first path you run during auto
+          this.resetOdometry(traj.getInitialPose());
+      }),
+      new PPRamseteCommand(
+          traj, 
+          this::getPose, // Pose supplier
+          new RamseteController(),
+          new SimpleMotorFeedforward(Constants.TrajectoryConstants.ksVolts, 
+          Constants.TrajectoryConstants.kvVoltSecondsPerMeter, 
+          Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter ),
+          this.driveKinematics, // DifferentialDriveKinematics
+          this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
+          new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+          new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), // Right controller (usually the same values as left controller)
+          this::tankDriveVolts, // Voltage biconsumer
+          false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+          this // Requires this drive subsystem
+      )
+  );
+} 
+
 
   @Override
   public void periodic() {
