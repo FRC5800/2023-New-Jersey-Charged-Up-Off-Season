@@ -12,7 +12,7 @@ public class TestEncoders extends SequentialCommandGroup {
   
   public TestEncoders(Angulation angulation, Take take, DriveTrain driveTrain) {
     addCommands(
-    new FollowPath(driveTrain, 2, 0),
+    new FollowPath(driveTrain),
     new DrivePIDAuto(driveTrain, 1)
     //new AngulationEncoder2(angulation)
     

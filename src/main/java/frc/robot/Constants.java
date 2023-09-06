@@ -80,14 +80,15 @@ public final class Constants {
   }
 
   public static class TrajectoryConstants {
-    public static final double ksVolts = 0.71998;
-    public static final double kvVoltSecondsPerMeter = 3.1991;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.81292;
-    public static final double kPDriveVel = 4.817;
+    public static final double ksVolts = 0.57443;
+    public static final double kvVoltSecondsPerMeter = 3.1843;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.60988;
+    public static final double kPDriveVel = 4.5524;
 
+    public static final double kTrackwidthMetersWithBumper = 0.92;
     public static final double kTrackwidthMeters = 0.62;
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 2.2;
     public static final double kMaxAccelerationMetersPerSecondSquared = 8;
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;

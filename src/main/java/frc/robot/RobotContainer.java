@@ -13,6 +13,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
+import frc.robot.commands.DriveTrain.Auto.trajectory.EventFollowPathPlanner;
+import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FlatEventFollowPathPlanner;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPath;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPathPlanner;
+import frc.robot.commands.DriveTrain.Auto.trajectory.GoToBottomMiddle;
+import frc.robot.commands.DriveTrain.Auto.trajectory.MakeCurve;
+import frc.robot.commands.DriveTrain.Auto.trajectory.RelativeToCurve;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
 import frc.robot.commands.Take.Tele.GetInFloor;
@@ -32,9 +40,9 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
 
 public class RobotContainer {
-  private DriveTrain driveTrain = new DriveTrain();
-  private Angulation angulation = new Angulation();
-  private Take take = new Take();
+  public DriveTrain driveTrain = new DriveTrain();
+  public Angulation angulation = new Angulation();
+  public Take take = new Take();
 
   public static XboxController driveController = new XboxController(OperatorConstants.kDriverControllerPort);
   public static XboxController subsystemsController = new XboxController(OperatorConstants.kSubsystemsControllerPort);
@@ -76,6 +84,9 @@ public class RobotContainer {
     new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ThrowMax(take));
     new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).onTrue(new ThrowMid(take));
  
+    new JoystickButton(driveController, XboxController.Button.kX.value).onTrue(new MakeCurve(driveTrain, driveTrain.getPose()));
+    new JoystickButton(driveController, XboxController.Button.kB.value).onTrue(new GoToBottomMiddle(driveTrain, driveTrain.getPose()));
+    new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(new RelativeToCurve(driveTrain, driveTrain.getPose()));
 
     //new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
@@ -88,8 +99,13 @@ public class RobotContainer {
     //return new AutoRoutinesPID(ShooterChooser.getSelected(), AutoChooser.getSelected(), driveTrain, angulation, take);
 //
     //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
-    return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
+    //return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
 
+    return new EventGroupFollow(driveTrain, take, angulation);
+    //return FlatEventFollowPathPlanner.create(driveTrain, take);
+    //return new FollowPath(driveTrain);
+    //return new FollowPathPlanner(driveTrain, take, angulation);
+    //return new WithPPRamsete(driveTrain, take, angulation);
   }
 
 }
