@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -47,7 +48,7 @@ public class GoToBottomMiddle extends CommandBase {
         Constants.TrajectoryConstants.ksVolts, 
         Constants.TrajectoryConstants.kvVoltSecondsPerMeter, 
         Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter),
-        driveTrain.driveKinematics,  12);
+        driveTrain.driveKinematics,  11.9);
   
     config = new TrajectoryConfig(
       Constants.TrajectoryConstants.kMaxSpeedMetersPerSecond, 
@@ -55,11 +56,10 @@ public class GoToBottomMiddle extends CommandBase {
       .setKinematics(driveTrain.driveKinematics).addConstraint(autoVoltageConstraint);
 
     trajectory = TrajectoryGenerator.generateTrajectory(
-      initialPose, 
+      initialPose,
       List.of(),
-      new Pose2d(0, 1, new Rotation2d(0)), 
+      new Pose2d(0, 1, new Rotation2d(Math.PI)),
       config); 
-
 
     ramseteCommand = new RamseteCommand(
      trajectory, driveTrain::getPose, 
@@ -72,7 +72,9 @@ public class GoToBottomMiddle extends CommandBase {
       new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), 
       new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), 
       driveTrain::tankDriveVolts, driveTrain);
-   
+
+      //driveTrain.resetOdometry(initialPose);
+
    ramseteCommand.initialize();
 
   }

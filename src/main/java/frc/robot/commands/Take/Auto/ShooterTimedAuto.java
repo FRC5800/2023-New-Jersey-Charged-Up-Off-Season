@@ -5,6 +5,7 @@
 package frc.robot.commands.Take.Auto;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Take;
 
@@ -52,18 +53,19 @@ public class ShooterTimedAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    setPercentage(upperSpd, lowerSpd);
+    setVoltage(upperSpd, lowerSpd);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    setPercentage(0.0, 0.0);
+    setVoltage(0.0, 0.0);
   }
 
-  public void setPercentage(double upper, double lower) {
+  public void setVoltage(double upper, double lower) {
     var dir = in ? 1 : -1;
-    intake.setLowerShooterPercentage(lower*dir);
+    SmartDashboard.putNumber("Lower timed", lower);
+    intake.setLowerShooterVoltage(lower*dir);
     intake.setUpperShooterPercentage(upper*dir);
   }
 

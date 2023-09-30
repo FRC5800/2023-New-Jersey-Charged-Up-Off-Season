@@ -39,9 +39,6 @@ public class DriveTrain extends SubsystemBase {
   private WPI_TalonSRX rightMaster = new WPI_TalonSRX(DrivetrainConstants.kRightMasterID);
   private VictorSPX rightSlave = new VictorSPX(DrivetrainConstants.kRightSlaveID);
 
-  //private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftMaster, leftSlave);
-  //private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightMaster, rightSlave);
-
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
   private final DifferentialDriveOdometry odometry;
   public final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TrajectoryConstants.kTrackwidthMeters);

@@ -13,7 +13,7 @@ public class ShooterLow extends CommandBase {
 
   
   public ShooterLow(Take intake) {
-    time = 1;
+    time = 2;
     this.intake = intake;
 
     addRequirements(intake);
@@ -30,7 +30,7 @@ public class ShooterLow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setLowerShooterPercentage(-0.25);
+    intake.setLowerShooterPercentage(-0.3);
     intake.setUpperShooterPercentage(-0.3);
   }
 

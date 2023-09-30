@@ -49,6 +49,12 @@ public final class Constants {
   public static class ShooterConstants{
     public static final int KIntakeUpperID = 11;
     public static final int KIntakeLowerID = 10;
+
+    
+    public static final double intakeKs = 0.81394;
+    public static final double intakeKv = 0.87401;
+    public static final double intakeKa = 0.10294;
+    public static final double intakeKp = 0.27363;
   }
   public static class AngulationConstants {
     public static final int kAngleMasterID = 21;

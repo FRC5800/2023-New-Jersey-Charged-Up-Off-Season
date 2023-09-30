@@ -9,9 +9,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Take extends SubsystemBase {
@@ -19,6 +22,9 @@ public class Take extends SubsystemBase {
 
   WPI_TalonSRX intakeUpper = new WPI_TalonSRX(ShooterConstants.KIntakeUpperID);
   WPI_TalonSRX intakeLower = new WPI_TalonSRX(ShooterConstants.KIntakeLowerID);
+
+  private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.ShooterConstants.intakeKs, Constants.ShooterConstants.intakeKv, Constants.ShooterConstants.intakeKa);
+  private PIDController pid = new PIDController(Constants.ShooterConstants.intakeKp, 0, 0);
 
   private DigitalInput bufferSwitch = new DigitalInput(0);
 
@@ -47,7 +53,7 @@ public class Take extends SubsystemBase {
     intakeUpper.configPeakOutputForward(1, 20);
     intakeUpper.configPeakOutputReverse(-1, 20);
 
-    intakeLower.config_kF(0, 3.8, 20);
+    intakeLower.config_kF(0, 1, 20);
     intakeLower.config_kP(0, 0.000351, 20);
     intakeLower.config_kI(0, 0, 20);
     intakeLower.config_kD(0, 3, 20);
@@ -64,11 +70,29 @@ public class Take extends SubsystemBase {
     SmartDashboard.putBoolean("FimDeCurso", this.getEndOfRoad());
   }
 
+  public void feedLowerVelocity(double vel) {
+    setLowerShooterVoltage(feedForward.calculate(vel));
+  }
+  
+  public void feedUpperVelocity(double vel) {
+    setUpperShooterVoltage( feedForward.calculate(vel));
+  }
+  public void feedPIDLowerVelocity(double vel) {
+    setLowerShooterVoltage(Math.sqrt(pid.calculate(getLowerEncoderLinearVelocity(), vel*0.7) + feedForward.calculate(vel))*2);
+  }
+
   public void setUpperShooterPercentage(double vel){
     intakeUpper.set(ControlMode.PercentOutput, vel);
   }
   public void setLowerShooterPercentage(double vel){
     intakeLower.set(ControlMode.PercentOutput, vel); 
+  }
+
+  public void setUpperShooterVoltage(double vel){
+    intakeUpper.setVoltage(vel);
+  }
+  public void setLowerShooterVoltage(double vel){
+    intakeLower.setVoltage(vel); 
   }
 
   public void setUpperShooterVelocity(double vel){
@@ -78,19 +102,27 @@ public class Take extends SubsystemBase {
     intakeLower.set(ControlMode.Velocity, vel);
   }
 
+  public double getLowerEncoderRPS(){
+    return intakeLower.getSelectedSensorVelocity()/4096*10;
+  }
+  
+  public double getUpperEncoderRPS(){
+    return intakeUpper.getSelectedSensorVelocity()/4096*10;
+  }
+
   public double getLowerEncoderRPM(){
-    return (intakeUpper.getSelectedSensorVelocity()/4096)*60;
+    return (intakeLower.getSelectedSensorVelocity()/4096)*600;
   }
 
   public double getUpperEncoderRPM(){
-    return (intakeLower.getSelectedSensorVelocity()/4096)*60;
+    return (intakeUpper.getSelectedSensorVelocity()/4096)*600;
   }
 
   public double getLowerEncoderLinearVelocity(){
-    return intakeLower.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 5.08;
+    return intakeLower.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 0.0381*10;
   }
   public double getUpperEncoderLinearVelocity(){
-    return intakeUpper.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 2.54;
+    return intakeUpper.getSelectedSensorVelocity()/4096 * Math.PI * 2 * 0.0508 *10;
   }
 
   public double getAverageEncoderRPM(){

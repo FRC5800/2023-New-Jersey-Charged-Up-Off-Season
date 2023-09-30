@@ -7,6 +7,9 @@ package frc.robot.commands.Take.Tele;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Take.Auto.ShooterTimedAuto;
 import frc.robot.subsystems.Take;
 
 public class GetCube extends CommandBase {
@@ -14,6 +17,7 @@ public class GetCube extends CommandBase {
   Take take;
   XboxController xboxController;
   double speed;
+  public double speedTest = 6;
   int in;
   private boolean pov;
   public GetCube(Take take, XboxController xboxController) {
@@ -26,6 +30,9 @@ public class GetCube extends CommandBase {
   public GetCube(Take take2, int i) {
 }
 
+public double getVoltageSend(){
+  return speedTest;
+}
 @Override
   public void initialize() {
     speed = 0;
@@ -41,6 +48,7 @@ public class GetCube extends CommandBase {
       take.setLowerShooterPercentage(0);
     }*/
     SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
+    SmartDashboard.putNumber("Shooter speed",  speedTest);
     
     if (xboxController.getPOV() == 0){
       take.setUpperShooterPercentage(0.65);   
@@ -48,6 +56,12 @@ public class GetCube extends CommandBase {
     }else if(xboxController.getPOV() == 180){
       take.setLowerShooterPercentage(-0.65);
       pov = true;
+    }else if(xboxController.getPOV() == 90) {
+      speedTest += 0.5;
+    }else if(xboxController.getPOV() == 270) {
+      speedTest -= 0.5;
+    }else if(xboxController.getPOV() == 270) {
+      speedTest -= 0.5;
     }else{
       take.setUpperShooterPercentage(speed);                                                                 
       take.setLowerShooterPercentage(speed);
@@ -80,9 +94,6 @@ public class GetCube extends CommandBase {
       take.setUpperShooterPercentage(speed);                                                                 
       take.setLowerShooterPercentage(speed);
     }
-
-    
-
   }
 
 
