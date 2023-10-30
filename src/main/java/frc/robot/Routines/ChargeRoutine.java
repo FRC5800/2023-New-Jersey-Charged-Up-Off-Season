@@ -6,6 +6,7 @@ package frc.robot.Routines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveTrain.Auto.Charge.ChargePigeon;
+import frc.robot.commands.DriveTrain.Auto.Charge.KeepCharge;
 import frc.robot.commands.DriveTrain.Auto.Charge.KeepChargeArena;
 import frc.robot.subsystems.DriveTrain;
 
@@ -27,8 +28,8 @@ public class ChargeRoutine extends SequentialCommandGroup {
 
     addCommands(
       new ChargePigeon(driveTrain, 15*-dir, 0.8*dir, 1.7),
-      new ChargePigeon(driveTrain, 6*-dir, 0.55*dir, 4),
-      new KeepChargeArena(driveTrain)
+      new ChargePigeon(driveTrain, 6*-dir, 0.6*dir, 4),
+      new KeepCharge(driveTrain)
     );
   }
 }

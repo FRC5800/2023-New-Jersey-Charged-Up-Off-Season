@@ -14,9 +14,9 @@ public final class Constants {
     public static final int kRightMasterID = 3;
     public static final int kRightSlaveID = 4;
     public static final int kTimeOutEncoder = 20;
-    public static final double kSPeedFast = 1 ;
+    public static final double kSPeedFast = 0.7 ;
     //public static final double kSPeedSlow = 0.6 ;
-    public static final double kSPeedSlow = 0.65 ;
+    public static final double kSPeedSlow = 0.7 ;
 
   }
   public static class OperatorConstants {

@@ -52,16 +52,16 @@ public double getVoltageSend(){
     
     if (xboxController.getPOV() == 0){
       take.setUpperShooterPercentage(0.65);   
+      take.setLowerShooterPercentage(0.65);   
       pov = true;                                                              
     }else if(xboxController.getPOV() == 180){
       take.setLowerShooterPercentage(-0.65);
+      take.setUpperShooterPercentage(-0.65);
       pov = true;
     }else if(xboxController.getPOV() == 90) {
       speedTest += 0.5;
     }else if(xboxController.getPOV() == 270) {
-      speedTest -= 0.5;
-    }else if(xboxController.getPOV() == 270) {
-      speedTest -= 0.5;
+      speedTest -= 0.9;
     }else{
       take.setUpperShooterPercentage(speed);                                                                 
       take.setLowerShooterPercentage(speed);

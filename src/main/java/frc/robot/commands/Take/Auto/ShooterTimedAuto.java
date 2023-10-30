@@ -65,7 +65,7 @@ public class ShooterTimedAuto extends CommandBase {
   public void setVoltage(double upper, double lower) {
     var dir = in ? 1 : -1;
     SmartDashboard.putNumber("Lower timed", lower);
-    intake.setLowerShooterVoltage(lower*dir);
+    intake.setLowerShooterPercentage(lower*dir);
     intake.setUpperShooterPercentage(upper*dir);
   }
 

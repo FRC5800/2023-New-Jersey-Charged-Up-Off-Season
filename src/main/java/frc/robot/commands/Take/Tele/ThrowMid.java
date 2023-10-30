@@ -13,8 +13,8 @@ public class ThrowMid extends SequentialCommandGroup{
   public ThrowMid(Take take) {
     addCommands(
       new ShooterTimedAuto(take, 0, 0.6, 0.4 , true),
-      new ShooterTimedAuto(take, 0.8, -0.4, 0.9, false),
-      new ShooterTimedAuto(take, 0.8, 1, 0.6, false)
+      new ShooterTimedAuto(take, 0.55, -0.4, 0.9, false),
+      new ShooterTimedAuto(take, 0.55, 1, 0.6, false)
     );
   }
 

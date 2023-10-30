@@ -13,6 +13,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Routines.ChargeRoutine;
+import frc.robot.commands.DriveTrain.Auto.DriveTurnAuto;
+import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
 import frc.robot.commands.Take.Tele.GetCube;
 import frc.robot.commands.Take.Tele.GetTimed;
 import frc.robot.commands.Take.Tele.ShooterHigh;
@@ -33,7 +36,7 @@ public class EventGroupFollow extends CommandBase {
 
   //install link: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json 
 
-  List<PathPlannerTrajectory> pathPlanner = PathPlanner.loadPathGroup("auto1", new PathConstraints(2.5, 2));
+  List<PathPlannerTrajectory> pathPlanner = PathPlanner.loadPathGroup("take_score", new PathConstraints(2.5, 2));
   //PathPlannerTrajectory pathPlanner = PathPlanner.loadPath("teste", new PathConstraints(3, 2.5));
 
     /*Creates a new EventGroupFOllow. */
@@ -57,6 +60,9 @@ public class EventGroupFollow extends CommandBase {
     //eventMap.put("getCube", new GetTimed(take, 1));
     eventMap.put("shooterMid", new ShooterMid(take));
     eventMap.put("angulate", new ShooterLow(take));
+    eventMap.put("turn", new DriveTurnAuto(driveTrain, 180));
+    eventMap.put("charge", new ChargeRoutine(driveTrain, true));
+    
 
     // A documentação recomenda colocar esse RamsetAutoBuilder no RobotContainer
     autoBuilder = new RamseteAutoBuilder(
@@ -91,7 +97,6 @@ public class EventGroupFollow extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     fullAuto.end(interrupted);
-    
     
   }
 

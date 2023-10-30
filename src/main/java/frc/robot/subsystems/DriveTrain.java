@@ -98,6 +98,7 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setVoltage(voltage);
   }
 
+  
   public void kSpeedAlter() {
     kSpeedIsFast = !kSpeedIsFast;
     kSpeed = kSpeedIsFast ? kSpeedFast : kSpeedSlow;
@@ -238,7 +239,7 @@ public class DriveTrain extends SubsystemBase {
           new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
           new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), // Right controller (usually the same values as left controller)
           this::tankDriveVolts, // Voltage biconsumer
-          false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
           this // Requires this drive subsystem
       )
   );

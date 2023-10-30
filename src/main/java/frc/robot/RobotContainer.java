@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
 import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
+import frc.robot.commands.DriveTrain.Auto.trajectory.FlatEventFollowPathPlanner;
 import frc.robot.commands.DriveTrain.Auto.trajectory.GoToBottomMiddle;
 import frc.robot.commands.DriveTrain.Auto.trajectory.MakeCurve;
 import frc.robot.commands.DriveTrain.Auto.trajectory.RelativeToCurve;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
+import frc.robot.commands.Take.Tele.GetTimed;
 import frc.robot.commands.Take.Tele.Lancamento;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
@@ -26,8 +28,10 @@ import frc.robot.commands.Take.Tele.ShooterTest;
 import frc.robot.commands.Take.Tele.ThrowMid;
 import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Routines.ChargeRoutine;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
+import frc.robot.Routines.trajectory.TrajectoryRoutines;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
@@ -63,7 +67,7 @@ public class RobotContainer {
     SmartDashboard.putData(AutoChooser);
     SmartDashboard.putData(ShooterChooser);
     
-    getCube =  new GetCube(take, subsystemsController);
+    getCube =  new GetCube(take, driveController);
 
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
     angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
@@ -74,19 +78,19 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterMid(take));
+    new JoystickButton(driveController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
     //new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterTest(take, getCube));
-    new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterLow(take));
+    new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
     new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ThrowMax(take));
 
-    new JoystickButton(subsystemsController, XboxController.Button.kLeftBumper.value).onTrue(new ThrowMid(take));
+    new JoystickButton(driveController, XboxController.Button.kLeftBumper.value).onTrue(new GetTimed(take,4));
  
-    new JoystickButton(driveController, XboxController.Button.kX.value).onTrue(new MakeCurve(driveTrain, driveTrain.getPose()));
-    new JoystickButton(driveController, XboxController.Button.kB.value).onTrue(new GoToBottomMiddle(driveTrain, driveTrain.getPose()));
+    //new JoystickButton(driveController, XboxController.Button.kX.value).onTrue(new MakeCurve(driveTrain, driveTrain.getPose()));
+    //new JoystickButton(driveController, XboxController.Button.kB.value).onTrue(new GoToBottomMiddle(driveTrain, driveTrain.getPose()));
     //new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(new RelativeToCurve(driveTrain, driveTrain.getPose()));
 
-    new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(driveTrain.runOnce(() -> driveTrain.resetOdometry(new Pose2d(0,0,new Rotation2d()))));
+    //new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(driveTrain.runOnce(() -> driveTrain.resetOdometry(new Pose2d(0,0,new Rotation2d()))));
 
     //new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     //new JoystickButton(subsystemsController, XboxController.Button.kRightBumper.value).whileTrue(new GetCube(take, subsystemsController));
@@ -103,7 +107,9 @@ public class RobotContainer {
 
     return new EventGroupFollow(driveTrain, take, angulation);
     //return FlatEventFollowPathPlanner.create(driveTrain, take);
+    //return new TrajectoryRoutines(driveTrain, take, angulation);
 
+    //return new ChargeRoutine(driveTrain, true);
 
     //return new Lancamento(take);
     //return new ShooterTest(take, getCube);
