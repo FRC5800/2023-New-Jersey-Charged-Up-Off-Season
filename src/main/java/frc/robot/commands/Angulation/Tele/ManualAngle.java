@@ -29,14 +29,14 @@ public class ManualAngle extends CommandBase {
   @Override
   public void execute() {
     angle = angulation.getEncoderRotations();
-    speed = -subsystemsController.getRawAxis(XboxController.Axis.kLeftY.value);
+    speed = subsystemsController.getRawAxis(XboxController.Axis.kLeftY.value);
     
     if (speed > 0) {
       //angulation.setElevatorAngleSpeed(speed*0.58);
-      angulation.setElevatorAngleSpeed(speed*0.55);
+      angulation.setElevatorAngleSpeed(speed*0.3);
     } else {
       //angulation.setElevatorAngleSpeed(speed*0.66);
-      angulation.setElevatorAngleSpeed(speed*0.85);
+      angulation.setElevatorAngleSpeed(speed*0.4);
     }
 
     SmartDashboard.putNumber("angle", angle);

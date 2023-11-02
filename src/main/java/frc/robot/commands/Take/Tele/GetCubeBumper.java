@@ -27,9 +27,6 @@ public class GetCubeBumper extends CommandBase {
     addRequirements(take);
   }
 
-  public GetCubeBumper(Take take2, int i) {
-}
-
 public double getVoltageSend(){
   return speedTest;
 }

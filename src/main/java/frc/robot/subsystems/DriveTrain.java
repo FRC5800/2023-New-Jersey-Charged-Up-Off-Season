@@ -4,14 +4,16 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.commands.PPRamseteCommand;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -23,6 +25,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,12 +37,16 @@ import frc.robot.Constants.DrivetrainConstants;
 
 public class DriveTrain extends SubsystemBase {
 
-  private WPI_TalonSRX leftMaster = new WPI_TalonSRX(DrivetrainConstants.kLeftMasterID);
-  private VictorSPX leftSlave = new VictorSPX(DrivetrainConstants.kLeftSlaveID);
-  private WPI_TalonSRX rightMaster = new WPI_TalonSRX(DrivetrainConstants.kRightMasterID);
-  private VictorSPX rightSlave = new VictorSPX(DrivetrainConstants.kRightSlaveID);
+  private CANSparkMax leftMaster = new CANSparkMax(DrivetrainConstants.kLeftMasterID, MotorType.kBrushed);
+  private WPI_VictorSPX leftSlave = new WPI_VictorSPX(DrivetrainConstants.kLeftSlaveID);
+  private CANSparkMax rightMaster = new CANSparkMax(DrivetrainConstants.kRightMasterID, MotorType.kBrushed);
+  private WPI_VictorSPX rightSlave = new WPI_VictorSPX(DrivetrainConstants.kRightSlaveID);
 
-  private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
+  private MotorControllerGroup rightMotors = new MotorControllerGroup(leftMaster, leftSlave);
+  private MotorControllerGroup leftMotors = new MotorControllerGroup(rightMaster, rightSlave);
+
+
+  private DifferentialDrive diffDrive = new DifferentialDrive(leftMotors, rightMotors);
   private final DifferentialDriveOdometry odometry;
   public final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(Constants.TrajectoryConstants.kTrackwidthMeters);
 
@@ -55,26 +62,19 @@ public class DriveTrain extends SubsystemBase {
 
   public final PIDConstants pidConstants = new PIDConstants(Constants.TrajectoryConstants.kPDriveVel, 0, 0);
 
+  private RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+  private RelativeEncoder leftEncoder = leftMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+
   public DriveTrain() {
     SmartDashboard.putData(field);
-    rightMaster.configFactoryDefault();
-    rightSlave.configFactoryDefault();
-    leftMaster.configFactoryDefault();
-    leftSlave.configFactoryDefault();
-    
-    leftSlave.follow(leftMaster);
-    rightSlave.follow(rightMaster);
+  
 
     rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
+    rightSlave.setInverted(false);
 
-    leftMaster.setInverted(false);
-    leftSlave.setInverted(false);
+    leftMaster.setInverted(true);
+    leftSlave.setInverted(true);
     
-
-    rightMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
-    leftMaster.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, DrivetrainConstants.kTimeOutEncoder);
-  
     initialPigeon = pigeon.getRoll();
     odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), new Pose2d(0, 0, new Rotation2d(0)) /*,new Pose2d(5.0, 13.5, new Rotation2d()) */);
   }
@@ -94,8 +94,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setVoltage(double voltage) {
-    leftMaster.setVoltage(voltage);
-    rightMaster.setVoltage(voltage);
+    leftMotors.setVoltage(voltage);
+    rightMotors.setVoltage(voltage);
   }
 
   
@@ -106,8 +106,8 @@ public class DriveTrain extends SubsystemBase {
 
   //RESETTING SENSORS
   public void resetEncoders(){
-    leftMaster.setSelectedSensorPosition(0);
-    rightMaster.setSelectedSensorPosition(0);
+    rightEncoder.setPosition(0);
+    leftEncoder.setPosition(0);
   }
   public void resetGyro(){
     pigeon.reset();
@@ -116,12 +116,12 @@ public class DriveTrain extends SubsystemBase {
   //GET encoders
   public double getLeftEncoderTicks() {
     double position;
-      position = leftMaster.getSelectedSensorPosition(0);
+      position = leftEncoder.getPosition();
     return position;
   }
   public double getRightEncoderTicks() {
     double position;
-      position = rightMaster.getSelectedSensorPosition(0);
+      position = rightEncoder.getPosition();
     return position;
   }
   public double encoderTicksToMeters(double encoderticks) {
@@ -146,34 +146,51 @@ public class DriveTrain extends SubsystemBase {
     return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2.0;
   }
 
+    /**
+     * Get RPM from left encoder encoder and convert it to linear velocity
+   *
+   * @return linear velocity of the left wheels
+   */
   public double getLeftEncoderSpeed() {
-    return leftMaster.getSelectedSensorVelocity();
+    return leftEncoder.getVelocity() / 60 * Constants.DriveConstants.kWheelCircunference;
   }
+    /**
+     * Get RPM from right encoder encoder and convert it to linear velocity
+   *
+   * @return linear velocity of the right wheels
+   */
   public double getRightEncoderSpeed() {
-    return rightMaster.getSelectedSensorVelocity();
+    return rightEncoder.getVelocity() / 60 * Constants.DriveConstants.kWheelCircunference;
   }
 
   public double getRightEncoderSpeedMeters() {
-    return encoderTicksToMeters(rightMaster.getSelectedSensorVelocity() * 10) ;
+    return getRightEncoderSpeed() ;
   }
   public double getLeftEncoderSpeedMeters() {
-    return encoderTicksToMeters(leftMaster.getSelectedSensorVelocity() * 10) ;
+    return getLeftEncoderSpeed() ;
   }
 
 
   //SET MASTER PERCENT OUTPUT
+  /**
+     * nao faz nada pois spark n tem essa função
+   */
   public void setLeftMasterPercent(double percent){
-    leftMaster.set(ControlMode.PercentOutput, percent);
+    //nao faz nada pois spark n tem essa função
   }
+  /**
+     * nao faz nada pois spark n tem essa função
+   */
   public void setRightMasterPercent(double percent){
-    rightMaster.set(ControlMode.PercentOutput, percent);
+    //rightMaster.set(ControlMode.PercentOutput, percent);
+    //nao faz nada pois spark n tem essa função
   }
 
   public void setRightTargetPosition(double position){
-    rightMaster.setSelectedSensorPosition(position);
+    rightEncoder.setPosition(position);
   }
   public void setLeftTargetPosition(double position){
-    leftMaster.setSelectedSensorPosition(position);
+    leftEncoder.setPosition(position);
   }
 
 
@@ -208,7 +225,7 @@ public class DriveTrain extends SubsystemBase {
       pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftMaster.setVoltage(leftVolts);
+    leftMotors.setVoltage(leftVolts);
     rightMaster.setVoltage(rightVolts);
     diffDrive.feed();
   }
@@ -250,15 +267,10 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     odometry.update(pigeon.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters());
 
-    
-    SmartDashboard.putNumber(("speedMeters"), getLeftEncoderSpeedMeters());
     SmartDashboard.putNumber("leftEncoder teleop", getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
     SmartDashboard.putNumber("rightEncoder speed", getRightEncoderSpeed());
-    SmartDashboard.putNumber("leftEncoder speed", getLeftEncoderSpeed());
-    SmartDashboard.putNumber("pose X", odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("pose Y", odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("rotation", pigeon.getRotation2d().getDegrees());
+
     field.setRobotPose(getPose());
   }
 

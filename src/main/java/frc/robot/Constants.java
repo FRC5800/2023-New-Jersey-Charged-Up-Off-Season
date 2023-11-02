@@ -57,10 +57,7 @@ public final class Constants {
     public static final double intakeKp = 0.27363;
   }
   public static class AngulationConstants {
-    public static final int kAngleMasterID = 21;
-    public static final int kAngleSlave0ID = 20;
-    public static final int kAngleSlave1ID = 22;
-    public static final int kAngleSlave2ID = 23;
+    public static final int kAngleMasterID = 7;
   
     public static final double KMaxAngle = 300;
     public static final double KMinAngle = 0;

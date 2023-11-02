@@ -20,38 +20,33 @@ import frc.robot.Constants.AngulationConstants;
 public class Angulation extends SubsystemBase {
   /** Creates a new Angulation. */
 
-  CANSparkMax rightMaster = new CANSparkMax(AngulationConstants.kAngleMasterID, MotorType.kBrushed);
-  WPI_VictorSPX rightSlave = new WPI_VictorSPX(AngulationConstants.kAngleSlave0ID);
-  MotorControllerGroup rightGroup = new MotorControllerGroup(rightMaster, rightSlave);
+  CANSparkMax angulationMotor = new CANSparkMax(AngulationConstants.kAngleMasterID, MotorType.kBrushed);
 
-  CANSparkMax leftMaster = new CANSparkMax(AngulationConstants.kAngleSlave1ID, MotorType.kBrushed);
-  CANSparkMax leftSlave = new CANSparkMax(AngulationConstants.kAngleSlave2ID, MotorType.kBrushed); 
-  MotorControllerGroup leftGroup = new MotorControllerGroup(leftMaster, leftSlave);
-
-  RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
-  public static final double DOWN_POSITION = 0.6894;
-  public static final double UP_POSITION = 0.2924;  //0.68505859375;
+  RelativeEncoder encoder = angulationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+  /**
+   * Posição na qual a angulação está para baixo
+   */
+  public static final double DOWN_POSITION = 75;
+  /**
+   * Posição na qual a angulação está para cima
+   */
+  public static final double UP_POSITION = 2;  
 
   public Angulation() {
-    rightMaster.setInverted(false);
-    rightSlave.setInverted(false);
+    angulationMotor.setInverted(false);
 
-    leftSlave.follow(leftMaster);
+    angulationMotor.setIdleMode(IdleMode.kBrake);
 
-    leftMaster.setIdleMode(IdleMode.kBrake);
-    leftSlave.setIdleMode(IdleMode.kBrake);
-    rightMaster.setIdleMode(IdleMode.kBrake);
-    rightSlave.setNeutralMode(NeutralMode.Brake);
-
+    encoder.setPosition(0);
   }
 
   public void setElevatorAngleSpeed(double vel) {
-    rightGroup.set(vel);
-    leftGroup.set(-vel);
+    angulationMotor.set(vel);
+    
 }
 public double getEncoderRotations() {
-  SmartDashboard.putNumber("Encoder Angulação", rightEncoder.getPosition());
-  var position = rightEncoder.getPosition();
+  SmartDashboard.putNumber("Encoder Angulação", encoder.getPosition());
+  var position = encoder.getPosition();
   //  return 550 - (position < 400 ? position+550 : position);
   if (position < 400){
     return position;
@@ -59,4 +54,15 @@ public double getEncoderRotations() {
     return 550-position;
   }
 }
+
+public void setEncoderAngulationPosition(double position) {
+  encoder.setPosition(position);
+}
+
+@Override
+public void periodic() {
+  SmartDashboard.putNumber("Angulation encoder ", getEncoderRotations());
+  
+}
+
 }

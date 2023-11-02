@@ -2,42 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Take.Tele;
+package frc.robot.commands.Angulation.Tele;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Take;
+import frc.robot.subsystems.Angulation;
 
-public class GetWithLimit extends CommandBase {
-  
-  private Take take;
-  private final double SPEED = 0.3;
+public class AngulatePID extends CommandBase {
+  /** Creates a new AngulatePID. */
+  private Angulation angulation;
+  private double initialAngle;
+  public AngulatePID() {
+    this.angulation = angulation;
 
-  public GetWithLimit(Take take) {
-    this.take = take;
-    addRequirements(take);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(angulation);  
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    initialAngle = angulation.getEncoderRotations();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.take.setUpperShooterPercentage(SPEED);
-    this.take.setLowerShooterPercentage(SPEED);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    this.take.setUpperShooterPercentage(0);
-    this.take.setLowerShooterPercentage(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return this.take.getEndOfRoad();
+    return false;
   }
 }

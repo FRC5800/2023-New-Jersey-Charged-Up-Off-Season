@@ -34,11 +34,7 @@ public class GetTimed extends CommandBase {
   public void execute() {
     this.take.setUpperShooterPercentage(0.5);
     this.take.setLowerShooterPercentage(0.5);
-    
-
   }
-
-
 
   @Override
   public void end(boolean interrupted) {
