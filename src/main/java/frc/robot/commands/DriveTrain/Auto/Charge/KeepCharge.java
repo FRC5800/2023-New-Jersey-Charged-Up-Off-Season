@@ -10,8 +10,8 @@ import frc.robot.subsystems.DriveTrain;
 //ajustar cálculo de speed para lados individualmente
 public class KeepCharge extends CommandBase {
   private final DriveTrain driveTrain;
-  private double initialSpeed = 0.4;
-  private double speed = 0.4;
+  private double initialSpeed = 0.5;
+  private double speed = 0.35;
   /** Creates a new KeepCharge. */
   public KeepCharge(DriveTrain driveTrain) {
     this.driveTrain = driveTrain; 

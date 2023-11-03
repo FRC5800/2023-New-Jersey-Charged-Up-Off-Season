@@ -14,24 +14,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
 import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FlatEventFollowPathPlanner;
-import frc.robot.commands.DriveTrain.Auto.trajectory.GoToBottomMiddle;
-import frc.robot.commands.DriveTrain.Auto.trajectory.MakeCurve;
-import frc.robot.commands.DriveTrain.Auto.trajectory.RelativeToCurve;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
-import frc.robot.commands.Take.Tele.GetTimed;
-import frc.robot.commands.Take.Tele.Lancamento;
-import frc.robot.commands.Take.Tele.ShooterHigh;
-import frc.robot.commands.Take.Tele.ShooterLow;
-import frc.robot.commands.Take.Tele.ShooterMid;
-import frc.robot.commands.Take.Tele.ThrowMid;
-import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.ChargeRoutine;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
-import frc.robot.Routines.trajectory.TrajectoryRoutines;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
@@ -46,7 +34,7 @@ public class RobotContainer {
 
   SendableChooser<ShooterHeight> ShooterChooser = new SendableChooser<>();
   SendableChooser<AutoMode> AutoChooser = new SendableChooser<>();
-
+  SendableChooser<Command> chooser = new SendableChooser<Command>();
 
   
   public GetCube getCube;
@@ -64,8 +52,12 @@ public class RobotContainer {
     AutoChooser.addOption("MOB_CHARGE", AutoMode.MOB_CHARGE);
     AutoChooser.addOption("NONE", AutoMode.NONE);
 
+    chooser.setDefaultOption("foward", ChargeRoutine.FORWARD(driveTrain));
+    chooser.addOption("backwards", ChargeRoutine.BACKWARDS(driveTrain));
+
     SmartDashboard.putData(AutoChooser);
     SmartDashboard.putData(ShooterChooser);
+    SmartDashboard.putData("chooser", chooser);
     
     getCube =  new GetCube(take, driveController);
 
@@ -104,7 +96,10 @@ public class RobotContainer {
     //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
     //return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
 
-    return new EventGroupFollow(driveTrain, take, angulation);
+    //return new EventGroupFollow(driveTrain, take, angulation);
+
+    return chooser.getSelected();
+
     //return FlatEventFollowPathPlanner.create(driveTrain, take);
     //return new TrajectoryRoutines(driveTrain, take, angulation);
 

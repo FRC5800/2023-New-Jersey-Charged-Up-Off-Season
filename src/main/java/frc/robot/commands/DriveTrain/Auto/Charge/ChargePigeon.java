@@ -31,7 +31,7 @@ public class ChargePigeon extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.tankDrive(speed, speed);
+    driveTrain.arcadeDrive(speed, 0);
     SmartDashboard.putNumber("diff", Math.abs(driveTrain.getRoll() - target)) ;
   }
 
