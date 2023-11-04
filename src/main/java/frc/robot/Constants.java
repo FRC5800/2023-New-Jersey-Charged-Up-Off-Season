@@ -47,8 +47,8 @@ public final class Constants {
 
   }
   public static class ShooterConstants{
-    public static final int KIntakeUpperID = 11;
-    public static final int KIntakeLowerID = 10;
+    public static final int KIntakeUpperID = 6;
+    public static final int KIntakeLowerID = 5;
 
     
     public static final double intakeKs = 0.81394;

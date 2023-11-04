@@ -10,8 +10,10 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.commands.PPRamseteCommand;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
@@ -23,6 +25,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -62,13 +65,18 @@ public class DriveTrain extends SubsystemBase {
 
   public final PIDConstants pidConstants = new PIDConstants(Constants.TrajectoryConstants.kPDriveVel, 0, 0);
 
+  //private AbsoluteEncoder rightEncoder = rightMaster.getAbsoluteEncoder(Type.kDutyCycle);
+  private AbsoluteEncoder leftEncoder = leftMaster.getAbsoluteEncoder(Type.kDutyCycle);
+  
   private RelativeEncoder rightEncoder = rightMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
-  private RelativeEncoder leftEncoder = leftMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+  //private RelativeEncoder rightEncoder = leftMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
+  //private RelativeEncoder leftEncoder = leftMaster.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 4096);
 
   public DriveTrain() {
     SmartDashboard.putData(field);
-  
 
+    resetEncoders(leftEncoder.getPosition(), rightEncoder.getPosition());
+  
     rightMaster.setInverted(false);
     rightSlave.setInverted(true);
 
@@ -108,9 +116,9 @@ public class DriveTrain extends SubsystemBase {
   }
 
   //RESETTING SENSORS
-  public void resetEncoders(){
-    rightEncoder.setPosition(0);
-    leftEncoder.setPosition(0);
+  public void resetEncoders(double leftEncoder, double rightEncoder){
+    this.rightEncoder.setPosition(0);
+    this.leftEncoder.setZeroOffset(rightEncoder);
   }
   public void resetGyro(){
     pigeon.reset();
@@ -118,14 +126,11 @@ public class DriveTrain extends SubsystemBase {
 
   //GET encoders
   public double getLeftEncoderRotations() {
-    double position;
-      position = leftEncoder.getPosition();
-    return position;
+    return leftEncoder.getPosition();
+    
   }
   public double getRightEncoderRotations() {
-    double position;
-      position = rightEncoder.getPosition();
-    return position;
+    return rightEncoder.getPosition();
   }
   public double encoderRotationsToMeters(double encoderRotations) {
 		return encoderRotations * Constants.DriveConstants.kWheelCircunference;
@@ -187,14 +192,6 @@ public class DriveTrain extends SubsystemBase {
   public void setRightMasterPercent(double percent){
     rightMaster.set(percent);
   }
-
-  public void setRightTargetPosition(double position){
-    rightEncoder.setPosition(position);
-  }
-  public void setLeftTargetPosition(double position){
-    leftEncoder.setPosition(position);
-  }
-
 
   //pigeon
   public double getAngle(){
@@ -271,7 +268,9 @@ public class DriveTrain extends SubsystemBase {
 
     SmartDashboard.putNumber("leftEncoder teleop", getLeftEncoderMeters());
     SmartDashboard.putNumber("rightEncoder teleop", getRightEncoderMeters());
-    SmartDashboard.putNumber("rightEncoder speed", getRightEncoderSpeed());
+
+    SmartDashboard.putNumber("rotation left", leftEncoder.getPosition());
+    SmartDashboard.putNumber("rotation right", rightEncoder.getPosition());
 
     field.setRobotPose(getPose());
   }

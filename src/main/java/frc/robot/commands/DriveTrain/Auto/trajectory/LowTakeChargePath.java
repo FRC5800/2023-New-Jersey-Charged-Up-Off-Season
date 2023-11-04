@@ -1,161 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package frc.robot.commands.DriveTrain.Auto.trajectory;
 
 import java.util.HashMap;
+import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -165,28 +11,35 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.commands.Take.Tele.GetTimed;
+import frc.robot.Routines.ChargeRoutine;
+import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
+import frc.robot.commands.DriveTrain.Auto.DriveTurnAuto;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
+import frc.robot.commands.Take.Tele.ShooterMid;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
 
-public class FollowPathPlanner extends CommandBase {
-  
+public class LowTakeChargePath extends CommandBase {
+
   private DriveTrain driveTrain; 
   private Take take;
+  private Angulation angulation;
   private HashMap<String, Command> eventMap;
   private RamseteAutoBuilder autoBuilder;
   private Command fullAuto;
 
   //install link: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json 
 
-  PathPlannerTrajectory pathPlanner = PathPlanner.loadPath("auto1", new PathConstraints(3, 2.5));
-    /*Creates a new FollowPathPlanner. */
-  public FollowPathPlanner(DriveTrain driveTrain, Take take, Angulation angulation) {
+  List<PathPlannerTrajectory> pathPlanner = PathPlanner.loadPathGroup("take_charge", new PathConstraints(2.5, 2));
+  //PathPlannerTrajectory pathPlanner = PathPlanner.loadPath("teste", new PathConstraints(3, 2.5));
+
+    /*Creates a new LowTakeChargePath. */
+  public LowTakeChargePath(DriveTrain driveTrain, Take take, Angulation angulation) {
     this.driveTrain = driveTrain;
     this.take = take;
+    this.angulation = angulation;
 
        // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain, take);
@@ -196,31 +49,38 @@ public class FollowPathPlanner extends CommandBase {
   @Override
   public void initialize() {
 
-    eventMap = new HashMap<>();
-    eventMap.put("shooterHigh", new ShooterHigh(take)); 
+   eventMap = new HashMap<>();
+     
+    //new PrintCommand("evento")
     eventMap.put("shooterLow", new ShooterLow(take)); 
-    //eventMap.put("shooter", new ShooterLow(take)); 
-    eventMap.put("take", new GetTimed(take, 3));
-    eventMap.put("marker",   new ShooterHigh(take));
+    eventMap.put("shooterHigh", new ShooterHigh(take));
+    //eventMap.put("getCube", new GetTimed(take, 1));
+    eventMap.put("shooterMid", new ShooterMid(take));
+    eventMap.put("angulate", new AngulationEncoder2(angulation));
+    eventMap.put("turn", new DriveTurnAuto(driveTrain, 180));
+    eventMap.put("charge", new ChargeRoutine(driveTrain, true));
+    
 
+    // A documentação recomenda colocar esse RamsetAutoBuilder no RobotContainer
     autoBuilder = new RamseteAutoBuilder(
       driveTrain::getPose, 
       driveTrain::resetOdometry,
-      new RamseteController(Constants.TrajectoryConstants.kRamseteB, 
-      Constants.TrajectoryConstants.kRamseteZeta),
-        driveTrain.driveKinematics, 
+      new RamseteController(Constants.TrajectoryConstants.kRamseteB, Constants.TrajectoryConstants.kRamseteZeta),
+      driveTrain.driveKinematics, 
       new SimpleMotorFeedforward(Constants.TrajectoryConstants.ksVolts, 
         Constants.TrajectoryConstants.kvVoltSecondsPerMeter, 
         Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter),
       driveTrain::getWheelSpeeds, 
       driveTrain.pidConstants,
-      driveTrain::tankDriveVolts, 
+      driveTrain::tankDriveVolts,   
       eventMap, 
       false,
       driveTrain);
 
       fullAuto = autoBuilder.fullAuto(pathPlanner);
+
       fullAuto.initialize();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -228,14 +88,13 @@ public class FollowPathPlanner extends CommandBase {
   public void execute() {
     fullAuto.execute();
     
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     fullAuto.end(interrupted);
-    driveTrain.setVoltage(0);
+    
   }
 
   // Returns true when the command should end.
@@ -244,3 +103,4 @@ public class FollowPathPlanner extends CommandBase {
     return fullAuto.isFinished();
   }
 }
+

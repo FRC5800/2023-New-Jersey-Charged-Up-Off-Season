@@ -12,9 +12,9 @@ public class ShooterHigh extends SequentialCommandGroup{
 
   public ShooterHigh(Take take) {
     addCommands(
-      new ShooterTimedAuto(take, 0, 0.6, 0.5 , true),
-      new ShooterTimedAuto(take, 1, -0.4, 0.9, false),
-      new ShooterTimedAuto(take, 0.8, 0.8, 0.5, false)
+      new ShooterTimedAuto(take, 0, -0.4, 0.5 , true),
+      new ShooterTimedAuto(take, 0.66, -0.4, 0.7, false),
+      new ShooterTimedAuto(take, 0.6, 0.7, 0.5, false)
     );
   }
 

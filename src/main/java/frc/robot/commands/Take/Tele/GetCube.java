@@ -20,6 +20,8 @@ public class GetCube extends CommandBase {
   public double speedTest = 6;
   int in;
   private boolean pov;
+
+  
   public GetCube(Take take, XboxController xboxController) {
     this.take = take;
     this.xboxController = xboxController;
@@ -27,8 +29,7 @@ public class GetCube extends CommandBase {
     addRequirements(take);
   }
 
-  public GetCube(Take take2, int i) {
-}
+  
 
 public double getVoltageSend(){
   return speedTest;
@@ -58,21 +59,17 @@ public double getVoltageSend(){
       take.setLowerShooterPercentage(-0.65);
       take.setUpperShooterPercentage(-0.65);
       pov = true;
-    }else if(xboxController.getPOV() == 90) {
-      speedTest += 0.5;
-    }else if(xboxController.getPOV() == 270) {
-      speedTest -= 0.9;
     }else{
-      take.setUpperShooterPercentage(speed);                                                                 
-      take.setLowerShooterPercentage(speed);
+      take.setUpperShooterPercentage(0);                                                                 
+      take.setLowerShooterPercentage(0);
       pov = false;
     }
 
-    if (take.getEndOfRoad() && !pov) {
+   /*if (take.getEndOfRoad() && !pov) {
       take.setUpperShooterPercentage(0);                                                                 
       take.setLowerShooterPercentage(0);
       return;
-    }
+    }  */ 
 
     if (xboxController.getRightBumper()) {
       speed = 0.35;
@@ -86,14 +83,7 @@ public double getVoltageSend(){
 
     SmartDashboard.putNumber("POV", xboxController.getPOV());
 
-    if (xboxController.getPOV() == 0){
-      take.setUpperShooterPercentage(0.65);                                                                 
-    }else if(xboxController.getPOV() == 180){
-      take.setLowerShooterPercentage(-0.65);
-    }else{
-      take.setUpperShooterPercentage(speed);                                                                 
-      take.setLowerShooterPercentage(speed);
-    }
+   
   }
 
 

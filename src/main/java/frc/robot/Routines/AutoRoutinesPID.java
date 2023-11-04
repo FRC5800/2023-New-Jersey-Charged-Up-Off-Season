@@ -15,7 +15,7 @@ import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.DriveTrain.Auto.DriveTimedAuto;
 import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
-import frc.robot.commands.DriveTrain.Auto.trajectory.FollowPath;
+import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.FollowPathWPI;
 import frc.robot.commands.Take.Auto.ShooterTimedAuto;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
@@ -63,7 +63,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
         commands = new SequentialCommandGroup(
           //DrivePIDAuto.MOB(driveTrain),
           new TurnAutoPID(driveTrain, 180),
-          new FollowPath(driveTrain)
+          new FollowPathWPI(driveTrain)
         );
         break;
 
@@ -84,7 +84,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
         commands = new SequentialCommandGroup(
           //DrivePIDAuto.MOB(driveTrain),
           new TurnAutoPID(driveTrain, 175),
-          new FollowPath(driveTrain),
+          new FollowPathWPI(driveTrain),
           //new ParallelCommandGroup(
             //new TurnAutoPID(driveTrain, 175),
           new AngulationEncoder2(angulation),
@@ -92,7 +92,7 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
           new ShooterTimedAuto(intake, 0.5, 0.5, 1, true),
           new AngulationEncoder2(angulation),
           new TurnAutoPID(driveTrain, 178),
-          new FollowPath(driveTrain),
+          new FollowPathWPI(driveTrain),
           new ShooterMid(intake)
         );
         break;

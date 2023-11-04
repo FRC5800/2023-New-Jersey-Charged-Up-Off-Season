@@ -6,7 +6,7 @@ package frc.robot.Routines.trajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Routines.ChargeRoutine;
-import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
+import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.EventGroupFollow;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;

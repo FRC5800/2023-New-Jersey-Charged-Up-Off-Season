@@ -1,53 +1,51 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+package frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing;
 
-package frc.robot.commands.DriveTrain.Auto.trajectory;
-
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
-
-import javax.xml.crypto.dsig.Transform;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
-public class MakeCurve extends CommandBase {
-  /** Creates a new GoToBottomMiddle. */
+
+public class FollowPathWPI extends CommandBase {
   
   private DifferentialDriveVoltageConstraint autoVoltageConstraint;
   private DriveTrain driveTrain; 
   private TrajectoryConfig config;
-  private Trajectory trajectoryBase;
-  private Trajectory trajectory;
-  private Pose2d initialPose;
+  private Trajectory exampleTrajectory;
   private RamseteCommand ramseteCommand;
+  
+  //private String trajectoryJSON = "paths/game.wpilib.json";
 
-  public 
-  MakeCurve(DriveTrain driveTrain, Pose2d initialPose) {
+    /** Creates a new FollowPath. */
+  public FollowPathWPI(DriveTrain driveTrain) {
     this.driveTrain = driveTrain;
-    this.initialPose = initialPose;
 
-    // Use addRequirements() here to declare subsystem dependencies.
+       // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-        
+    
     autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
         Constants.TrajectoryConstants.ksVolts, Constants.TrajectoryConstants.kvVoltSecondsPerMeter, Constants.TrajectoryConstants.kaVoltSecondsSquaredPerMeter),
@@ -58,18 +56,24 @@ public class MakeCurve extends CommandBase {
       Constants.TrajectoryConstants.kMaxAccelerationMetersPerSecondSquared)
       .setKinematics(driveTrain.driveKinematics).addConstraint(autoVoltageConstraint);
 
-    trajectoryBase = TrajectoryGenerator.generateTrajectory(
+    exampleTrajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d()), 
-      List.of(new Translation2d(1, 0), new Translation2d(1, 1), new Translation2d(0, 1)),
-      new Pose2d(0, 0, new Rotation2d(0)), 
+      List.of(new Translation2d(1, 1), new Translation2d(2, -1), new Translation2d(2.7, 0)),
+      new Pose2d(3, 0, new Rotation2d(0)), 
       config); 
 
-      Transform2d transform = initialPose.minus(trajectoryBase.getInitialPose());
-      trajectory = trajectoryBase.transformBy(transform);
+      String trajectoryJSON = "New Path";
+      try {
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        exampleTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+     } catch (IOException ex) {
+        DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+     }
+     
+    driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
 
-      
-    ramseteCommand = new RamseteCommand(
-      trajectory, driveTrain::getPose, 
+     ramseteCommand = new RamseteCommand(
+      exampleTrajectory, driveTrain::getPose, 
       new RamseteController(Constants.TrajectoryConstants.kRamseteB, Constants.TrajectoryConstants.kRamseteZeta),
        new SimpleMotorFeedforward(Constants.TrajectoryConstants.ksVolts, 
         Constants.TrajectoryConstants.kvVoltSecondsPerMeter, 
@@ -79,26 +83,30 @@ public class MakeCurve extends CommandBase {
        new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), 
        new PIDController(Constants.TrajectoryConstants.kPDriveVel, 0, 0), 
        driveTrain::tankDriveVolts, driveTrain);
-   
-   ramseteCommand.initialize();
-
+    
+    driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
+    ramseteCommand.initialize();
+ 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ramseteCommand.execute();
+    //return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     ramseteCommand.end(interrupted);
+    driveTrain.tankDriveVolts(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   return ramseteCommand.isFinished();
+    return ramseteCommand.isFinished();
+//    return false;
   }
 }

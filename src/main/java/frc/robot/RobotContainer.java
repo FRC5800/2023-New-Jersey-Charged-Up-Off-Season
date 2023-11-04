@@ -13,9 +13,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
-import frc.robot.commands.DriveTrain.Auto.trajectory.EventGroupFollow;
+import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.EventGroupFollow;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
+import frc.robot.commands.Take.Tele.ShooterHigh;
+import frc.robot.commands.Take.Tele.ShooterLow;
+import frc.robot.commands.Take.Tele.ShooterMid;
+import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.ChargeRoutine;
 import frc.robot.Routines.Autos.AutoMode;
@@ -35,9 +39,6 @@ public class RobotContainer {
   SendableChooser<ShooterHeight> ShooterChooser = new SendableChooser<>();
   SendableChooser<AutoMode> AutoChooser = new SendableChooser<>();
   SendableChooser<Command> chooser = new SendableChooser<Command>();
-
-  
-  public GetCube getCube;
   
 
   public RobotContainer() {
@@ -59,27 +60,26 @@ public class RobotContainer {
     SmartDashboard.putData(ShooterChooser);
     SmartDashboard.putData("chooser", chooser);
     
-    getCube =  new GetCube(take, driveController);
 
     driveTrain.setDefaultCommand(new Drive(driveTrain, driveController));
     angulation.setDefaultCommand(new ManualAngle(angulation, subsystemsController));
-    //take.setDefaultCommand(getCube);
+    take.setDefaultCommand(new GetCube(take, subsystemsController));
     
     configureBindings();
   }
 
   private void configureBindings() {
 
-    /*
-    new JoystickButton(driveController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
+    
+   // new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
+    //new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
     //new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterTest(take, getCube));
-    new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
-    new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ThrowMax(take));
+    //new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
+    //new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new ThrowMax(take));
 
-    new JoystickButton(driveController, XboxController.Button.kLeftBumper.value).onTrue(new GetTimed(take,4));
-  */
-    new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(driveTrain.runOnce(() -> driveTrain.resetOdometry(new Pose2d(0,0,new Rotation2d()))));
+    //new JoystickButton(driveController, XboxController.Button.kLeftBumper.value).onTrue(new GetTimed(take,4));
+  
+   // new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(driveTrain.runOnce(() -> driveTrain.resetOdometry(new Pose2d(0,0,new Rotation2d()))));
 
     new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     
@@ -98,12 +98,12 @@ public class RobotContainer {
 
     //return new EventGroupFollow(driveTrain, take, angulation);
 
-    return chooser.getSelected();
+    //return chooser.getSelected();
 
     //return FlatEventFollowPathPlanner.create(driveTrain, take);
     //return new TrajectoryRoutines(driveTrain, take, angulation);
 
-    //return new ChargeRoutine(driveTrain, true);
+    return new ChargeRoutine(driveTrain, true);
 
     //return new Lancamento(take);
     //return new ShooterTest(take, getCube);

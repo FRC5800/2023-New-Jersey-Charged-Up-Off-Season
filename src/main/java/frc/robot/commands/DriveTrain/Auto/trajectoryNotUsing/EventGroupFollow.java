@@ -1,4 +1,4 @@
-package frc.robot.commands.DriveTrain.Auto.trajectory;
+package frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,18 +6,14 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.RamseteAutoBuilder;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Routines.ChargeRoutine;
+import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.DriveTrain.Auto.DriveTurnAuto;
-import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
-import frc.robot.commands.Take.Tele.GetCube;
-import frc.robot.commands.Take.Tele.GetTimed;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
 import frc.robot.commands.Take.Tele.ShooterMid;
@@ -43,6 +39,7 @@ public class EventGroupFollow extends CommandBase {
   public EventGroupFollow(DriveTrain driveTrain, Take take, Angulation angulation) {
     this.driveTrain = driveTrain;
     this.take = take;
+    this.angulation = angulation;
 
        // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain, take);
@@ -59,7 +56,7 @@ public class EventGroupFollow extends CommandBase {
     eventMap.put("shooterHigh", new ShooterHigh(take));
     //eventMap.put("getCube", new GetTimed(take, 1));
     eventMap.put("shooterMid", new ShooterMid(take));
-    eventMap.put("angulate", new ShooterLow(take));
+    eventMap.put("angulate", new AngulationEncoder2(angulation));
     eventMap.put("turn", new DriveTurnAuto(driveTrain, 180));
     eventMap.put("charge", new ChargeRoutine(driveTrain, true));
     

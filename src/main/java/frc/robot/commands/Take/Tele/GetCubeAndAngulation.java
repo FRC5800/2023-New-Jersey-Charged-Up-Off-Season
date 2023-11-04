@@ -11,7 +11,7 @@ public class GetCubeAndAngulation extends SequentialCommandGroup {
   public GetCubeAndAngulation(Angulation angulation, Take take) {
     addCommands(
       new AngulationEncoder2(angulation),
-      new GetCube(take, 2),
+      new GetCubeLimit(take, 2),
       new AngulationEncoder2(angulation)
     );
   }

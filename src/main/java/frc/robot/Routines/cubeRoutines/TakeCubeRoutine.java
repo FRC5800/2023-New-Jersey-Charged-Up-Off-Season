@@ -5,9 +5,11 @@
 package frc.robot.Routines.cubeRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.GetDown;
 import frc.robot.commands.Angulation.Tele.GetUp;
 import frc.robot.commands.Take.Tele.GetCube;
+import frc.robot.commands.Take.Tele.GetCubeLimit;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.Take;
 
@@ -20,9 +22,9 @@ public class TakeCubeRoutine extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GetDown(angulation),
-      new GetCube(take, 2),
-      new GetUp(angulation)
+      new AngulationEncoder2(angulation),
+      new GetCubeLimit(take, 2),
+      new AngulationEncoder2(angulation)
     );
   }
 }

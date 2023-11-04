@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Take.Tele;
 
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,18 +14,20 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Take.Auto.ShooterTimedAuto;
 import frc.robot.subsystems.Take;
 
-public class GetCubeBumper extends CommandBase {
+public class GetCubeLimit extends CommandBase {
   /** Creates a new InOutTake. */
   Take take;
   XboxController xboxController;
   double speed;
   public double speedTest = 6;
   int in;
-  private boolean pov;
-  public GetCubeBumper(Take take, XboxController xboxController) {
+  private double time;
+  private Timer timer = new Timer();
+
+
+  public GetCubeLimit(Take take, double timme) {
     this.take = take;
-    this.xboxController = xboxController;
-    pov = false;
+    this.time = time;
     addRequirements(take);
   }
 
@@ -32,28 +36,16 @@ public double getVoltageSend(){
 }
 @Override
   public void initialize() {
-    speed = 0;
+    speed = 0.43;
+    
+    timer.reset();
+    timer.start();
   }
 
   @Override
   public void execute() {
     SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
     SmartDashboard.putNumber("Shooter speed",  speedTest);
-    
-
-    if (xboxController.getRightBumper()) {
-      speed = 0.35;
-    } else {
-      if (xboxController.getLeftTriggerAxis() > 0.15) {
-        speed = 0.4 * xboxController.getLeftTriggerAxis();
-      }else{
-        speed = 0;
-      }
-    }
-
-    if(take.getEndOfRoad()) {
-      speed = 0;
-    }
 
     
     take.setUpperShooterPercentage(speed);                                                                 
@@ -71,6 +63,6 @@ public double getVoltageSend(){
 
   @Override
   public boolean isFinished() {
-    return false;
+    return take.getEndOfRoad() || timer.get() >= time;
   }
 }

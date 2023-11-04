@@ -17,8 +17,6 @@ public class AngulationEncoder2 extends CommandBase {
   private double diffUp;
   private double speed;
   private double speedUp;
-  private double kUp1;
-  private double kUp2;
   private double kUp;
   private double k;
 
@@ -51,8 +49,7 @@ public class AngulationEncoder2 extends CommandBase {
     speed = diff * k;
     speed = Math.min(0.3,speed);
 
-
-    diffUp = rotation - (Angulation.UP_POSITION+10) ;
+    diffUp = rotation - (Angulation.UP_POSITION+12) ;
 
     kUp = 0.05;
 
@@ -89,7 +86,7 @@ public class AngulationEncoder2 extends CommandBase {
       return angulation.getEncoderRotations() >= Angulation.DOWN_POSITION-20;
       
     }else{
-      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+5;
+      return angulation.getEncoderRotations() <= Angulation.UP_POSITION+8;
     }
   }
 }
