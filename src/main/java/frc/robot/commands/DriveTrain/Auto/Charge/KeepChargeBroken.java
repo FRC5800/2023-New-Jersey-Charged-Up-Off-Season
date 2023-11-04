@@ -8,17 +8,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 //ajustar cálculo de speed para lados individualmente
-public class KeepCharge extends CommandBase {
+public class KeepChargeBroken extends CommandBase {
   private final DriveTrain driveTrain;
-  private double initialSpeed = 0.4;
-  private double speed = 0.4;
+  private double initialSpeed = 0.45;
+  private double speed = 0.45;
   /** Creates a new KeepCharge. */
 
-
+  
   /*
-   * COMANDO FUNCIONAL ATÉ A CHARGE QUEBRAR
+   * COMANDO CONSERTADO PELO APÓS A CHARGE QUEBRAR
    */
-  public KeepCharge(DriveTrain driveTrain) {
+
+  public KeepChargeBroken(DriveTrain driveTrain) {
     this.driveTrain = driveTrain; 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
@@ -40,11 +41,11 @@ public class KeepCharge extends CommandBase {
       driveTrain.tankDrive(0.5, 0.5);
     }*/
 
-    if (driveTrain.getRoll() > 4.4) {
+    if (driveTrain.getRoll() > 4.5) {
       driveTrain.tankDrive(-speed, -speed);
       //driveTrain.tankDrive(-0.454, -0.454);
     } 
-    else if (driveTrain.getRoll() < -4.4) {
+    else if (driveTrain.getRoll() < -4.5) {
       driveTrain.tankDrive(speed, speed);
       //driveTrain.tankDrive(0.454, 0.454);
     }
@@ -55,11 +56,11 @@ public class KeepCharge extends CommandBase {
 
     if (driveTrain.getRoll() > 4) {
       if (driveTrain.getAverageEncoderSpeed() < 25) {
-        speed += 0.001;
+        speed += 0.0005;
       }
     } else if (driveTrain.getRoll() < -4) {
       if (driveTrain.getAverageEncoderSpeed() > -22) {
-        speed += 0.001;
+        speed += 0.0005;
       }
     }
 

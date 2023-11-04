@@ -13,6 +13,12 @@ public class KeepChargeArena extends CommandBase {
   private double initialSpeed = 0.4;
   private double speed = 0.4;
   /** Creates a new KeepChargeArena. */
+
+  
+  /*
+   * COMANDO COM VALORES AJUSTADOS NA ARENA DO RIO
+   */
+
   public KeepChargeArena(DriveTrain driveTrain) {
     this.driveTrain = driveTrain; 
     // Use addRequirements() here to declare subsystem dependencies.

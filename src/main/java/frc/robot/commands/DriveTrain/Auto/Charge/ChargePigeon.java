@@ -13,6 +13,7 @@ public class ChargePigeon extends CommandBase {
   private double target;
   private double speed;
   private double tolerance;
+  private double speed0 = 0;
 
   /** Creates a new ChargeGyro. */
   public ChargePigeon(DriveTrain driveTrain, double target, double speed, double tolerance) {
@@ -31,7 +32,7 @@ public class ChargePigeon extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.arcadeDrive(speed, 0);
+    driveTrain.tankDrive(speed, speed0*0.97);
     SmartDashboard.putNumber("diff", Math.abs(driveTrain.getRoll() - target)) ;
   }
 
