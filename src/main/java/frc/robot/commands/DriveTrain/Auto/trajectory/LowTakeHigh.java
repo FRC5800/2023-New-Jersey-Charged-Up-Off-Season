@@ -22,7 +22,7 @@ import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Take;
 
-public class LowTakeChargePath extends CommandBase {
+public class LowTakeHigh extends CommandBase {
 
   private DriveTrain driveTrain; 
   private Take take;
@@ -33,11 +33,11 @@ public class LowTakeChargePath extends CommandBase {
 
   //install link: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json 
 
-  List<PathPlannerTrajectory> pathPlanner = PathPlanner.loadPathGroup("take_charge", new PathConstraints(2.5, 2));
+  List<PathPlannerTrajectory> pathPlanner = PathPlanner.loadPathGroup("take_score", new PathConstraints(2.5, 2));
   //PathPlannerTrajectory pathPlanner = PathPlanner.loadPath("teste", new PathConstraints(3, 2.5));
 
-    /*Creates a new LowTakeChargePath. */
-  public LowTakeChargePath(DriveTrain driveTrain, Take take, Angulation angulation) {
+    /*Creates a new LowTakeHigh. */
+  public LowTakeHigh(DriveTrain driveTrain, Take take, Angulation angulation) {
     this.driveTrain = driveTrain;
     this.take = take;
     this.angulation = angulation;
@@ -52,10 +52,8 @@ public class LowTakeChargePath extends CommandBase {
 
    eventMap = new HashMap<>();
      
-    eventMap.put("shooterLow", new ShooterLow(take)); 
-    eventMap.put("shooterHigh", new ShooterHigh(take));
+    eventMap.put("shoot", new ShooterHigh(take));
     eventMap.put("getCube", new GetCubeLimit(take, 1));
-    eventMap.put("shooterMid", new ShooterMid(take));
     eventMap.put("angulate", new AngulationEncoder2(angulation));
     eventMap.put("charge", new ChargeRoutine(driveTrain, true));
     

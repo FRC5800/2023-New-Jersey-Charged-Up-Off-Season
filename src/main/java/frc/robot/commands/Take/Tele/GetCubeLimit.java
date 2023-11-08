@@ -17,7 +17,6 @@ import frc.robot.subsystems.Take;
 public class GetCubeLimit extends CommandBase {
   /** Creates a new InOutTake. */
   Take take;
-  XboxController xboxController;
   double speed;
   public double speedTest = 6;
   int in;
@@ -25,7 +24,7 @@ public class GetCubeLimit extends CommandBase {
   private Timer timer = new Timer();
 
 
-  public GetCubeLimit(Take take, double timme) {
+  public GetCubeLimit(Take take, double time) {
     this.take = take;
     this.time = time;
     addRequirements(take);
@@ -36,7 +35,7 @@ public double getVoltageSend(){
 }
 @Override
   public void initialize() {
-    speed = 0.43;
+    speed = 0.45;
     
     timer.reset();
     timer.start();
@@ -44,7 +43,6 @@ public double getVoltageSend(){
 
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
     SmartDashboard.putNumber("Shooter speed",  speedTest);
 
     
@@ -63,6 +61,6 @@ public double getVoltageSend(){
 
   @Override
   public boolean isFinished() {
-    return take.getEndOfRoad() || timer.get() >= time;
+    return !take.getEndOfRoad() || timer.get() >= time;
   }
 }

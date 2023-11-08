@@ -6,6 +6,7 @@ package frc.robot.Routines.trajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Routines.ChargeRoutine;
+import frc.robot.commands.DriveTrain.Auto.trajectory.LowTakeChargePath;
 import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.EventGroupFollow;
 import frc.robot.subsystems.Angulation;
 import frc.robot.subsystems.DriveTrain;
@@ -14,14 +15,14 @@ import frc.robot.subsystems.Take;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TrajectoryRoutines extends SequentialCommandGroup {
+public class LowTakeChargeRoutine extends SequentialCommandGroup {
   /** Creates a new TrajectoryRoutines. */
-  public TrajectoryRoutines(DriveTrain driveTrain, Take take, Angulation angulation) {
+  public LowTakeChargeRoutine(DriveTrain driveTrain, Take take, Angulation angulation) {
     
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new EventGroupFollow(driveTrain, take, angulation),
+      new LowTakeChargePath(driveTrain, take, angulation),
       new ChargeRoutine(driveTrain, true)
     );
   }

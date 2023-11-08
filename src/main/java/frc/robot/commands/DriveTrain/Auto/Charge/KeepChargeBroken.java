@@ -16,7 +16,7 @@ public class KeepChargeBroken extends CommandBase {
 
   
   /*
-   * COMANDO CONSERTADO PELO APÓS A CHARGE QUEBRAR
+   * COMANDO CONSERTADO APÓS A CHARGE QUEBRAR
    */
 
   public KeepChargeBroken(DriveTrain driveTrain) {

@@ -13,15 +13,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
+import frc.robot.commands.DriveTrain.Auto.trajectory.LowTakeMid;
 import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.EventGroupFollow;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
+import frc.robot.commands.Take.Tele.GetCubeLimit;
 import frc.robot.commands.Take.Tele.ShooterHigh;
 import frc.robot.commands.Take.Tele.ShooterLow;
 import frc.robot.commands.Take.Tele.ShooterMid;
 import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.ChargeRoutine;
+import frc.robot.Routines.trajectory.LowTakeChargeRoutine;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.subsystems.Angulation;
@@ -80,7 +83,9 @@ public class RobotContainer {
     //new JoystickButton(driveController, XboxController.Button.kLeftBumper.value).onTrue(new GetTimed(take,4));
   
    // new JoystickButton(driveController, XboxController.Button.kA.value).onTrue(driveTrain.runOnce(() -> driveTrain.resetOdometry(new Pose2d(0,0,new Rotation2d()))));
-
+   new JoystickButton(subsystemsController, XboxController.Button.kY.value).onTrue(new ShooterHigh(take));
+   new JoystickButton(subsystemsController, XboxController.Button.kX.value).onTrue(new ShooterMid(take));
+   new JoystickButton(subsystemsController, XboxController.Button.kA.value).onTrue(new ShooterLow(take));
     new JoystickButton(subsystemsController, XboxController.Button.kB.value).onTrue(new AngulationEncoder2(angulation));
     
     
@@ -96,19 +101,15 @@ public class RobotContainer {
     //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
     //return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
 
-    //return new EventGroupFollow(driveTrain, take, angulation);
 
     //return chooser.getSelected();
 
-    //return FlatEventFollowPathPlanner.create(driveTrain, take);
-    //return new TrajectoryRoutines(driveTrain, take, angulation);
+    //return new LowTakeChargeRoutine(driveTrain, take, angulation);
+    //return new LowTakeMid(driveTrain, take, angulation);
+    return new LowTakeHigh(driveTrain, take, angulation);
 
-    return new ChargeRoutine(driveTrain, true);
+    //return new ChargeRoutine(driveTrain, true);
 
-    //return new Lancamento(take);
-    //return new ShooterTest(take, getCube);
-    //return new FollowPathPlanner(driveTrain, take, angulation);
-    //return new WithPPRamsete(driveTrain, take, angulation);
   }
 
 }

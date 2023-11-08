@@ -42,10 +42,7 @@ public class Lancamento extends CommandBase {
   @Override
   public void execute() {
     //take.setLowerShooterVelocity(25 * 4096 / 600);
-    take.feedPIDLowerVelocity(v);
-    SmartDashboard.putNumber("Shooter speed lower RPM", take.getLowerEncoderRPM());
-    SmartDashboard.putNumber("Shooter speed lower Linear", take.getLowerEncoderLinearVelocity());
-    SmartDashboard.putNumber("Shooter speed lower RPS", take.getLowerEncoderRPS());
+   // take.feedPIDLowerVelocity(v);
   }
 
   // Called once the command ends or is interrupted.

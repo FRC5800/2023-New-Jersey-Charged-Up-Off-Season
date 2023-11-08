@@ -41,27 +41,32 @@ public double getVoltageSend(){
 
   @Override
   public void execute() {
-    /*if(xboxController.getAButton()){
-      take.setUpperShooterPercentage(0.8);                                                                 
-      take.setLowerShooterPercentage(0.8);
-    } else {
-      take.setUpperShooterPercentage(0);                                                                 
-      take.setLowerShooterPercentage(0);
-    }*/
+
     SmartDashboard.putNumber("Contrller trigger",  xboxController.getLeftTriggerAxis());
     SmartDashboard.putNumber("Shooter speed",  speedTest);
     
-    if (xboxController.getPOV() == 0){
-      take.setUpperShooterPercentage(0.65);   
-      take.setLowerShooterPercentage(0.65);   
+    /**
+     * If trying to suck ball but it's already in: speed = 0
+   */
+    if (!(xboxController.getPOV() == 0) && !take.getEndOfRoad()) {
+      speed = 0;
+      take.setUpperShooterPercentage(speed);                                                                 
+      take.setLowerShooterPercentage(speed);
+      return;
+    }
+
+    //get ball in 
+    else if (xboxController.getPOV() == 180){
+      speed = 0.55; 
       pov = true;                                                              
-    }else if(xboxController.getPOV() == 180){
-      take.setLowerShooterPercentage(-0.65);
-      take.setUpperShooterPercentage(-0.65);
+    }
+    
+    else if(xboxController.getPOV() == 0){
+      speed = -0.6;
       pov = true;
-    }else{
-      take.setUpperShooterPercentage(0);                                                                 
-      take.setLowerShooterPercentage(0);
+    }
+    else{
+      speed = 0;
       pov = false;
     }
 
@@ -71,18 +76,13 @@ public double getVoltageSend(){
       return;
     }  */ 
 
-    if (xboxController.getRightBumper()) {
-      speed = 0.35;
-    } else {
-      if (xboxController.getLeftTriggerAxis() > 0.15) {
-        speed = 0.4 * xboxController.getLeftTriggerAxis();
-      }else{
-        speed = 0;
-      }
-    }
 
     SmartDashboard.putNumber("POV", xboxController.getPOV());
 
+    SmartDashboard.putBoolean("endofroad", take.getEndOfRoad());
+
+    take.setLowerShooterPercentage(speed);
+    take.setUpperShooterPercentage(speed);
    
   }
 

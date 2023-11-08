@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.01471388657063,
-        "y": 1.1022352044704096
+        "x": 2.0003991436554305,
+        "y": 0.8731993178272072
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0596901193802393,
-        "y": 1.1022352044704096
+        "x": 3.0453753764650395,
+        "y": 0.8731993178272072
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -67,21 +67,22 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "shooterLow"
+          "getCube",
+          "angulate"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
+        "executionBehavior": "sequential",
+        "waitBehavior": "before",
         "waitTime": 0.5
       }
     },
     {
       "anchorPoint": {
         "x": 5.536140643709859,
-        "y": 2.5623389818208215
+        "y": 2.40487680975362
       },
       "prevControl": {
         "x": 6.810474402178007,
-        "y": 2.5623389818208215
+        "y": 2.40487680975362
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -90,12 +91,21 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "charge"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.7090909090909091,
+      "names": [
+        "angulate"
+      ]
+    }
+  ]
 }

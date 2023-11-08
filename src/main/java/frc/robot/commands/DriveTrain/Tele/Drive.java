@@ -27,7 +27,7 @@ public class Drive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.resetEncoders(driveTrain.getLeftEncoderRotations(), driveTrain.getRightEncoderRotations() );
+    driveTrain.resetEncoders();
   }
   
   // Called every time the scheduler runs while the command is scheduled.

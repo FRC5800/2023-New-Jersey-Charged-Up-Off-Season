@@ -10,11 +10,13 @@ import frc.robot.subsystems.Take;
 
 public class ShooterHigh extends SequentialCommandGroup{
 
+  //positive values get in
+  //negative values put out
   public ShooterHigh(Take take) {
     addCommands(
-      new ShooterTimedAuto(take, 0, -0.4, 0.5 , true),
-      new ShooterTimedAuto(take, 0.66, -0.4, 0.7, false),
-      new ShooterTimedAuto(take, 0.6, 0.7, 0.5, false)
+      new ShooterTimedAuto(take, 0.35, 0.3, 0.7 , false),
+      new ShooterTimedAuto(take, -0.6, 0.3, 0.8, false),
+      new ShooterTimedAuto(take, -0.6, -0.8, 0.7, false)
     );
   }
 

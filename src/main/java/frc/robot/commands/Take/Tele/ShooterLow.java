@@ -13,7 +13,7 @@ public class ShooterLow extends CommandBase {
 
   
   public ShooterLow(Take intake) {
-    time = 2;
+    time = 1;
     this.intake = intake;
 
     addRequirements(intake);

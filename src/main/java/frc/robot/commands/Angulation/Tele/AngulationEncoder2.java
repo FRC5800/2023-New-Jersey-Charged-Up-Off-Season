@@ -24,7 +24,6 @@ public class AngulationEncoder2 extends CommandBase {
     this.angulation = angulation;
 
     addRequirements(angulation);
-    
   }
 
   @Override
