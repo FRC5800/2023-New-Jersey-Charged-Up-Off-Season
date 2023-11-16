@@ -21,7 +21,7 @@ public class DrivePIDAuto extends CommandBase {
   private PIDController pid = new PIDController(Constants.AutoConstants.KP_DRIVEAUTO, Constants.AutoConstants.KI_DRIVEAUTO, Constants.AutoConstants.KD_DRIVEAUTO);
 
   public final static DrivePIDAuto MOB(DriveTrain driveTrain) {
-    return new DrivePIDAuto(driveTrain, -4.4);
+    return new DrivePIDAuto(driveTrain, -4);
   }
   public final static DrivePIDAuto MOB_F(DriveTrain driveTrain) {
     return new DrivePIDAuto(driveTrain, 4.4);

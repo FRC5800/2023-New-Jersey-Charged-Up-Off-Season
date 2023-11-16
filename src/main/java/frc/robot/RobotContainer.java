@@ -13,18 +13,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
 import frc.robot.commands.Angulation.Tele.ManualAngle;
+import frc.robot.commands.DriveTrain.Auto.trajectory.LowTakeHigh;
 import frc.robot.commands.DriveTrain.Auto.trajectory.LowTakeMid;
 import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.EventGroupFollow;
 import frc.robot.commands.DriveTrain.Tele.Drive;
 import frc.robot.commands.Take.Tele.GetCube;
 import frc.robot.commands.Take.Tele.GetCubeLimit;
 import frc.robot.commands.Take.Tele.ShooterHigh;
+import frc.robot.commands.Take.Tele.ShooterHigh2;
 import frc.robot.commands.Take.Tele.ShooterLow;
 import frc.robot.commands.Take.Tele.ShooterMid;
 import frc.robot.commands.Take.Tele.ThrowMax;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Routines.ChargeRoutine;
-import frc.robot.Routines.trajectory.LowTakeChargeRoutine;
+import frc.robot.Routines.trajectory.TrajectoryRoutines;
+import frc.robot.Routines.AutoRoutinesPID;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.subsystems.Angulation;
@@ -99,17 +102,16 @@ public class RobotContainer {
     //return new AutoRoutinesPID(ShooterChooser.getSelected(), AutoChooser.getSelected(), driveTrain, angulation, take);
 //
     //return new AutoRoutinesPID(ShooterChooser::getSelected, AutoChooser::getSelected, driveTrain, angulation, take);
-    //return new AutoRoutinesPID(ShooterHeight.LOW, AutoMode.CHARGE, driveTrain, angulation, take);
-
+    return new AutoRoutinesPID(ShooterHeight.HIGH, AutoMode.CHARGE, driveTrain, angulation, take);
 
     //return chooser.getSelected();
 
-    //return new LowTakeChargeRoutine(driveTrain, take, angulation);
+    //return new TrajectoryRoutines(driveTrain, take, angulation);
     //return new LowTakeMid(driveTrain, take, angulation);
-    return new LowTakeHigh(driveTrain, take, angulation);
+    //return new LowTakeHigh(driveTrain, take, angulation);
 
     //return new ChargeRoutine(driveTrain, true);
-
   }
+
 
 }

@@ -30,8 +30,8 @@ public class ShooterLow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setLowerShooterPercentage(-0.4);
-    intake.setUpperShooterPercentage(-0.4);
+    intake.setLowerShooterPercentage(-0.28);
+    intake.setUpperShooterPercentage(-0.28);
   }
 
   // Called once the command ends or is interrupted.

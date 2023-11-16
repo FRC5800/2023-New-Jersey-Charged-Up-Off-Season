@@ -62,7 +62,7 @@ public double getVoltageSend(){
     }
     
     else if(xboxController.getPOV() == 0){
-      speed = -0.6;
+      speed = -0.65;
       pov = true;
     }
     else{

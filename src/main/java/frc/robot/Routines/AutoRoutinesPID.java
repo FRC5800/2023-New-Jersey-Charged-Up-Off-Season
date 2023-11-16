@@ -13,6 +13,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.Routines.Autos.AutoMode;
 import frc.robot.Routines.Autos.ShooterHeight;
 import frc.robot.commands.Angulation.Tele.AngulationEncoder2;
+import frc.robot.commands.DriveTrain.Auto.DrivePIDAuto;
 import frc.robot.commands.DriveTrain.Auto.DriveTimedAuto;
 import frc.robot.commands.DriveTrain.Auto.TurnAutoPID;
 import frc.robot.commands.DriveTrain.Auto.trajectoryNotUsing.FollowPathWPI;
@@ -61,9 +62,9 @@ public class AutoRoutinesPID extends SequentialCommandGroup {
     switch (autoMode) {
       case MOB:
         commands = new SequentialCommandGroup(
-          //DrivePIDAuto.MOB(driveTrain),
-          new TurnAutoPID(driveTrain, 180),
-          new FollowPathWPI(driveTrain)
+          DrivePIDAuto.MOB(driveTrain)
+          //new TurnAutoPID(driveTrain, 180),
+          //new FollowPathWPI(driveTrain)
         );
         break;
 

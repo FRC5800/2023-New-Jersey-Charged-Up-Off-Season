@@ -42,11 +42,14 @@ public class AngulationEncoder2 extends CommandBase {
 
     //diff = (Angulation.DOWN_POSITION - rotation) * (Angulation.DOWN_POSITION - rotation) /1000;
 
-    diff = ((Angulation.DOWN_POSITION-15) - rotation);
+    diff = ((Angulation.DOWN_POSITION-25) - rotation);
 
-    k = 0.01;
+    k = 0.02;
     speed = diff * k;
-    speed = Math.min(0.3,speed);
+    speed = Math.min(0.5,speed);
+
+
+    SmartDashboard.putNumber("speedAngulat", speed);
 
     diffUp = rotation - (Angulation.UP_POSITION+12) ;
 
@@ -63,8 +66,8 @@ public class AngulationEncoder2 extends CommandBase {
       
       }else{
        angulation.setElevatorAngleSpeed(-speedUp); //0.61
-
     }
+
 
     SmartDashboard.putNumber("speed angulation", speed);
   }

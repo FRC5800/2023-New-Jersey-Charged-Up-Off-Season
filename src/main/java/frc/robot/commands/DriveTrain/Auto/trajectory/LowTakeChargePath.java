@@ -73,7 +73,7 @@ public class LowTakeChargePath extends CommandBase {
       driveTrain.pidConstants,
       driveTrain::tankDriveVolts,   
       eventMap, 
-      false,
+      true,
       driveTrain);
 
       fullAuto = autoBuilder.fullAuto(pathPlanner);

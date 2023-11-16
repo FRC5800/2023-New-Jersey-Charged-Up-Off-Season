@@ -83,10 +83,10 @@ public final class Constants {
   }
 
   public static class TrajectoryConstants {
-    public static final double ksVolts = 0.57443;
-    public static final double kvVoltSecondsPerMeter = 3.1843;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.60988;
-    public static final double kPDriveVel = 4.5524;
+    public static final double ksVolts = 0.70277;
+    public static final double kvVoltSecondsPerMeter = 3.1943;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.68226;
+    public static final double kPDriveVel = 0.32121;
 
     public static final double kTrackwidthMetersWithBumper = 0.92;
     public static final double kTrackwidthMeters = 0.62;

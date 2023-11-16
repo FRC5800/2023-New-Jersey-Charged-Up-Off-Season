@@ -15,9 +15,9 @@ import frc.robot.subsystems.Take;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LowTakeChargeRoutine extends SequentialCommandGroup {
+public class TrajectoryRoutines extends SequentialCommandGroup {
   /** Creates a new TrajectoryRoutines. */
-  public LowTakeChargeRoutine(DriveTrain driveTrain, Take take, Angulation angulation) {
+  public TrajectoryRoutines(DriveTrain driveTrain, Take take, Angulation angulation) {
     
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
